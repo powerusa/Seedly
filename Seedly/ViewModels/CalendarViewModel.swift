@@ -39,7 +39,6 @@ final class CalendarViewModel: ObservableObject {
     }
     
     func loadEvents() {
-        let calendar = Calendar.current
         let location = GardenLocation(
             latitude: 43.07, longitude: -89.40,
             city: "Madison", country: "US",

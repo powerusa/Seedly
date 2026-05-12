@@ -117,18 +117,19 @@ final class StoreKitManager: ObservableObject {
         Task.detached { [weak self] in
             for await result in Transaction.updates {
                 do {
-                    let transaction = try await self?.checkVerifiedDetached(result)
-                    if let productID = transaction?.productID {
-                        await MainActor.run {
-                            self?.purchasedProductIDs.insert(productID)
-                        }
-                    }
-                    await transaction?.finish()
+                    guard let transaction = try self?.checkVerifiedDetached(result) else { continue }
+                    let productID = transaction.productID
+                    await self?.markPurchased(productID)
+                    await transaction.finish()
                 } catch {
                     // Transaction verification failed
                 }
             }
         }
+    }
+    
+    private func markPurchased(_ productID: String) {
+        purchasedProductIDs.insert(productID)
     }
     
     private nonisolated func checkVerifiedDetached(_ result: VerificationResult<Transaction>) throws -> Transaction {

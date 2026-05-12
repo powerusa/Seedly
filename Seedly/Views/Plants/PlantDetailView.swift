@@ -201,7 +201,7 @@ struct PlantDetailView: View {
     // MARK: - Timeline
     private var timelineContent: some View {
         VStack(spacing: 0) {
-            if let indoorWeeks = plant.indoorSeedWeeks {
+            if plant.indoorSeedWeeks != nil {
                 TimelineItem(
                     icon: "house.fill",
                     title: "Start Seeds Indoors",

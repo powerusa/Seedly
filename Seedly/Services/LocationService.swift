@@ -61,7 +61,7 @@ final class LocationService: NSObject, ObservableObject {
 }
 
 // MARK: - CLLocationManagerDelegate
-extension LocationService: @preconcurrency CLLocationManagerDelegate {
+extension LocationService: CLLocationManagerDelegate {
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         
@@ -78,11 +78,12 @@ extension LocationService: @preconcurrency CLLocationManagerDelegate {
     }
     
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        // Extract Sendable value before crossing actor boundary
+        let status = manager.authorizationStatus
         Task { @MainActor in
-            self.authorizationStatus = manager.authorizationStatus
+            self.authorizationStatus = status
             
-            if manager.authorizationStatus == .authorizedWhenInUse ||
-               manager.authorizationStatus == .authorizedAlways {
+            if status == .authorizedWhenInUse || status == .authorizedAlways {
                 self.requestLocation()
             }
         }

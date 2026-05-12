@@ -3,19 +3,14 @@
 
 import Foundation
 
-final class PlantDatabase {
+final class PlantDatabase: Sendable {
     
     static let shared = PlantDatabase()
     
-    private(set) var allPlants: [Plant] = []
+    let allPlants: [Plant]
     
     private init() {
-        loadPlants()
-    }
-    
-    // MARK: - Load
-    private func loadPlants() {
-        allPlants = Self.mockPlants + Self.expansionPlants + Self.fullPlantList
+        self.allPlants = Self.mockPlants + Self.expansionPlants + Self.fullPlantList
     }
     
     // MARK: - Query

@@ -14,10 +14,7 @@ final class PlantingEngine {
         in zone: ClimateZone,
         weather: WeatherData?
     ) -> PlantingSchedule {
-        let hemisphere = zone.hemisphere
         let today = Date()
-        let calendar = Calendar.current
-        let currentMonth = calendar.component(.month, from: today)
         
         // Calculate indoor seed start date
         let indoorStartDate = calculateIndoorSeedDate(plant: plant, zone: zone)

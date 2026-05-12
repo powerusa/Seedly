@@ -5,7 +5,7 @@ import Foundation
 import WeatherKit
 import CoreLocation
 
-final class WeatherService {
+actor WeatherService {
     
     private var cachedWeather: WeatherData?
     private var lastFetchDate: Date?
@@ -29,7 +29,7 @@ final class WeatherService {
     }
     
     // MARK: - Generate Insights
-    func generateInsights(weather: WeatherData, plants: [Plant]) -> [GardenInsight] {
+    nonisolated func generateInsights(weather: WeatherData, plants: [Plant]) -> [GardenInsight] {
         var insights: [GardenInsight] = []
         
         // Frost alert
@@ -115,7 +115,6 @@ final class WeatherService {
         
         // Seasonal temperature adjustment
         let baseTemp: Double
-        let tempRange: Double
         
         let isWinter: Bool
         let isSpring: Bool
@@ -132,13 +131,13 @@ final class WeatherService {
         }
         
         if isWinter {
-            baseTemp = 2; tempRange = 8
+            baseTemp = 2
         } else if isSpring {
-            baseTemp = 14; tempRange = 10
+            baseTemp = 14
         } else if isSummer {
-            baseTemp = 25; tempRange = 10
+            baseTemp = 25
         } else {
-            baseTemp = 16; tempRange = 10
+            baseTemp = 16
         }
         
         let currentTemp = baseTemp + Double.random(in: -3...3)
