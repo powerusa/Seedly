@@ -1,0 +1,58 @@
+/* 
+  Localizable.strings (French)
+  Seedly – Global Planting Calendar
+*/
+
+// MARK: - App
+"app_name" = "Seedly";
+"app_tagline" = "Achetez une fois. Jardinez pour toujours.";
+"app_subtitle" = "Calendrier Global de Plantation";
+
+// MARK: - Tabs
+"tab_today" = "Aujourd'hui";
+"tab_calendar" = "Calendrier";
+"tab_plants" = "Plantes";
+"tab_tasks" = "Tâches";
+"tab_more" = "Plus";
+
+// MARK: - Home
+"today_in_your_garden" = "Aujourd'hui dans votre jardin";
+"todays_highlights" = "Points forts du jour";
+"coming_up" = "À venir";
+"view_all" = "Voir tout";
+"frost_forecast" = "Prévision de gel";
+
+// MARK: - Insights
+"insight_frost_title" = "Risque de gel cette nuit";
+"insight_frost_subtitle" = "Protégez les plantes sensibles.";
+"insight_heat_title" = "Risque élevé de stress thermique";
+"insight_heat_subtitle" = "Arrosez abondamment et fournissez de l'ombre.";
+"insight_rain_title" = "Pluie attendue demain";
+"insight_rain_subtitle" = "Pas besoin d'arroser.";
+"insight_perfect_title" = "Excellentes conditions de plantation";
+"insight_perfect_subtitle" = "Journée idéale pour planter.";
+"insight_water_title" = "Arrosez votre jardin aujourd'hui";
+"insight_water_subtitle" = "Faible humidité, pas de pluie prévue.";
+"insight_wind_title" = "Vents forts attendus";
+"insight_wind_subtitle" = "Tuteurez les plantes hautes.";
+
+// MARK: - Categories
+"category_vegetable" = "Légumes";
+"category_fruit" = "Fruits";
+"category_herb" = "Herbes";
+"category_flower" = "Fleurs";
+"category_berry" = "Baies";
+"category_tree" = "Arbres";
+"category_tropical" = "Tropical";
+"category_greenhouse" = "Serre";
+
+// MARK: - Onboarding
+"onboarding_welcome" = "Bienvenue sur Seedly";
+"onboarding_language" = "Choisissez votre langue";
+"onboarding_location" = "Votre emplacement";
+"onboarding_climate" = "Votre climat";
+"onboarding_experience" = "Expérience en jardinage";
+"onboarding_notifications" = "Restez informé";
+"onboarding_continue" = "Continuer";
+"onboarding_get_started" = "Commencer";
+"onboarding_skip" = "Passer";

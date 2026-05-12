@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings (Arabic)
+  Seedly – Global Planting Calendar
+  RTL Support
+*/
+
+// MARK: - App
+"app_name" = "Seedly";
+"app_tagline" = "اشترِ مرة واحدة. ازرع إلى الأبد.";
+"app_subtitle" = "تقويم الزراعة العالمي";
+
+// MARK: - Tabs
+"tab_today" = "اليوم";
+"tab_calendar" = "التقويم";
+"tab_plants" = "النباتات";
+"tab_tasks" = "المهام";
+"tab_more" = "المزيد";
+
+// MARK: - Home
+"today_in_your_garden" = "اليوم في حديقتك";
+"todays_highlights" = "أبرز أحداث اليوم";
+"coming_up" = "قريباً";
+"view_all" = "عرض الكل";
+"frost_forecast" = "توقعات الصقيع";
+
+// MARK: - Insights
+"insight_frost_title" = "خطر الصقيع الليلة";
+"insight_frost_subtitle" = "احمِ النباتات الحساسة.";
+"insight_heat_title" = "خطر الإجهاد الحراري";
+"insight_heat_subtitle" = "اسقِ بعمق ووفر الظل.";
+"insight_rain_title" = "أمطار متوقعة غداً";
+"insight_rain_subtitle" = "تخطَّ الري.";
+"insight_perfect_title" = "ظروف ممتازة للزراعة";
+"insight_perfect_subtitle" = "يوم رائع للزراعة في الخارج.";
+
+// MARK: - Categories
+"category_vegetable" = "خضروات";
+"category_fruit" = "فواكه";
+"category_herb" = "أعشاب";
+"category_flower" = "زهور";
+"category_berry" = "توت";
+"category_tree" = "أشجار";
+"category_tropical" = "استوائي";
+"category_greenhouse" = "دفيئة";
+
+// MARK: - Onboarding
+"onboarding_welcome" = "مرحباً بك في Seedly";
+"onboarding_language" = "اختر لغتك";
+"onboarding_location" = "موقعك";
+"onboarding_climate" = "مناخك";
+"onboarding_experience" = "خبرة البستنة";
+"onboarding_notifications" = "ابقَ على اطلاع";
+"onboarding_continue" = "متابعة";
+"onboarding_get_started" = "ابدأ";
+"onboarding_skip" = "تخطي";

@@ -1,0 +1,54 @@
+/* 
+  Localizable.strings (Japanese)
+  Seedly – Global Planting Calendar
+*/
+
+// MARK: - App
+"app_name" = "Seedly";
+"app_tagline" = "一度購入。ずっとガーデニング。";
+"app_subtitle" = "グローバル植栽カレンダー";
+
+// MARK: - Tabs
+"tab_today" = "今日";
+"tab_calendar" = "カレンダー";
+"tab_plants" = "植物";
+"tab_tasks" = "タスク";
+"tab_more" = "その他";
+
+// MARK: - Home
+"today_in_your_garden" = "今日のお庭";
+"todays_highlights" = "今日のハイライト";
+"coming_up" = "もうすぐ";
+"view_all" = "すべて見る";
+"frost_forecast" = "霜予報";
+
+// MARK: - Insights
+"insight_frost_title" = "今夜霜の危険";
+"insight_frost_subtitle" = "繊細な植物を保護してください。";
+"insight_heat_title" = "高温ストレスの危険";
+"insight_heat_subtitle" = "深く水をやり、日陰を作ってください。";
+"insight_rain_title" = "明日雨の予報";
+"insight_rain_subtitle" = "水やりは不要です。";
+"insight_perfect_title" = "植え付けに最適な条件";
+"insight_perfect_subtitle" = "屋外で植えるのに最適な日。";
+
+// MARK: - Categories
+"category_vegetable" = "野菜";
+"category_fruit" = "果物";
+"category_herb" = "ハーブ";
+"category_flower" = "花";
+"category_berry" = "ベリー";
+"category_tree" = "樹木";
+"category_tropical" = "熱帯植物";
+"category_greenhouse" = "温室";
+
+// MARK: - Onboarding
+"onboarding_welcome" = "Seedlyへようこそ";
+"onboarding_language" = "言語を選択";
+"onboarding_location" = "あなたの場所";
+"onboarding_climate" = "あなたの気候";
+"onboarding_experience" = "ガーデニング経験";
+"onboarding_notifications" = "通知を受け取る";
+"onboarding_continue" = "続ける";
+"onboarding_get_started" = "始める";
+"onboarding_skip" = "スキップ";

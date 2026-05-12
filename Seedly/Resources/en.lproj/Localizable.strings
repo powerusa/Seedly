@@ -1,0 +1,141 @@
+/* 
+  Localizable.strings (English)
+  Seedly – Global Planting Calendar
+*/
+
+// MARK: - App
+"app_name" = "Seedly";
+"app_tagline" = "Buy once. Garden forever.";
+"app_subtitle" = "Global Planting Calendar";
+
+// MARK: - Tabs
+"tab_today" = "Today";
+"tab_calendar" = "Calendar";
+"tab_plants" = "Plants";
+"tab_tasks" = "Tasks";
+"tab_more" = "More";
+
+// MARK: - Home
+"today_in_your_garden" = "Today in Your Garden";
+"todays_highlights" = "Today's Highlights";
+"coming_up" = "Coming Up";
+"view_all" = "View all";
+"frost_forecast" = "Frost Forecast";
+
+// MARK: - Insights
+"insight_frost_title" = "Frost risk tonight";
+"insight_frost_subtitle" = "Protect sensitive plants.";
+"insight_heat_title" = "High heat stress risk";
+"insight_heat_subtitle" = "Water deeply and provide shade.";
+"insight_rain_title" = "Rain expected tomorrow";
+"insight_rain_subtitle" = "Skip watering.";
+"insight_perfect_title" = "Excellent planting conditions";
+"insight_perfect_subtitle" = "Great day to plant outdoors.";
+"insight_water_title" = "Water your garden today";
+"insight_water_subtitle" = "Low humidity, no rain expected.";
+"insight_wind_title" = "Strong winds expected";
+"insight_wind_subtitle" = "Stake tall plants and protect seedlings.";
+
+// MARK: - Weather
+"weather_sunny" = "Sunny";
+"weather_partlyCloudy" = "Partly Cloudy";
+"weather_cloudy" = "Cloudy";
+"weather_overcast" = "Overcast";
+"weather_lightRain" = "Light Rain";
+"weather_rain" = "Rain";
+"weather_heavyRain" = "Heavy Rain";
+"weather_thunderstorm" = "Thunderstorm";
+"weather_snow" = "Snow";
+"weather_sleet" = "Sleet";
+"weather_fog" = "Fog";
+"weather_windy" = "Windy";
+
+// MARK: - Planting Status
+"status_offSeason" = "Off Season";
+"status_startIndoors" = "Start Indoors";
+"status_approaching" = "Coming Soon";
+"status_readyToPlant" = "Ready to Plant";
+"status_inProgress" = "Growing";
+"status_harvesting" = "Harvesting";
+
+// MARK: - Categories
+"category_vegetable" = "Vegetables";
+"category_fruit" = "Fruits";
+"category_herb" = "Herbs";
+"category_flower" = "Flowers";
+"category_berry" = "Berries";
+"category_tree" = "Trees";
+"category_tropical" = "Tropical";
+"category_greenhouse" = "Greenhouse";
+
+// MARK: - Water Needs
+"water_low" = "Low";
+"water_moderate" = "Moderate";
+"water_high" = "High";
+"water_veryHigh" = "Very High";
+
+// MARK: - Gardening Impact
+"impact_excellent" = "Excellent";
+"impact_good" = "Good";
+"impact_fair" = "Fair";
+"impact_poor" = "Poor";
+"impact_avoid" = "Avoid";
+
+// MARK: - Notifications
+"notification_frost_title" = "🥶 Frost Alert";
+"notification_frost_body %lld" = "Temperature dropping to %lld° tonight. Protect sensitive plants.";
+"notification_heat_title" = "🌡️ Heat Alert";
+"notification_heat_body %lld" = "Temperature reaching %lld° today. Water deeply and shade sensitive plants.";
+"notification_water_title" = "💧 Watering Reminder";
+"notification_water_body %@" = "Time to water your %@.";
+"notification_planting_title" = "🌱 Time to Plant";
+"notification_planting_body %@" = "It's a great time to plant %@ in your garden.";
+"notification_harvest_title" = "🧺 Harvest Ready";
+"notification_harvest_body %@" = "Your %@ should be ready to harvest!";
+
+// MARK: - Actions
+"action_view_tips" = "View Tips";
+"action_mark_done" = "Mark Done";
+"action_snooze" = "Snooze";
+"action_add_plant" = "Add Plant";
+"action_add_task" = "Add Task";
+"action_add_garden" = "Create Garden";
+
+// MARK: - Onboarding
+"onboarding_welcome" = "Welcome to Seedly";
+"onboarding_language" = "Choose Your Language";
+"onboarding_location" = "Your Location";
+"onboarding_climate" = "Your Climate";
+"onboarding_experience" = "Gardening Experience";
+"onboarding_notifications" = "Stay Informed";
+"onboarding_continue" = "Continue";
+"onboarding_get_started" = "Get Started";
+"onboarding_skip" = "Skip";
+
+// MARK: - Settings
+"settings_gardens" = "My Gardens";
+"settings_location" = "Location";
+"settings_climate_zone" = "Climate Zone";
+"settings_temperature" = "Temperature";
+"settings_measurements" = "Measurements";
+"settings_language" = "Language";
+"settings_notifications" = "Notifications";
+"settings_frost_alerts" = "Frost Alerts";
+"settings_about" = "About Seedly";
+"settings_privacy" = "Privacy Policy";
+
+// MARK: - Empty States
+"empty_no_plants" = "No Plants Yet";
+"empty_no_plants_message" = "Add your first plant to get personalized gardening advice.";
+"empty_no_tasks" = "All caught up!";
+"empty_no_tasks_message" = "No tasks in this category.";
+"empty_no_gardens" = "No Gardens Yet";
+"empty_no_gardens_message" = "Create your first garden to start tracking.";
+
+// MARK: - Plant Detail
+"plant_overview" = "Overview";
+"plant_timeline" = "Timeline";
+"plant_companions" = "Companions";
+"plant_notes" = "Notes";
+"plant_add_to_garden" = "Add to My Garden";
+"plant_added_to_garden" = "Added to My Garden";

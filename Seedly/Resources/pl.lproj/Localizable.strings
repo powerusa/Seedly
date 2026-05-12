@@ -1,0 +1,141 @@
+/* 
+  Localizable.strings (Polish)
+  Seedly – Global Planting Calendar
+*/
+
+// MARK: - App
+"app_name" = "Seedly";
+"app_tagline" = "Kup raz. Uprawiaj ogród na zawsze.";
+"app_subtitle" = "Globalny Kalendarz Sadzenia";
+
+// MARK: - Tabs
+"tab_today" = "Dziś";
+"tab_calendar" = "Kalendarz";
+"tab_plants" = "Rośliny";
+"tab_tasks" = "Zadania";
+"tab_more" = "Więcej";
+
+// MARK: - Home
+"today_in_your_garden" = "Dziś w Twoim ogrodzie";
+"todays_highlights" = "Dzisiejsze informacje";
+"coming_up" = "Nadchodzące";
+"view_all" = "Zobacz wszystko";
+"frost_forecast" = "Prognoza mrozu";
+
+// MARK: - Insights
+"insight_frost_title" = "Ryzyko przymrozku dziś w nocy";
+"insight_frost_subtitle" = "Chroń wrażliwe rośliny.";
+"insight_heat_title" = "Wysokie ryzyko stresu cieplnego";
+"insight_heat_subtitle" = "Podlewaj obficie i zapewnij cień.";
+"insight_rain_title" = "Deszcz spodziewany jutro";
+"insight_rain_subtitle" = "Pomiń podlewanie.";
+"insight_perfect_title" = "Doskonałe warunki do sadzenia";
+"insight_perfect_subtitle" = "Świetny dzień na sadzenie.";
+"insight_water_title" = "Podlej dziś ogród";
+"insight_water_subtitle" = "Niska wilgotność, brak deszczu.";
+"insight_wind_title" = "Spodziewany silny wiatr";
+"insight_wind_subtitle" = "Podepnij wysokie rośliny i chroń sadzonki.";
+
+// MARK: - Weather
+"weather_sunny" = "Słonecznie";
+"weather_partlyCloudy" = "Częściowe zachmurzenie";
+"weather_cloudy" = "Pochmurno";
+"weather_overcast" = "Zachmurzenie całkowite";
+"weather_lightRain" = "Lekki deszcz";
+"weather_rain" = "Deszcz";
+"weather_heavyRain" = "Ulewny deszcz";
+"weather_thunderstorm" = "Burza";
+"weather_snow" = "Śnieg";
+"weather_sleet" = "Deszcz ze śniegiem";
+"weather_fog" = "Mgła";
+"weather_windy" = "Wietrznie";
+
+// MARK: - Planting Status
+"status_offSeason" = "Poza sezonem";
+"status_startIndoors" = "Rozpocznij w domu";
+"status_approaching" = "Wkrótce";
+"status_readyToPlant" = "Gotowe do sadzenia";
+"status_inProgress" = "Rośnie";
+"status_harvesting" = "Zbieranie";
+
+// MARK: - Categories
+"category_vegetable" = "Warzywa";
+"category_fruit" = "Owoce";
+"category_herb" = "Zioła";
+"category_flower" = "Kwiaty";
+"category_berry" = "Jagody";
+"category_tree" = "Drzewa";
+"category_tropical" = "Tropikalne";
+"category_greenhouse" = "Szklarnia";
+
+// MARK: - Water Needs
+"water_low" = "Niskie";
+"water_moderate" = "Umiarkowane";
+"water_high" = "Wysokie";
+"water_veryHigh" = "Bardzo wysokie";
+
+// MARK: - Gardening Impact
+"impact_excellent" = "Doskonałe";
+"impact_good" = "Dobre";
+"impact_fair" = "Średnie";
+"impact_poor" = "Słabe";
+"impact_avoid" = "Unikaj";
+
+// MARK: - Notifications
+"notification_frost_title" = "🥶 Alert mrozowy";
+"notification_frost_body %lld" = "Temperatura spadnie do %lld° dziś w nocy. Chroń wrażliwe rośliny.";
+"notification_heat_title" = "🌡️ Alert cieplny";
+"notification_heat_body %lld" = "Temperatura do %lld° dziś. Podlewaj obficie.";
+"notification_water_title" = "💧 Przypomnienie o podlewaniu";
+"notification_water_body %@" = "Czas podlać %@.";
+"notification_planting_title" = "🌱 Czas na sadzenie";
+"notification_planting_body %@" = "Świetny czas na posadzenie %@ w ogrodzie.";
+"notification_harvest_title" = "🧺 Gotowe do zbioru";
+"notification_harvest_body %@" = "Twoje %@ powinno być gotowe do zbioru!";
+
+// MARK: - Actions
+"action_view_tips" = "Zobacz porady";
+"action_mark_done" = "Oznacz jako wykonane";
+"action_snooze" = "Przypomnij później";
+"action_add_plant" = "Dodaj roślinę";
+"action_add_task" = "Dodaj zadanie";
+"action_add_garden" = "Utwórz ogród";
+
+// MARK: - Onboarding
+"onboarding_welcome" = "Witaj w Seedly";
+"onboarding_language" = "Wybierz język";
+"onboarding_location" = "Twoja lokalizacja";
+"onboarding_climate" = "Twój klimat";
+"onboarding_experience" = "Doświadczenie ogrodnicze";
+"onboarding_notifications" = "Bądź na bieżąco";
+"onboarding_continue" = "Kontynuuj";
+"onboarding_get_started" = "Zacznij";
+"onboarding_skip" = "Pomiń";
+
+// MARK: - Settings
+"settings_gardens" = "Moje ogrody";
+"settings_location" = "Lokalizacja";
+"settings_climate_zone" = "Strefa klimatyczna";
+"settings_temperature" = "Temperatura";
+"settings_measurements" = "Jednostki miar";
+"settings_language" = "Język";
+"settings_notifications" = "Powiadomienia";
+"settings_frost_alerts" = "Alerty mrozowe";
+"settings_about" = "O Seedly";
+"settings_privacy" = "Polityka prywatności";
+
+// MARK: - Empty States
+"empty_no_plants" = "Brak roślin";
+"empty_no_plants_message" = "Dodaj pierwszą roślinę, aby otrzymać spersonalizowane porady.";
+"empty_no_tasks" = "Wszystko zrobione!";
+"empty_no_tasks_message" = "Brak zadań w tej kategorii.";
+"empty_no_gardens" = "Brak ogrodów";
+"empty_no_gardens_message" = "Utwórz pierwszy ogród, aby rozpocząć śledzenie.";
+
+// MARK: - Plant Detail
+"plant_overview" = "Przegląd";
+"plant_timeline" = "Oś czasu";
+"plant_companions" = "Towarzysze";
+"plant_notes" = "Notatki";
+"plant_add_to_garden" = "Dodaj do ogrodu";
+"plant_added_to_garden" = "Dodano do ogrodu";

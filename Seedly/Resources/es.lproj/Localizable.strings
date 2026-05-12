@@ -1,0 +1,70 @@
+/* 
+  Localizable.strings (Spanish)
+  Seedly – Global Planting Calendar
+*/
+
+// MARK: - App
+"app_name" = "Seedly";
+"app_tagline" = "Compra una vez. Jardín para siempre.";
+"app_subtitle" = "Calendario Global de Siembra";
+
+// MARK: - Tabs
+"tab_today" = "Hoy";
+"tab_calendar" = "Calendario";
+"tab_plants" = "Plantas";
+"tab_tasks" = "Tareas";
+"tab_more" = "Más";
+
+// MARK: - Home
+"today_in_your_garden" = "Hoy en tu jardín";
+"todays_highlights" = "Destacados de hoy";
+"coming_up" = "Próximamente";
+"view_all" = "Ver todo";
+"frost_forecast" = "Pronóstico de heladas";
+
+// MARK: - Insights
+"insight_frost_title" = "Riesgo de heladas esta noche";
+"insight_frost_subtitle" = "Protege las plantas sensibles.";
+"insight_heat_title" = "Alto riesgo de estrés por calor";
+"insight_heat_subtitle" = "Riega profundamente y proporciona sombra.";
+"insight_rain_title" = "Lluvia esperada mañana";
+"insight_rain_subtitle" = "No riegues hoy.";
+"insight_perfect_title" = "Condiciones excelentes para plantar";
+"insight_perfect_subtitle" = "Gran día para plantar al aire libre.";
+"insight_water_title" = "Riega tu jardín hoy";
+"insight_water_subtitle" = "Baja humedad, no se espera lluvia.";
+"insight_wind_title" = "Vientos fuertes esperados";
+"insight_wind_subtitle" = "Protege las plantas altas y las plántulas.";
+
+// MARK: - Categories
+"category_vegetable" = "Verduras";
+"category_fruit" = "Frutas";
+"category_herb" = "Hierbas";
+"category_flower" = "Flores";
+"category_berry" = "Bayas";
+"category_tree" = "Árboles";
+"category_tropical" = "Tropical";
+"category_greenhouse" = "Invernadero";
+
+// MARK: - Notifications
+"notification_frost_title" = "🥶 Alerta de heladas";
+"notification_frost_body %lld" = "Temperatura bajando a %lld° esta noche. Protege las plantas sensibles.";
+"notification_heat_title" = "🌡️ Alerta de calor";
+"notification_heat_body %lld" = "Temperatura alcanzando %lld° hoy.";
+"notification_water_title" = "💧 Recordatorio de riego";
+"notification_water_body %@" = "Hora de regar tu %@.";
+"notification_planting_title" = "🌱 Hora de plantar";
+"notification_planting_body %@" = "Es un buen momento para plantar %@.";
+"notification_harvest_title" = "🧺 Listo para cosechar";
+"notification_harvest_body %@" = "Tu %@ debería estar listo para cosechar.";
+
+// MARK: - Onboarding
+"onboarding_welcome" = "Bienvenido a Seedly";
+"onboarding_language" = "Elige tu idioma";
+"onboarding_location" = "Tu ubicación";
+"onboarding_climate" = "Tu clima";
+"onboarding_experience" = "Experiencia en jardinería";
+"onboarding_notifications" = "Mantente informado";
+"onboarding_continue" = "Continuar";
+"onboarding_get_started" = "Comenzar";
+"onboarding_skip" = "Omitir";

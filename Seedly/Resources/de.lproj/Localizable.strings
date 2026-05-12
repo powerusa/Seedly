@@ -1,0 +1,70 @@
+/* 
+  Localizable.strings (German)
+  Seedly – Global Planting Calendar
+*/
+
+// MARK: - App
+"app_name" = "Seedly";
+"app_tagline" = "Einmal kaufen. Für immer gärtnern.";
+"app_subtitle" = "Globaler Pflanzkalender";
+
+// MARK: - Tabs
+"tab_today" = "Heute";
+"tab_calendar" = "Kalender";
+"tab_plants" = "Pflanzen";
+"tab_tasks" = "Aufgaben";
+"tab_more" = "Mehr";
+
+// MARK: - Home
+"today_in_your_garden" = "Heute in Ihrem Garten";
+"todays_highlights" = "Heutige Highlights";
+"coming_up" = "Demnächst";
+"view_all" = "Alle anzeigen";
+"frost_forecast" = "Frostvorhersage";
+
+// MARK: - Insights
+"insight_frost_title" = "Frostgefahr heute Nacht";
+"insight_frost_subtitle" = "Empfindliche Pflanzen schützen.";
+"insight_heat_title" = "Hohes Hitzestressrisiko";
+"insight_heat_subtitle" = "Tief gießen und Schatten spenden.";
+"insight_rain_title" = "Regen morgen erwartet";
+"insight_rain_subtitle" = "Heute nicht gießen.";
+"insight_perfect_title" = "Ausgezeichnete Pflanzbedingungen";
+"insight_perfect_subtitle" = "Toller Tag zum Pflanzen im Freien.";
+"insight_water_title" = "Gießen Sie heute Ihren Garten";
+"insight_water_subtitle" = "Niedrige Luftfeuchtigkeit, kein Regen erwartet.";
+"insight_wind_title" = "Starke Winde erwartet";
+"insight_wind_subtitle" = "Hohe Pflanzen stützen und Setzlinge schützen.";
+
+// MARK: - Categories
+"category_vegetable" = "Gemüse";
+"category_fruit" = "Obst";
+"category_herb" = "Kräuter";
+"category_flower" = "Blumen";
+"category_berry" = "Beeren";
+"category_tree" = "Bäume";
+"category_tropical" = "Tropisch";
+"category_greenhouse" = "Gewächshaus";
+
+// MARK: - Notifications
+"notification_frost_title" = "🥶 Frostalarm";
+"notification_frost_body %lld" = "Temperatur sinkt auf %lld° heute Nacht. Schützen Sie empfindliche Pflanzen.";
+"notification_heat_title" = "🌡️ Hitzealarm";
+"notification_heat_body %lld" = "Temperatur erreicht %lld° heute.";
+"notification_water_title" = "💧 Gießerinnerung";
+"notification_water_body %@" = "Zeit, Ihre %@ zu gießen.";
+"notification_planting_title" = "🌱 Zeit zum Pflanzen";
+"notification_planting_body %@" = "Gute Zeit, %@ zu pflanzen.";
+"notification_harvest_title" = "🧺 Erntebereit";
+"notification_harvest_body %@" = "Ihr %@ sollte erntereif sein!";
+
+// MARK: - Onboarding
+"onboarding_welcome" = "Willkommen bei Seedly";
+"onboarding_language" = "Sprache wählen";
+"onboarding_location" = "Ihr Standort";
+"onboarding_climate" = "Ihr Klima";
+"onboarding_experience" = "Gartenerfahrung";
+"onboarding_notifications" = "Bleiben Sie informiert";
+"onboarding_continue" = "Weiter";
+"onboarding_get_started" = "Loslegen";
+"onboarding_skip" = "Überspringen";
