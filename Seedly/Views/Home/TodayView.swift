@@ -113,7 +113,7 @@ struct TodayView: View {
                     .font(.system(size: 52, weight: .thin, design: .rounded))
                     .foregroundStyle(.white)
                 
-                Text(viewModel.weather?.condition.localizedDisplayName ?? "Loading...")
+                Text(viewModel.weather?.condition.localizedDisplayName ?? localization.loading)
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundStyle(.white.opacity(0.8))
             }
@@ -279,7 +279,7 @@ struct TodayView: View {
                 HStack {
                     Image(systemName: "checkmark.shield.fill")
                         .foregroundStyle(SeedlyTheme.accentGreen)
-                    Text("Safe planting in 6 days for tomatoes & peppers")
+                    Text(localization.safePlantingMessage)
                         .font(.system(.caption, design: .rounded))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -305,11 +305,8 @@ struct TodayView: View {
     
     private func dayName(for date: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(date) { return "Tonight" }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter.string(from: date)
+        if calendar.isDateInToday(date) { return localization.tonight }
+        return localization.shortWeekday(for: date)
     }
 }
 

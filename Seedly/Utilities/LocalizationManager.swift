@@ -388,6 +388,93 @@ final class LocalizationManager: ObservableObject {
         }
     }
     
+    // MARK: - Weather / Forecast
+    
+    /// Short weekday name (e.g. "Mon" / "Pon") for the given date in the selected language.
+    func shortWeekday(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: currentLanguage)
+        formatter.dateFormat = "EEE"
+        let raw = formatter.string(from: date)
+        return raw.prefix(1).localizedCapitalized + raw.dropFirst()
+    }
+    
+    var tonight: String {
+        switch currentLanguage {
+        case "pl": return "Dziś wieczorem"; case "es": return "Esta noche"; case "de": return "Heute Abend"
+        case "fr": return "Ce soir"; case "it": return "Stasera"; case "pt": return "Hoje à noite"
+        case "nl": return "Vanavond"; case "ja": return "今夜"; case "ko": return "오늘 밤"
+        case "zh": return "今晚"; case "ar": return "الليلة"; case "hi": return "आज रात"
+        case "uk": return "Сьогодні ввечері"; case "ru": return "Сегодня вечером"; default: return "Tonight"
+        }
+    }
+    
+    var humidity: String {
+        switch currentLanguage {
+        case "pl": return "Wilgotność"; case "es": return "Humedad"; case "de": return "Feuchtigkeit"
+        case "fr": return "Humidité"; case "it": return "Umidità"; case "pt": return "Humidade"
+        case "nl": return "Vochtigheid"; case "ja": return "湿度"; case "ko": return "습도"
+        case "zh": return "湿度"; case "ar": return "الرطوبة"; case "hi": return "नमी"
+        case "uk": return "Вологість"; case "ru": return "Влажность"; default: return "Humidity"
+        }
+    }
+    var wind: String {
+        switch currentLanguage {
+        case "pl": return "Wiatr"; case "es": return "Viento"; case "de": return "Wind"
+        case "fr": return "Vent"; case "it": return "Vento"; case "pt": return "Vento"
+        case "nl": return "Wind"; case "ja": return "風"; case "ko": return "바람"
+        case "zh": return "风"; case "ar": return "الرياح"; case "hi": return "हवा"
+        case "uk": return "Вітер"; case "ru": return "Ветер"; default: return "Wind"
+        }
+    }
+    var uvIndex: String {
+        switch currentLanguage {
+        case "pl": return "UV"; case "es": return "UV"; case "de": return "UV"
+        case "fr": return "UV"; case "it": return "UV"; case "pt": return "UV"
+        case "nl": return "UV"; case "ja": return "UV"; case "ko": return "자외선"
+        case "zh": return "紫外线"; case "ar": return "الأشعة"; case "hi": return "UV"
+        case "uk": return "УФ"; case "ru": return "УФ"; default: return "UV"
+        }
+    }
+    var rain: String {
+        switch currentLanguage {
+        case "pl": return "Deszcz"; case "es": return "Lluvia"; case "de": return "Regen"
+        case "fr": return "Pluie"; case "it": return "Pioggia"; case "pt": return "Chuva"
+        case "nl": return "Regen"; case "ja": return "雨"; case "ko": return "비"
+        case "zh": return "雨"; case "ar": return "مطر"; case "hi": return "बारिश"
+        case "uk": return "Дощ"; case "ru": return "Дождь"; default: return "Rain"
+        }
+    }
+    var safePlantingMessage: String {
+        switch currentLanguage {
+        case "pl": return "Bezpieczne sadzenie w najbliższych dniach"
+        case "es": return "Siembra segura en los próximos días"
+        case "de": return "Sicheres Pflanzen in den nächsten Tagen"
+        case "fr": return "Plantation sécurisée dans les jours à venir"
+        case "it": return "Semina sicura nei prossimi giorni"
+        case "pt": return "Plantio seguro nos próximos dias"
+        case "nl": return "Veilig planten in de komende dagen"
+        case "ja": return "今後数日間は安全に植え付け可能"
+        case "ko": return "앞으로 며칠간 안전한 심기 가능"
+        case "zh": return "未来几天可安全种植"
+        case "ar": return "الزراعة آمنة في الأيام القادمة"
+        case "hi": return "अगले कुछ दिनों में सुरक्षित रोपण"
+        case "uk": return "Безпечна посадка найближчими днями"
+        case "ru": return "Безопасная посадка в ближайшие дни"
+        default: return "Safe planting in the coming days"
+        }
+    }
+    
+    var loading: String {
+        switch currentLanguage {
+        case "pl": return "Ładowanie..."; case "es": return "Cargando..."; case "de": return "Lädt..."
+        case "fr": return "Chargement..."; case "it": return "Caricamento..."; case "pt": return "A carregar..."
+        case "nl": return "Laden..."; case "ja": return "読み込み中..."; case "ko": return "로딩 중..."
+        case "zh": return "加载中..."; case "ar": return "جارٍ التحميل..."; case "hi": return "लोड हो रहा है..."
+        case "uk": return "Завантаження..."; case "ru": return "Загрузка..."; default: return "Loading..."
+        }
+    }
+    
     // MARK: - Task Types
     
     func taskTypeName(_ type: TaskType) -> String {

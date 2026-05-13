@@ -6,6 +6,7 @@ import SwiftUI
 struct WeatherCardView: View {
     let weather: WeatherData
     let temperatureUnit: TemperatureUnit
+    @EnvironmentObject var localization: LocalizationManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -20,7 +21,7 @@ struct WeatherCardView: View {
                         .font(.system(size: 44, weight: .thin, design: .rounded))
                         .foregroundStyle(.white)
                     
-                    Text(weather.condition.rawValue.camelCaseToWords())
+                    Text(weather.condition.localizedDisplayName)
                         .font(.system(.caption, design: .rounded))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -47,10 +48,10 @@ struct WeatherCardView: View {
             
             // Quick stats
             HStack(spacing: 16) {
-                WeatherStat(icon: "humidity.fill", value: "\(weather.humidity)%", label: "Humidity")
-                WeatherStat(icon: "wind", value: "\(Int(weather.windSpeedKmh)) km/h", label: "Wind")
-                WeatherStat(icon: "sun.max.fill", value: "\(weather.uvIndex)", label: "UV")
-                WeatherStat(icon: "drop.fill", value: "\(weather.precipitationChance)%", label: "Rain")
+                WeatherStat(icon: "humidity.fill", value: "\(weather.humidity)%", label: localization.humidity)
+                WeatherStat(icon: "wind", value: "\(Int(weather.windSpeedKmh)) km/h", label: localization.wind)
+                WeatherStat(icon: "sun.max.fill", value: "\(weather.uvIndex)", label: localization.uvIndex)
+                WeatherStat(icon: "drop.fill", value: "\(weather.precipitationChance)%", label: localization.rain)
             }
         }
         .padding(SeedlyTheme.paddingMedium)
@@ -134,6 +135,7 @@ struct GardeningConditionBadge: View {
 struct MiniForecastCard: View {
     let forecast: DayForecast
     let temperatureUnit: TemperatureUnit
+    @EnvironmentObject var localization: LocalizationManager
     
     var body: some View {
         VStack(spacing: 6) {
@@ -157,9 +159,7 @@ struct MiniForecastCard: View {
     }
     
     private var dayName: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter.string(from: forecast.date)
+        localization.shortWeekday(for: forecast.date)
     }
 }
 
