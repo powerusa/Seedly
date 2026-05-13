@@ -388,6 +388,201 @@ final class LocalizationManager: ObservableObject {
         }
     }
     
+    // MARK: - Plant Categories
+    
+    func categoryName(_ category: PlantCategory) -> String {
+        switch category {
+        case .vegetable: return categoryVegetable
+        case .fruit: return categoryFruit
+        case .herb: return categoryHerb
+        case .flower: return categoryFlower
+        case .berry: return categoryBerry
+        case .tree: return categoryTree
+        case .tropical: return categoryTropical
+        case .greenhouse: return categoryGreenhouse
+        }
+    }
+    
+    var categoryAll: String {
+        switch currentLanguage {
+        case "pl": return "Wszystkie"
+        case "es": return "Todas"
+        case "de": return "Alle"
+        case "fr": return "Toutes"
+        case "it": return "Tutte"
+        case "pt": return "Todas"
+        case "nl": return "Alle"
+        case "ja": return "すべて"
+        case "ko": return "전체"
+        case "zh": return "全部"
+        case "ar": return "الكل"
+        case "hi": return "सभी"
+        case "uk": return "Усі"
+        case "ru": return "Все"
+        default: return "All"
+        }
+    }
+    
+    var categoryVegetable: String {
+        switch currentLanguage {
+        case "pl": return "Warzywa"
+        case "es": return "Verduras"
+        case "de": return "Gemüse"
+        case "fr": return "Légumes"
+        case "it": return "Verdure"
+        case "pt": return "Vegetais"
+        case "nl": return "Groenten"
+        case "ja": return "野菜"
+        case "ko": return "채소"
+        case "zh": return "蔬菜"
+        case "ar": return "خضروات"
+        case "hi": return "सब्जियाँ"
+        case "uk": return "Овочі"
+        case "ru": return "Овощи"
+        default: return "Vegetable"
+        }
+    }
+    
+    var categoryFruit: String {
+        switch currentLanguage {
+        case "pl": return "Owoce"
+        case "es": return "Frutas"
+        case "de": return "Obst"
+        case "fr": return "Fruits"
+        case "it": return "Frutta"
+        case "pt": return "Frutas"
+        case "nl": return "Fruit"
+        case "ja": return "果物"
+        case "ko": return "과일"
+        case "zh": return "水果"
+        case "ar": return "فواكه"
+        case "hi": return "फल"
+        case "uk": return "Фрукти"
+        case "ru": return "Фрукты"
+        default: return "Fruit"
+        }
+    }
+    
+    var categoryHerb: String {
+        switch currentLanguage {
+        case "pl": return "Zioła"
+        case "es": return "Hierbas"
+        case "de": return "Kräuter"
+        case "fr": return "Herbes"
+        case "it": return "Erbe"
+        case "pt": return "Ervas"
+        case "nl": return "Kruiden"
+        case "ja": return "ハーブ"
+        case "ko": return "허브"
+        case "zh": return "香草"
+        case "ar": return "أعشاب"
+        case "hi": return "जड़ी-बूटियाँ"
+        case "uk": return "Трави"
+        case "ru": return "Травы"
+        default: return "Herb"
+        }
+    }
+    
+    var categoryFlower: String {
+        switch currentLanguage {
+        case "pl": return "Kwiaty"
+        case "es": return "Flores"
+        case "de": return "Blumen"
+        case "fr": return "Fleurs"
+        case "it": return "Fiori"
+        case "pt": return "Flores"
+        case "nl": return "Bloemen"
+        case "ja": return "花"
+        case "ko": return "꽃"
+        case "zh": return "花卉"
+        case "ar": return "زهور"
+        case "hi": return "फूल"
+        case "uk": return "Квіти"
+        case "ru": return "Цветы"
+        default: return "Flower"
+        }
+    }
+    
+    var categoryBerry: String {
+        switch currentLanguage {
+        case "pl": return "Jagody"
+        case "es": return "Bayas"
+        case "de": return "Beeren"
+        case "fr": return "Baies"
+        case "it": return "Bacche"
+        case "pt": return "Frutos vermelhos"
+        case "nl": return "Bessen"
+        case "ja": return "ベリー"
+        case "ko": return "베리"
+        case "zh": return "浆果"
+        case "ar": return "توت"
+        case "hi": return "बेरी"
+        case "uk": return "Ягоди"
+        case "ru": return "Ягоды"
+        default: return "Berry"
+        }
+    }
+    
+    var categoryTree: String {
+        switch currentLanguage {
+        case "pl": return "Drzewa"
+        case "es": return "Árboles"
+        case "de": return "Bäume"
+        case "fr": return "Arbres"
+        case "it": return "Alberi"
+        case "pt": return "Árvores"
+        case "nl": return "Bomen"
+        case "ja": return "木"
+        case "ko": return "나무"
+        case "zh": return "树木"
+        case "ar": return "أشجار"
+        case "hi": return "पेड़"
+        case "uk": return "Дерева"
+        case "ru": return "Деревья"
+        default: return "Tree"
+        }
+    }
+    
+    var categoryTropical: String {
+        switch currentLanguage {
+        case "pl": return "Tropikalne"
+        case "es": return "Tropicales"
+        case "de": return "Tropisch"
+        case "fr": return "Tropicales"
+        case "it": return "Tropicali"
+        case "pt": return "Tropicais"
+        case "nl": return "Tropisch"
+        case "ja": return "熱帯"
+        case "ko": return "열대"
+        case "zh": return "热带"
+        case "ar": return "استوائي"
+        case "hi": return "उष्णकटिबंधीय"
+        case "uk": return "Тропічні"
+        case "ru": return "Тропические"
+        default: return "Tropical"
+        }
+    }
+    
+    var categoryGreenhouse: String {
+        switch currentLanguage {
+        case "pl": return "Szklarnia"
+        case "es": return "Invernadero"
+        case "de": return "Gewächshaus"
+        case "fr": return "Serre"
+        case "it": return "Serra"
+        case "pt": return "Estufa"
+        case "nl": return "Kas"
+        case "ja": return "温室"
+        case "ko": return "온실"
+        case "zh": return "温室"
+        case "ar": return "دفيئة"
+        case "hi": return "ग्रीनहाउस"
+        case "uk": return "Теплиця"
+        case "ru": return "Теплица"
+        default: return "Greenhouse"
+        }
+    }
+    
     var browsePlants: String {
         switch currentLanguage {
         case "pl": return "Przeglądaj rośliny"

@@ -67,7 +67,7 @@ struct PlantsView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 CategoryChip(
-                    title: "All",
+                    title: localization.categoryAll,
                     isSelected: viewModel.selectedCategory == nil
                 ) {
                     viewModel.selectCategory(nil)
@@ -75,7 +75,7 @@ struct PlantsView: View {
                 
                 ForEach(viewModel.categories) { category in
                     CategoryChip(
-                        title: category.rawValue.capitalized,
+                        title: localization.categoryName(category),
                         isSelected: viewModel.selectedCategory == category
                     ) {
                         viewModel.selectCategory(category)

@@ -241,6 +241,7 @@ struct SearchResultRow: View {
 
 struct CategoryBrowseCard: View {
     let category: PlantCategory
+    @EnvironmentObject var localization: LocalizationManager
     
     var body: some View {
         VStack(spacing: 8) {
@@ -248,7 +249,7 @@ struct CategoryBrowseCard: View {
                 .font(.title2)
                 .foregroundStyle(SeedlyTheme.primaryGreen)
             
-            Text(category.rawValue.capitalized)
+            Text(localization.categoryName(category))
                 .font(.system(.caption, design: .rounded, weight: .medium))
         }
         .frame(maxWidth: .infinity)
