@@ -8,7 +8,6 @@ struct CalendarScreenView: View {
     @EnvironmentObject var localization: LocalizationManager
     @State private var showMonthPicker = false
     
-    private let weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
     
     var body: some View {
@@ -65,7 +64,7 @@ struct CalendarScreenView: View {
     // MARK: - Weekday Header
     private var weekdayHeader: some View {
         LazyVGrid(columns: columns, spacing: 4) {
-            ForEach(weekdays, id: \.self) { day in
+            ForEach(viewModel.weekdaySymbols, id: \.self) { day in
                 Text(day)
                     .font(.system(.caption, design: .rounded, weight: .medium))
                     .foregroundStyle(.secondary)

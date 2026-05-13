@@ -17,8 +17,23 @@ final class CalendarViewModel: ObservableObject {
     
     var monthTitle: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: currentMonth)
+        let lang = LocalizationManager.shared.currentLanguage
+        formatter.locale = Locale(identifier: lang)
+        formatter.dateFormat = "LLLL yyyy"  // standalone month ("styczeń 2026" vs "stycznia 2026")
+        let raw = formatter.string(from: currentMonth)
+        // Polish standalone month is lowercase — capitalize first letter for display
+        return raw.prefix(1).localizedCapitalized + raw.dropFirst()
+    }
+    
+    /// Short weekday labels starting from Monday, in the selected app language.
+    var weekdaySymbols: [String] {
+        let formatter = DateFormatter()
+        let lang = LocalizationManager.shared.currentLanguage
+        formatter.locale = Locale(identifier: lang)
+        // shortStandaloneWeekdaySymbols = [Sun, Mon, Tue, Wed, Thu, Fri, Sat]; we want Mon-first
+        let symbols = formatter.shortStandaloneWeekdaySymbols ?? ["S","M","T","W","T","F","S"]
+        let reordered = Array(symbols.dropFirst()) + [symbols[0]]
+        return reordered.map { $0.prefix(1).localizedCapitalized + $0.dropFirst() }
     }
     
     var daysInMonth: [Date] {
