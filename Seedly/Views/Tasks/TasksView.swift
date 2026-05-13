@@ -95,7 +95,7 @@ struct TasksView: View {
             Text(localization.allCaughtUp)
                 .font(.system(.title3, design: .rounded, weight: .semibold))
             
-            Text("No tasks in this category. Add new gardening tasks to stay on track.")
+            Text(localization.noTasksInCategory)
                 .font(.system(.subheadline, design: .rounded))
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -110,6 +110,7 @@ struct TasksView: View {
 struct TaskRow: View {
     let task: GardenTaskItem
     let onToggle: () -> Void
+    @EnvironmentObject var localization: LocalizationManager
     
     var body: some View {
         HStack(spacing: 14) {
@@ -143,20 +144,20 @@ struct TaskRow: View {
             
             // Task info
             VStack(alignment: .leading, spacing: 3) {
-                Text(task.title)
+                Text(task.localizedTitle(using: localization))
                     .font(.system(.subheadline, design: .rounded, weight: .medium))
                     .strikethrough(task.isCompleted)
                     .foregroundStyle(task.isCompleted ? .secondary : .primary)
                 
                 HStack(spacing: 4) {
-                    if let plantName = task.plantName {
+                    if let plantName = task.plantDisplayName(language: localization.currentLanguage) {
                         Text(plantName)
                             .font(.system(.caption, design: .rounded))
                             .foregroundStyle(SeedlyTheme.primaryGreen)
+                        
+                        Text("•")
+                            .foregroundStyle(.tertiary)
                     }
-                    
-                    Text("•")
-                        .foregroundStyle(.tertiary)
                     
                     Text(task.dueDateString)
                         .font(.system(.caption, design: .rounded))
@@ -198,6 +199,7 @@ struct TaskRow: View {
 
 struct AddTaskSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var localization: LocalizationManager
     @State private var title = ""
     @State private var selectedType: TaskType = .watering
     @State private var dueDate = Date()
@@ -206,31 +208,31 @@ struct AddTaskSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Task Details") {
-                    TextField("Task name", text: $title)
+                Section(localization.taskDetails) {
+                    TextField(localization.taskNameField, text: $title)
                     
-                    Picker("Type", selection: $selectedType) {
+                    Picker(localization.taskTypeField, selection: $selectedType) {
                         ForEach(TaskType.allCases, id: \.self) { type in
-                            Label(type.rawValue.capitalized, systemImage: type.icon)
+                            Label(localization.taskTypeName(type), systemImage: type.icon)
                                 .tag(type)
                         }
                     }
                     
-                    DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
+                    DatePicker(localization.dueDate, selection: $dueDate, displayedComponents: .date)
                 }
                 
                 Section {
-                    Toggle("Recurring", isOn: $isRecurring)
+                    Toggle(localization.recurring, isOn: $isRecurring)
                 }
             }
-            .navigationTitle("New Task")
+            .navigationTitle(localization.newTask)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") { dismiss() }
+                    Button(localization.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add") { dismiss() }
+                    Button(localization.add) { dismiss() }
                         .font(.system(.body, weight: .semibold))
                         .foregroundStyle(SeedlyTheme.primaryGreen)
                         .disabled(title.isEmpty)

@@ -388,6 +388,295 @@ final class LocalizationManager: ObservableObject {
         }
     }
     
+    // MARK: - Task Types
+    
+    func taskTypeName(_ type: TaskType) -> String {
+        switch type {
+        case .watering: return taskWatering
+        case .fertilizing: return taskFertilizing
+        case .pruning: return taskPruning
+        case .harvesting: return taskHarvesting
+        case .seedStarting: return taskSeedStarting
+        case .transplanting: return taskTransplanting
+        case .pestInspection: return taskPestInspection
+        case .weeding: return taskWeeding
+        case .mulching: return taskMulching
+        case .soilTesting: return taskSoilTesting
+        }
+    }
+    
+    /// Verb form used when building dynamic titles like "Water Tomatoes".
+    func taskVerb(_ type: TaskType) -> String {
+        switch type {
+        case .watering:
+            switch currentLanguage {
+            case "pl": return "Podlej"; case "es": return "Regar"; case "de": return "Bewässere"
+            case "fr": return "Arroser"; case "it": return "Annaffia"; case "pt": return "Regar"
+            case "nl": return "Besproei"; case "ja": return "水やり"; case "ko": return "물주기"
+            case "zh": return "浇水"; case "ar": return "اسقِ"; case "hi": return "पानी दें"
+            case "uk": return "Полий"; case "ru": return "Полей"; default: return "Water"
+            }
+        case .fertilizing:
+            switch currentLanguage {
+            case "pl": return "Nawoź"; case "es": return "Fertilizar"; case "de": return "Dünge"
+            case "fr": return "Fertiliser"; case "it": return "Concima"; case "pt": return "Fertilizar"
+            case "nl": return "Bemest"; case "ja": return "肥料"; case "ko": return "비료주기"
+            case "zh": return "施肥"; case "ar": return "سمِّد"; case "hi": return "खाद दें"
+            case "uk": return "Удобри"; case "ru": return "Удобри"; default: return "Fertilize"
+            }
+        case .pruning:
+            switch currentLanguage {
+            case "pl": return "Przytnij"; case "es": return "Podar"; case "de": return "Beschneide"
+            case "fr": return "Tailler"; case "it": return "Pota"; case "pt": return "Podar"
+            case "nl": return "Snoei"; case "ja": return "剪定"; case "ko": return "가지치기"
+            case "zh": return "修剪"; case "ar": return "قلِّم"; case "hi": return "छंटाई करें"
+            case "uk": return "Обріж"; case "ru": return "Обрежь"; default: return "Prune"
+            }
+        case .harvesting:
+            switch currentLanguage {
+            case "pl": return "Zbierz"; case "es": return "Cosechar"; case "de": return "Ernte"
+            case "fr": return "Récolter"; case "it": return "Raccogli"; case "pt": return "Colher"
+            case "nl": return "Oogst"; case "ja": return "収穫"; case "ko": return "수확"
+            case "zh": return "收获"; case "ar": return "احصد"; case "hi": return "फसल काटें"
+            case "uk": return "Збери"; case "ru": return "Собери"; default: return "Harvest"
+            }
+        case .seedStarting:
+            switch currentLanguage {
+            case "pl": return "Posiej"; case "es": return "Siembra"; case "de": return "Säe"
+            case "fr": return "Semer"; case "it": return "Semina"; case "pt": return "Semear"
+            case "nl": return "Zaai"; case "ja": return "種まき"; case "ko": return "씨앗 심기"
+            case "zh": return "播种"; case "ar": return "ازرع"; case "hi": return "बीज बोएं"
+            case "uk": return "Посій"; case "ru": return "Посей"; default: return "Start"
+            }
+        case .transplanting:
+            switch currentLanguage {
+            case "pl": return "Przesadź"; case "es": return "Trasplantar"; case "de": return "Pflanze um"
+            case "fr": return "Transplanter"; case "it": return "Trapianta"; case "pt": return "Transplantar"
+            case "nl": return "Verplant"; case "ja": return "植え替え"; case "ko": return "이식"
+            case "zh": return "移植"; case "ar": return "انقل"; case "hi": return "प्रत्यारोपण"
+            case "uk": return "Пересади"; case "ru": return "Пересади"; default: return "Transplant"
+            }
+        case .pestInspection:
+            switch currentLanguage {
+            case "pl": return "Sprawdź szkodniki"; case "es": return "Revisar plagas"; case "de": return "Schädlinge prüfen"
+            case "fr": return "Vérifier les parasites"; case "it": return "Controlla parassiti"; case "pt": return "Verificar pragas"
+            case "nl": return "Controleer op plagen"; case "ja": return "害虫チェック"; case "ko": return "해충 점검"
+            case "zh": return "检查害虫"; case "ar": return "افحص الآفات"; case "hi": return "कीट जांच"
+            case "uk": return "Перевір шкідників"; case "ru": return "Проверь вредителей"; default: return "Check for pests"
+            }
+        case .weeding:
+            switch currentLanguage {
+            case "pl": return "Wypiel chwasty"; case "es": return "Quitar malezas"; case "de": return "Jäte Unkraut"
+            case "fr": return "Désherber"; case "it": return "Diserba"; case "pt": return "Tirar ervas daninhas"
+            case "nl": return "Wied"; case "ja": return "雑草取り"; case "ko": return "잡초 제거"
+            case "zh": return "除草"; case "ar": return "انزع الأعشاب"; case "hi": return "खरपतवार हटाएं"
+            case "uk": return "Прополи"; case "ru": return "Пропалывай"; default: return "Weed"
+            }
+        case .mulching:
+            switch currentLanguage {
+            case "pl": return "Ściółkuj"; case "es": return "Colocar mantillo"; case "de": return "Mulche"
+            case "fr": return "Pailler"; case "it": return "Pacciama"; case "pt": return "Cobrir com palha"
+            case "nl": return "Mulch"; case "ja": return "マルチング"; case "ko": return "멀칭"
+            case "zh": return "覆盖"; case "ar": return "غطِّ التربة"; case "hi": return "मल्च करें"
+            case "uk": return "Замульчуй"; case "ru": return "Замульчируй"; default: return "Mulch"
+            }
+        case .soilTesting:
+            switch currentLanguage {
+            case "pl": return "Zbadaj glebę"; case "es": return "Probar suelo"; case "de": return "Boden testen"
+            case "fr": return "Tester le sol"; case "it": return "Testa il terreno"; case "pt": return "Testar solo"
+            case "nl": return "Grondtest"; case "ja": return "土壌検査"; case "ko": return "토양 검사"
+            case "zh": return "土壤检测"; case "ar": return "افحص التربة"; case "hi": return "मिट्टी परीक्षण"
+            case "uk": return "Перевір ґрунт"; case "ru": return "Проверь почву"; default: return "Test soil"
+            }
+        }
+    }
+    
+    var taskWatering: String {
+        switch currentLanguage {
+        case "pl": return "Podlewanie"; case "es": return "Riego"; case "de": return "Bewässerung"
+        case "fr": return "Arrosage"; case "it": return "Irrigazione"; case "pt": return "Rega"
+        case "nl": return "Water geven"; case "ja": return "水やり"; case "ko": return "물주기"
+        case "zh": return "浇水"; case "ar": return "الري"; case "hi": return "पानी देना"
+        case "uk": return "Полив"; case "ru": return "Полив"; default: return "Watering"
+        }
+    }
+    var taskFertilizing: String {
+        switch currentLanguage {
+        case "pl": return "Nawożenie"; case "es": return "Fertilización"; case "de": return "Düngung"
+        case "fr": return "Fertilisation"; case "it": return "Concimazione"; case "pt": return "Fertilização"
+        case "nl": return "Bemesten"; case "ja": return "施肥"; case "ko": return "비료주기"
+        case "zh": return "施肥"; case "ar": return "التسميد"; case "hi": return "खाद देना"
+        case "uk": return "Удобрення"; case "ru": return "Удобрение"; default: return "Fertilizing"
+        }
+    }
+    var taskPruning: String {
+        switch currentLanguage {
+        case "pl": return "Przycinanie"; case "es": return "Poda"; case "de": return "Beschneiden"
+        case "fr": return "Taille"; case "it": return "Potatura"; case "pt": return "Poda"
+        case "nl": return "Snoeien"; case "ja": return "剪定"; case "ko": return "가지치기"
+        case "zh": return "修剪"; case "ar": return "التقليم"; case "hi": return "छंटाई"
+        case "uk": return "Обрізка"; case "ru": return "Обрезка"; default: return "Pruning"
+        }
+    }
+    var taskHarvesting: String {
+        switch currentLanguage {
+        case "pl": return "Zbieranie"; case "es": return "Cosecha"; case "de": return "Ernte"
+        case "fr": return "Récolte"; case "it": return "Raccolta"; case "pt": return "Colheita"
+        case "nl": return "Oogsten"; case "ja": return "収穫"; case "ko": return "수확"
+        case "zh": return "收获"; case "ar": return "الحصاد"; case "hi": return "फसल"
+        case "uk": return "Збирання"; case "ru": return "Сбор урожая"; default: return "Harvesting"
+        }
+    }
+    var taskSeedStarting: String {
+        switch currentLanguage {
+        case "pl": return "Siew"; case "es": return "Siembra"; case "de": return "Aussaat"
+        case "fr": return "Semis"; case "it": return "Semina"; case "pt": return "Semeadura"
+        case "nl": return "Zaaien"; case "ja": return "種まき"; case "ko": return "씨앗 심기"
+        case "zh": return "播种"; case "ar": return "زرع البذور"; case "hi": return "बीज बोना"
+        case "uk": return "Посів"; case "ru": return "Посев"; default: return "Seed Starting"
+        }
+    }
+    var taskTransplanting: String {
+        switch currentLanguage {
+        case "pl": return "Przesadzanie"; case "es": return "Trasplante"; case "de": return "Umpflanzen"
+        case "fr": return "Transplantation"; case "it": return "Trapianto"; case "pt": return "Transplante"
+        case "nl": return "Verplanten"; case "ja": return "植え替え"; case "ko": return "이식"
+        case "zh": return "移植"; case "ar": return "النقل"; case "hi": return "प्रत्यारोपण"
+        case "uk": return "Пересадка"; case "ru": return "Пересадка"; default: return "Transplanting"
+        }
+    }
+    var taskPestInspection: String {
+        switch currentLanguage {
+        case "pl": return "Kontrola szkodników"; case "es": return "Control de plagas"; case "de": return "Schädlingskontrolle"
+        case "fr": return "Contrôle des parasites"; case "it": return "Controllo parassiti"; case "pt": return "Controle de pragas"
+        case "nl": return "Plaagbeheersing"; case "ja": return "害虫検査"; case "ko": return "해충 점검"
+        case "zh": return "害虫检查"; case "ar": return "فحص الآفات"; case "hi": return "कीट निरीक्षण"
+        case "uk": return "Контроль шкідників"; case "ru": return "Контроль вредителей"; default: return "Pest Inspection"
+        }
+    }
+    var taskWeeding: String {
+        switch currentLanguage {
+        case "pl": return "Pielenie"; case "es": return "Deshierbe"; case "de": return "Jäten"
+        case "fr": return "Désherbage"; case "it": return "Diserbo"; case "pt": return "Capina"
+        case "nl": return "Wieden"; case "ja": return "除草"; case "ko": return "잡초 제거"
+        case "zh": return "除草"; case "ar": return "إزالة الأعشاب"; case "hi": return "खरपतवार"
+        case "uk": return "Прополювання"; case "ru": return "Прополка"; default: return "Weeding"
+        }
+    }
+    var taskMulching: String {
+        switch currentLanguage {
+        case "pl": return "Ściółkowanie"; case "es": return "Acolchado"; case "de": return "Mulchen"
+        case "fr": return "Paillage"; case "it": return "Pacciamatura"; case "pt": return "Cobertura morta"
+        case "nl": return "Mulchen"; case "ja": return "マルチング"; case "ko": return "멀칭"
+        case "zh": return "覆盖"; case "ar": return "التغطية"; case "hi": return "मल्चिंग"
+        case "uk": return "Мульчування"; case "ru": return "Мульчирование"; default: return "Mulching"
+        }
+    }
+    var taskSoilTesting: String {
+        switch currentLanguage {
+        case "pl": return "Badanie gleby"; case "es": return "Prueba de suelo"; case "de": return "Bodentest"
+        case "fr": return "Test du sol"; case "it": return "Test del suolo"; case "pt": return "Teste do solo"
+        case "nl": return "Grondtest"; case "ja": return "土壌検査"; case "ko": return "토양 검사"
+        case "zh": return "土壤检测"; case "ar": return "فحص التربة"; case "hi": return "मिट्टी परीक्षण"
+        case "uk": return "Аналіз ґрунту"; case "ru": return "Анализ почвы"; default: return "Soil Testing"
+        }
+    }
+    
+    // MARK: - Tasks UI
+    
+    var noTasksInCategory: String {
+        switch currentLanguage {
+        case "pl": return "Brak zadań w tej kategorii. Dodaj nowe zadania ogrodowe, aby być na bieżąco."
+        case "es": return "No hay tareas en esta categoría. Añade nuevas tareas de jardín para estar al día."
+        case "de": return "Keine Aufgaben in dieser Kategorie. Füge neue Gartenaufgaben hinzu, um auf Kurs zu bleiben."
+        case "fr": return "Aucune tâche dans cette catégorie. Ajoutez de nouvelles tâches pour rester organisé."
+        case "it": return "Nessuna attività in questa categoria. Aggiungi nuove attività di giardinaggio per restare al passo."
+        case "pt": return "Nenhuma tarefa nesta categoria. Adicione novas tarefas de jardim para se manter em dia."
+        case "nl": return "Geen taken in deze categorie. Voeg nieuwe tuintaken toe om bij te blijven."
+        case "ja": return "このカテゴリにタスクはありません。新しい園芸タスクを追加しましょう。"
+        case "ko": return "이 카테고리에 작업이 없습니다. 새 정원 작업을 추가하세요."
+        case "zh": return "此类别中没有任务。添加新的园艺任务以保持进度。"
+        case "ar": return "لا توجد مهام في هذه الفئة. أضف مهام جديدة للبستنة للبقاء على المسار."
+        case "hi": return "इस श्रेणी में कोई कार्य नहीं है। ट्रैक पर रहने के लिए नए बागवानी कार्य जोड़ें।"
+        case "uk": return "Немає завдань у цій категорії. Додайте нові садові завдання."
+        case "ru": return "В этой категории нет задач. Добавьте новые садовые задачи."
+        default: return "No tasks in this category. Add new gardening tasks to stay on track."
+        }
+    }
+    
+    var newTask: String {
+        switch currentLanguage {
+        case "pl": return "Nowe zadanie"; case "es": return "Nueva tarea"; case "de": return "Neue Aufgabe"
+        case "fr": return "Nouvelle tâche"; case "it": return "Nuova attività"; case "pt": return "Nova tarefa"
+        case "nl": return "Nieuwe taak"; case "ja": return "新しいタスク"; case "ko": return "새 작업"
+        case "zh": return "新任务"; case "ar": return "مهمة جديدة"; case "hi": return "नया कार्य"
+        case "uk": return "Нове завдання"; case "ru": return "Новая задача"; default: return "New Task"
+        }
+    }
+    var taskDetails: String {
+        switch currentLanguage {
+        case "pl": return "Szczegóły zadania"; case "es": return "Detalles de la tarea"; case "de": return "Aufgabendetails"
+        case "fr": return "Détails de la tâche"; case "it": return "Dettagli attività"; case "pt": return "Detalhes da tarefa"
+        case "nl": return "Taakdetails"; case "ja": return "タスクの詳細"; case "ko": return "작업 세부정보"
+        case "zh": return "任务详情"; case "ar": return "تفاصيل المهمة"; case "hi": return "कार्य विवरण"
+        case "uk": return "Деталі завдання"; case "ru": return "Детали задачи"; default: return "Task Details"
+        }
+    }
+    var taskNameField: String {
+        switch currentLanguage {
+        case "pl": return "Nazwa zadania"; case "es": return "Nombre de la tarea"; case "de": return "Aufgabenname"
+        case "fr": return "Nom de la tâche"; case "it": return "Nome attività"; case "pt": return "Nome da tarefa"
+        case "nl": return "Taaknaam"; case "ja": return "タスク名"; case "ko": return "작업 이름"
+        case "zh": return "任务名称"; case "ar": return "اسم المهمة"; case "hi": return "कार्य नाम"
+        case "uk": return "Назва завдання"; case "ru": return "Название задачи"; default: return "Task name"
+        }
+    }
+    var taskTypeField: String {
+        switch currentLanguage {
+        case "pl": return "Typ"; case "es": return "Tipo"; case "de": return "Typ"
+        case "fr": return "Type"; case "it": return "Tipo"; case "pt": return "Tipo"
+        case "nl": return "Type"; case "ja": return "種類"; case "ko": return "유형"
+        case "zh": return "类型"; case "ar": return "النوع"; case "hi": return "प्रकार"
+        case "uk": return "Тип"; case "ru": return "Тип"; default: return "Type"
+        }
+    }
+    var dueDate: String {
+        switch currentLanguage {
+        case "pl": return "Termin"; case "es": return "Fecha límite"; case "de": return "Fällig am"
+        case "fr": return "Échéance"; case "it": return "Scadenza"; case "pt": return "Data de vencimento"
+        case "nl": return "Vervaldatum"; case "ja": return "期限"; case "ko": return "기한"
+        case "zh": return "截止日期"; case "ar": return "تاريخ الاستحقاق"; case "hi": return "नियत तिथि"
+        case "uk": return "Термін"; case "ru": return "Срок"; default: return "Due Date"
+        }
+    }
+    var recurring: String {
+        switch currentLanguage {
+        case "pl": return "Powtarzające się"; case "es": return "Recurrente"; case "de": return "Wiederkehrend"
+        case "fr": return "Récurrent"; case "it": return "Ricorrente"; case "pt": return "Recorrente"
+        case "nl": return "Terugkerend"; case "ja": return "繰り返し"; case "ko": return "반복"
+        case "zh": return "重复"; case "ar": return "متكرر"; case "hi": return "आवर्ती"
+        case "uk": return "Повторюване"; case "ru": return "Повторяющееся"; default: return "Recurring"
+        }
+    }
+    var cancel: String {
+        switch currentLanguage {
+        case "pl": return "Anuluj"; case "es": return "Cancelar"; case "de": return "Abbrechen"
+        case "fr": return "Annuler"; case "it": return "Annulla"; case "pt": return "Cancelar"
+        case "nl": return "Annuleer"; case "ja": return "キャンセル"; case "ko": return "취소"
+        case "zh": return "取消"; case "ar": return "إلغاء"; case "hi": return "रद्द करें"
+        case "uk": return "Скасувати"; case "ru": return "Отмена"; default: return "Cancel"
+        }
+    }
+    var add: String {
+        switch currentLanguage {
+        case "pl": return "Dodaj"; case "es": return "Añadir"; case "de": return "Hinzufügen"
+        case "fr": return "Ajouter"; case "it": return "Aggiungi"; case "pt": return "Adicionar"
+        case "nl": return "Voeg toe"; case "ja": return "追加"; case "ko": return "추가"
+        case "zh": return "添加"; case "ar": return "إضافة"; case "hi": return "जोड़ें"
+        case "uk": return "Додати"; case "ru": return "Добавить"; default: return "Add"
+        }
+    }
+    
     // MARK: - Plant Categories
     
     func categoryName(_ category: PlantCategory) -> String {
