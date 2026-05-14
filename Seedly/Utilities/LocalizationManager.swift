@@ -1342,7 +1342,7 @@ Powiadomienia
 Powiadomienia o przymrozkach, podlewaniu i zbiorach są generowane lokalnie na Twoim urządzeniu na podstawie Twoich ustawień.
 
 Kontakt
-Pytania dotyczące prywatności? Napisz do nas: support@simpleseeds.app
+Pytania dotyczące prywatności? Napisz do nas: powersatellite@yahoo.com
 """
         default: return """
 Simple Seeds respects your privacy.
@@ -1360,7 +1360,7 @@ Notifications
 Frost, watering, and harvest notifications are generated locally on your device based on your settings.
 
 Contact
-Questions about privacy? Email us: support@simpleseeds.app
+Questions about privacy? Email us: powersatellite@yahoo.com
 """
         }
     }
