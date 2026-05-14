@@ -129,6 +129,79 @@ final class CalendarViewModel: ObservableObject {
     private func updateSelectedDayPlants() {
         selectedDayPlants = eventsForDate(selectedDate)
     }
+    
+    // MARK: - Forward-looking recommendations (driven by selectedDate)
+    
+    /// Plants ready to sow/transplant within `days` days starting from the
+    /// currently selected date. Dedup'd by plant, sorted by soonest.
+    func upcomingPlantings(within days: Int = 14, limit: Int = 4) -> [CalendarRecommendation] {
+        recommendations(
+            eventTypes: [.planting, .seedStart, .transplant],
+            fromOffset: 0,
+            toOffset: days,
+            limit: limit
+        )
+    }
+    
+    /// Events occurring farther out from the selected date (default: between
+    /// 14 and 90 days). Used for the "Coming Up" preview list.
+    func comingUpEvents(afterDays: Int = 14, throughDays: Int = 90, limit: Int = 4) -> [CalendarRecommendation] {
+        recommendations(
+            eventTypes: nil,
+            fromOffset: afterDays,
+            toOffset: throughDays,
+            limit: limit
+        )
+    }
+    
+    private func recommendations(eventTypes: Set<PlantingEventType>?,
+                                 fromOffset: Int,
+                                 toOffset: Int,
+                                 limit: Int) -> [CalendarRecommendation] {
+        let cal = Calendar.current
+        let anchor = cal.startOfDay(for: selectedDate)
+        guard let lo = cal.date(byAdding: .day, value: fromOffset, to: anchor),
+              let hi = cal.date(byAdding: .day, value: toOffset,   to: anchor)
+        else { return [] }
+        
+        let lang = LocalizationManager.shared.currentLanguage
+        var seen = Set<String>()
+        var out: [CalendarRecommendation] = []
+        
+        let candidates = plantingEvents
+            .filter { event in
+                if let types = eventTypes, !types.contains(event.eventType) { return false }
+                let d = cal.startOfDay(for: event.date)
+                return d >= lo && d <= hi
+            }
+            .sorted { $0.date < $1.date }
+        
+        for event in candidates {
+            let key = "\(event.plantId)|\(event.eventType.rawValue)"
+            guard !seen.contains(key) else { continue }
+            seen.insert(key)
+            let days = cal.dateComponents([.day], from: anchor, to: cal.startOfDay(for: event.date)).day ?? 0
+            let name = PlantDatabase.shared.plant(byId: event.plantId)?.localizedName(for: lang) ?? event.plantName
+            out.append(CalendarRecommendation(
+                plantId: event.plantId,
+                plantName: name,
+                daysFromSelected: days,
+                eventType: event.eventType
+            ))
+            if out.count >= limit { break }
+        }
+        return out
+    }
+}
+
+// MARK: - Recommendation Model
+
+struct CalendarRecommendation: Identifiable, Hashable {
+    let id = UUID()
+    let plantId: String
+    let plantName: String
+    let daysFromSelected: Int
+    let eventType: PlantingEventType
 }
 
 struct PlantingEvent: Identifiable {

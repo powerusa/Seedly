@@ -103,12 +103,28 @@ struct CalendarScreenView: View {
         .padding(.horizontal, SeedlyTheme.paddingMedium)
     }
     
-    // MARK: - What to Plant Section
+    // MARK: - Selected date subtitle
+    private var selectedDateLabel: String {
+        let cal = Calendar.current
+        if cal.isDateInToday(viewModel.selectedDate) { return localization.today }
+        let f = DateFormatter()
+        f.locale = Locale(identifier: localization.currentLanguage)
+        f.setLocalizedDateFormatFromTemplate("EEE, MMM d")
+        return f.string(from: viewModel.selectedDate)
+    }
+    
+    // MARK: - What to Plant Section (dynamic, anchored to selectedDate)
     private var whatToPlantSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let recs = viewModel.upcomingPlantings(within: 14, limit: 4)
+        return VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(localization.whatToPlant)
-                    .font(.system(.headline, design: .rounded, weight: .semibold))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(localization.whatToPlant)
+                        .font(.system(.headline, design: .rounded, weight: .semibold))
+                    Text(selectedDateLabel)
+                        .font(.system(.caption, design: .rounded))
+                        .foregroundStyle(.secondary)
+                }
                 Spacer()
                 Button(localization.viewAll) {}
                     .font(.system(.caption, design: .rounded))
@@ -116,48 +132,82 @@ struct CalendarScreenView: View {
             }
             .padding(.horizontal, SeedlyTheme.paddingLarge)
             
-            VStack(spacing: 8) {
-                plantRowLink(id: "lettuce") {
-                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_lettuce", locale: localization.currentLanguage), status: localization.excellent, statusColor: .green)
+            if recs.isEmpty {
+                emptyRecommendation(message: localization.allCaughtUp)
+            } else {
+                VStack(spacing: 8) {
+                    ForEach(recs) { rec in
+                        plantRowLink(id: rec.plantId) {
+                            CalendarPlantRow(
+                                name: rec.plantName,
+                                status: badgeText(for: rec),
+                                statusColor: badgeColor(for: rec)
+                            )
+                        }
+                    }
                 }
-                plantRowLink(id: "carrot") {
-                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_carrot", locale: localization.currentLanguage), status: localization.excellent, statusColor: .green)
-                }
-                plantRowLink(id: "onion") {
-                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_onion", locale: localization.currentLanguage), status: localization.good, statusColor: .teal)
-                }
-                plantRowLink(id: "spinach") {
-                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_spinach", locale: localization.currentLanguage), status: localization.good, statusColor: .teal)
-                }
+                .padding(.horizontal, SeedlyTheme.paddingLarge)
             }
-            .padding(.horizontal, SeedlyTheme.paddingLarge)
         }
     }
     
-    // MARK: - Coming Up
+    // MARK: - Coming Up (events further in the future from selectedDate)
     private var comingUpSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let recs = viewModel.comingUpEvents(afterDays: 14, throughDays: 120, limit: 4)
+        return VStack(alignment: .leading, spacing: 12) {
             Text(localization.comingUp)
                 .font(.system(.headline, design: .rounded, weight: .semibold))
                 .padding(.horizontal, SeedlyTheme.paddingLarge)
             
-            VStack(spacing: 8) {
-                plantRowLink(id: "tomato") {
-                    ComingUpRow(
-                        plantName: PlantLocalization.localizedName(for: "plant_tomato", locale: localization.currentLanguage),
-                        detail: localization.safePlantIn(days: 12),
-                        icon: "leaf.fill"
-                    )
+            if recs.isEmpty {
+                emptyRecommendation(message: localization.noTasksInCategory)
+            } else {
+                VStack(spacing: 8) {
+                    ForEach(recs) { rec in
+                        plantRowLink(id: rec.plantId) {
+                            ComingUpRow(
+                                plantName: rec.plantName,
+                                detail: detailText(for: rec),
+                                icon: rec.eventType.icon
+                            )
+                        }
+                    }
                 }
-                plantRowLink(id: "pepper") {
-                    ComingUpRow(
-                        plantName: PlantLocalization.localizedName(for: "plant_pepper", locale: localization.currentLanguage),
-                        detail: localization.safePlantIn(days: 14),
-                        icon: "leaf.fill"
-                    )
-                }
+                .padding(.horizontal, SeedlyTheme.paddingLarge)
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func emptyRecommendation(message: String) -> some View {
+        Text(message)
+            .font(.system(.subheadline, design: .rounded))
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, 8)
             .padding(.horizontal, SeedlyTheme.paddingLarge)
+    }
+    
+    // MARK: - Row labels
+    
+    private func detailText(for rec: CalendarRecommendation) -> String {
+        switch rec.eventType {
+        case .harvest:                  return localization.harvestInDays(rec.daysFromSelected)
+        case .seedStart:                return localization.startSeedsInDays(rec.daysFromSelected)
+        case .planting, .transplant:    return localization.plantInDays(rec.daysFromSelected)
+        }
+    }
+    
+    private func badgeText(for rec: CalendarRecommendation) -> String {
+        rec.daysFromSelected <= 0 ? localization.today : "\(rec.daysFromSelected)d"
+    }
+    
+    private func badgeColor(for rec: CalendarRecommendation) -> Color {
+        switch rec.daysFromSelected {
+        case ..<0:  return .gray
+        case 0...3: return .green
+        case 4...7: return .teal
+        default:    return .orange
         }
     }
     

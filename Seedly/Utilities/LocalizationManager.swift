@@ -222,6 +222,55 @@ final class LocalizationManager: ObservableObject {
         }
     }
     
+    func harvestInDays(_ days: Int) -> String {
+        if days <= 0 {
+            switch currentLanguage {
+            case "pl": return "Zbiory dziś"; case "es": return "Cosecha hoy"; case "de": return "Ernte heute"
+            case "fr": return "Récolte aujourd'hui"; case "it": return "Raccolta oggi"; case "pt": return "Colheita hoje"
+            case "nl": return "Oogst vandaag"; case "ja": return "今日収穫"; case "ko": return "오늘 수확"
+            case "zh": return "今日收获"; case "ar": return "الحصاد اليوم"; case "hi": return "आज कटाई"
+            case "uk": return "Сьогодні збір"; case "ru": return "Сбор сегодня"; default: return "Harvest today"
+            }
+        }
+        switch currentLanguage {
+        case "pl": return "Zbiory za \(days) dni"; case "es": return "Cosecha en \(days) días"
+        case "de": return "Ernte in \(days) Tagen"; case "fr": return "Récolte dans \(days) jours"
+        case "it": return "Raccolta tra \(days) giorni"; case "pt": return "Colheita em \(days) dias"
+        case "nl": return "Oogst over \(days) dagen"; case "ja": return "\(days)日後に収穫"
+        case "ko": return "\(days)일 후 수확"; case "zh": return "\(days)天后收获"
+        case "ar": return "الحصاد خلال \(days) يومًا"; case "hi": return "\(days) दिनों में कटाई"
+        case "uk": return "Збір через \(days) дн."; case "ru": return "Сбор через \(days) дн."
+        default: return "Harvest in \(days) days"
+        }
+    }
+    
+    func startSeedsInDays(_ days: Int) -> String {
+        if days <= 0 { return startIndoorsNow }
+        switch currentLanguage {
+        case "pl": return "Zacznij siew za \(days) dni"; case "es": return "Iniciar semillas en \(days) días"
+        case "de": return "Aussaat in \(days) Tagen"; case "fr": return "Semis dans \(days) jours"
+        case "it": return "Inizia semina tra \(days) giorni"; case "pt": return "Iniciar sementes em \(days) dias"
+        case "nl": return "Zaaien over \(days) dagen"; case "ja": return "\(days)日後に種まき"
+        case "ko": return "\(days)일 후 파종"; case "zh": return "\(days)天后播种"
+        case "ar": return "ابدأ البذور خلال \(days) يومًا"; case "hi": return "\(days) दिनों में बीज शुरू करें"
+        case "uk": return "Сівба через \(days) дн."; case "ru": return "Посев через \(days) дн."
+        default: return "Start seeds in \(days) days"
+        }
+    }
+    
+    func plantInDays(_ days: Int) -> String {
+        if days <= 0 {
+            switch currentLanguage {
+            case "pl": return "Sadź dziś"; case "es": return "Plantar hoy"; case "de": return "Heute pflanzen"
+            case "fr": return "Planter aujourd'hui"; case "it": return "Pianta oggi"; case "pt": return "Plantar hoje"
+            case "nl": return "Plant vandaag"; case "ja": return "今日植える"; case "ko": return "오늘 심기"
+            case "zh": return "今日种植"; case "ar": return "ازرع اليوم"; case "hi": return "आज लगाएँ"
+            case "uk": return "Садіть сьогодні"; case "ru": return "Сажать сегодня"; default: return "Plant today"
+            }
+        }
+        return safePlantIn(days: days)
+    }
+    
     // MARK: - Tabs
     
     var tabToday: String {
