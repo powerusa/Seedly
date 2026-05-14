@@ -117,10 +117,18 @@ struct CalendarScreenView: View {
             .padding(.horizontal, SeedlyTheme.paddingLarge)
             
             VStack(spacing: 8) {
-                CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_lettuce", locale: localization.currentLanguage), status: localization.excellent, statusColor: .green)
-                CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_carrot", locale: localization.currentLanguage), status: localization.excellent, statusColor: .green)
-                CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_onion", locale: localization.currentLanguage), status: localization.good, statusColor: .teal)
-                CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_spinach", locale: localization.currentLanguage), status: localization.good, statusColor: .teal)
+                plantRowLink(id: "lettuce") {
+                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_lettuce", locale: localization.currentLanguage), status: localization.excellent, statusColor: .green)
+                }
+                plantRowLink(id: "carrot") {
+                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_carrot", locale: localization.currentLanguage), status: localization.excellent, statusColor: .green)
+                }
+                plantRowLink(id: "onion") {
+                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_onion", locale: localization.currentLanguage), status: localization.good, statusColor: .teal)
+                }
+                plantRowLink(id: "spinach") {
+                    CalendarPlantRow(name: PlantLocalization.localizedName(for: "plant_spinach", locale: localization.currentLanguage), status: localization.good, statusColor: .teal)
+                }
             }
             .padding(.horizontal, SeedlyTheme.paddingLarge)
         }
@@ -134,18 +142,36 @@ struct CalendarScreenView: View {
                 .padding(.horizontal, SeedlyTheme.paddingLarge)
             
             VStack(spacing: 8) {
-                ComingUpRow(
-                    plantName: PlantLocalization.localizedName(for: "plant_tomato", locale: localization.currentLanguage),
-                    detail: localization.safePlantIn(days: 12),
-                    icon: "leaf.fill"
-                )
-                ComingUpRow(
-                    plantName: PlantLocalization.localizedName(for: "plant_pepper", locale: localization.currentLanguage),
-                    detail: localization.safePlantIn(days: 14),
-                    icon: "leaf.fill"
-                )
+                plantRowLink(id: "tomato") {
+                    ComingUpRow(
+                        plantName: PlantLocalization.localizedName(for: "plant_tomato", locale: localization.currentLanguage),
+                        detail: localization.safePlantIn(days: 12),
+                        icon: "leaf.fill"
+                    )
+                }
+                plantRowLink(id: "pepper") {
+                    ComingUpRow(
+                        plantName: PlantLocalization.localizedName(for: "plant_pepper", locale: localization.currentLanguage),
+                        detail: localization.safePlantIn(days: 14),
+                        icon: "leaf.fill"
+                    )
+                }
             }
             .padding(.horizontal, SeedlyTheme.paddingLarge)
+        }
+    }
+    
+    /// Wraps a row in a NavigationLink to PlantDetailView when the plant id
+    /// resolves in the catalog. Falls back to the plain row otherwise.
+    @ViewBuilder
+    private func plantRowLink<Content: View>(id: String, @ViewBuilder content: () -> Content) -> some View {
+        if let plant = PlantDatabase.shared.plant(byId: id) {
+            NavigationLink(destination: PlantDetailView(plant: plant)) {
+                content()
+            }
+            .buttonStyle(.plain)
+        } else {
+            content()
         }
     }
 }
