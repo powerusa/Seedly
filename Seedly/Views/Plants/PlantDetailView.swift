@@ -44,18 +44,34 @@ struct PlantDetailView: View {
     // MARK: - Header
     private var plantHeader: some View {
         ZStack(alignment: .bottomLeading) {
-            // Image placeholder
-            LinearGradient(
-                colors: [SeedlyTheme.accentGreen.opacity(0.4), SeedlyTheme.primaryGreen.opacity(0.6)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .frame(height: 260)
-            .overlay(
-                Image(systemName: plant.category.icon)
-                    .font(.system(size: 80))
-                    .foregroundStyle(.white.opacity(0.3))
-            )
+            // Real plant photo if asset exists, otherwise gradient + category icon fallback
+            if UIImage(named: plant.imageAssetName) != nil {
+                Image(plant.imageAssetName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 260)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+                    .overlay(
+                        LinearGradient(
+                            colors: [.clear, .black.opacity(0.5)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+            } else {
+                LinearGradient(
+                    colors: [SeedlyTheme.accentGreen.opacity(0.4), SeedlyTheme.primaryGreen.opacity(0.6)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .frame(height: 260)
+                .overlay(
+                    Image(systemName: plant.category.icon)
+                        .font(.system(size: 80))
+                        .foregroundStyle(.white.opacity(0.3))
+                )
+            }
             
             // Plant name overlay
             VStack(alignment: .leading, spacing: 4) {
