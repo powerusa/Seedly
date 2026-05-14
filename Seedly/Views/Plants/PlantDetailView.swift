@@ -78,13 +78,19 @@ struct PlantDetailView: View {
                 Text(plant.localizedName())
                     .font(.system(.title, design: .rounded, weight: .bold))
                     .foregroundStyle(.white)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.7)
                 
                 Text(plant.scientificName)
                     .font(.system(.subheadline, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.8))
+                    .foregroundStyle(.white.opacity(0.85))
                     .italic()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
-            .padding(SeedlyTheme.paddingLarge)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, SeedlyTheme.paddingLarge + 8)
+            .padding(.bottom, SeedlyTheme.paddingLarge)
             
             // Difficulty badge
             VStack {
@@ -100,9 +106,11 @@ struct PlantDetailView: View {
                                 .fill(difficultyColor(plant.difficulty))
                         )
                 }
-                .padding()
+                .padding(.horizontal, SeedlyTheme.paddingLarge + 8)
+                .padding(.top, SeedlyTheme.paddingMedium)
                 Spacer()
             }
+            .frame(maxWidth: .infinity)
         }
     }
     
