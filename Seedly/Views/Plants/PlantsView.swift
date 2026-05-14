@@ -6,23 +6,35 @@ import SwiftUI
 struct PlantsView: View {
     @StateObject private var viewModel = PlantsViewModel()
     @EnvironmentObject var localization: LocalizationManager
+    @EnvironmentObject var garden: GardenStore
     @State private var showAllPlants = true
+    @State private var isEditing = false
+    @State private var showAddSheet = false
     
     private let columns = [
         GridItem(.flexible(), spacing: 12),
         GridItem(.flexible(), spacing: 12)
     ]
     
+    // Plants visible after applying garden filters (removed catalog + custom)
+    private var visiblePlants: [Plant] {
+        let filtered = viewModel.filteredPlants.filter { !garden.isRemoved($0.id) }
+        let customAsPlants = garden.customPlants.map { garden.asPlant($0) }
+        // When viewing favorites, custom plants are not shown unless favorited.
+        let customs = viewModel.showFavoritesOnly
+            ? customAsPlants.filter { viewModel.isFavorite($0.id) }
+            : customAsPlants.filter { plant in
+                if let cat = viewModel.selectedCategory { return plant.category == cat }
+                return true
+            }
+        return filtered + customs
+    }
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Segmented control
                 segmentedControl
-                
-                // Category filter
                 categoryScroll
-                
-                // Plants grid
                 ScrollView {
                     plantsGrid
                         .padding(.bottom, 100)
@@ -32,14 +44,30 @@ struct PlantsView: View {
             .navigationTitle(localization.myGarden)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showAddSheet = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(SeedlyTheme.primaryGreen)
+                    }
+                    .accessibilityLabel(localization.addPlant)
+                }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(localization.edit) {}
-                        .foregroundStyle(SeedlyTheme.primaryGreen)
+                    Button(isEditing ? localization.done : localization.edit) {
+                        withAnimation { isEditing.toggle() }
+                    }
+                    .foregroundStyle(SeedlyTheme.primaryGreen)
                 }
             }
             .searchable(text: $viewModel.searchText, prompt: localization.searchPlants)
             .onChange(of: viewModel.searchText) { _, _ in
                 viewModel.applyFilters()
+            }
+            .sheet(isPresented: $showAddSheet) {
+                AddCustomPlantSheet()
+                    .environmentObject(localization)
+                    .environmentObject(garden)
             }
         }
     }
@@ -90,39 +118,55 @@ struct PlantsView: View {
     // MARK: - Plants Grid
     private var plantsGrid: some View {
         LazyVGrid(columns: columns, spacing: 12) {
-            ForEach(viewModel.filteredPlants) { plant in
-                NavigationLink(destination: PlantDetailView(plant: plant)) {
-                    PlantGridCard(
-                        plant: plant,
-                        isFavorite: viewModel.isFavorite(plant.id)
-                    )
-                }
-                .buttonStyle(.plain)
-                .contextMenu {
-                    Button {
-                        withAnimation { viewModel.toggleFavorite(plant.id) }
-                    } label: {
-                        Label(
-                            viewModel.isFavorite(plant.id) ? localization.removeFromFavorites : localization.addToFavorites,
-                            systemImage: viewModel.isFavorite(plant.id) ? "heart.slash" : "heart"
+            ForEach(visiblePlants) { plant in
+                ZStack(alignment: .topLeading) {
+                    NavigationLink(destination: PlantDetailView(plant: plant)) {
+                        PlantGridCard(
+                            plant: plant,
+                            isFavorite: viewModel.isFavorite(plant.id)
                         )
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isEditing)
+                    .contextMenu {
+                        Button {
+                            withAnimation { viewModel.toggleFavorite(plant.id) }
+                        } label: {
+                            Label(
+                                viewModel.isFavorite(plant.id) ? localization.removeFromFavorites : localization.addToFavorites,
+                                systemImage: viewModel.isFavorite(plant.id) ? "heart.slash" : "heart"
+                            )
+                        }
+                        Button(role: .destructive) {
+                            withAnimation { garden.removeFromGarden(plant.id) }
+                        } label: {
+                            Label(localization.removeFromGarden, systemImage: "trash")
+                        }
+                    }
+                    
+                    if isEditing {
+                        Button {
+                            withAnimation { garden.removeFromGarden(plant.id) }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .font(.title2)
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.white, .red)
+                                .background(Circle().fill(.white).scaleEffect(0.8))
+                        }
+                        .offset(x: -6, y: -6)
+                        .accessibilityLabel(localization.removeFromGarden)
                     }
                 }
             }
             
-            // Add plant button — only shown in Favorites tab; tapping switches to All Plants
-            if !showAllPlants {
-                Button {
-                    withAnimation {
-                        showAllPlants = true
-                        viewModel.showFavoritesOnly = false
-                        viewModel.applyFilters()
-                    }
-                } label: {
-                    AddPlantCard(title: localization.browsePlants)
-                }
-                .buttonStyle(.plain)
+            // Add custom plant card — visible in both tabs
+            Button {
+                showAddSheet = true
+            } label: {
+                AddPlantCard(title: localization.addPlant)
             }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, SeedlyTheme.paddingLarge)
         .padding(.top, SeedlyTheme.paddingSmall)

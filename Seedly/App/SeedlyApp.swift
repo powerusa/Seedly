@@ -11,6 +11,7 @@ struct SeedlyApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var localization = LocalizationManager.shared
     @StateObject private var favorites = FavoritesStore.shared
+    @StateObject private var garden = GardenStore.shared
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -43,11 +44,13 @@ struct SeedlyApp: App {
                     .environmentObject(appState)
                     .environmentObject(localization)
                     .environmentObject(favorites)
+                    .environmentObject(garden)
             } else {
                 OnboardingView()
                     .environmentObject(appState)
                     .environmentObject(localization)
                     .environmentObject(favorites)
+                    .environmentObject(garden)
             }
         }
         .modelContainer(sharedModelContainer)

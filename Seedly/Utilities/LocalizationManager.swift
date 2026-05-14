@@ -736,6 +736,96 @@ final class LocalizationManager: ObservableObject {
         case "uk": return "Термін"; case "ru": return "Срок"; default: return "Due Date"
         }
     }
+    var addPlant: String {
+        switch currentLanguage {
+        case "pl": return "Dodaj roślinę"; case "es": return "Añadir planta"; case "de": return "Pflanze hinzufügen"
+        case "fr": return "Ajouter une plante"; case "it": return "Aggiungi pianta"; case "pt": return "Adicionar planta"
+        case "nl": return "Plant toevoegen"; case "ja": return "植物を追加"; case "ko": return "식물 추가"
+        case "zh": return "添加植物"; case "ar": return "إضافة نبات"; case "hi": return "पौधा जोड़ें"
+        case "uk": return "Додати рослину"; case "ru": return "Добавить растение"; default: return "Add Plant"
+        }
+    }
+    var newPlant: String {
+        switch currentLanguage {
+        case "pl": return "Nowa roślina"; case "es": return "Nueva planta"; case "de": return "Neue Pflanze"
+        case "fr": return "Nouvelle plante"; case "it": return "Nuova pianta"; case "pt": return "Nova planta"
+        case "nl": return "Nieuwe plant"; case "ja": return "新しい植物"; case "ko": return "새 식물"
+        case "zh": return "新植物"; case "ar": return "نبات جديد"; case "hi": return "नया पौधा"
+        case "uk": return "Нова рослина"; case "ru": return "Новое растение"; default: return "New Plant"
+        }
+    }
+    var plantName: String {
+        switch currentLanguage {
+        case "pl": return "Nazwa rośliny"; case "es": return "Nombre"; case "de": return "Pflanzenname"
+        case "fr": return "Nom"; case "it": return "Nome"; case "pt": return "Nome"
+        case "nl": return "Plantnaam"; case "ja": return "植物名"; case "ko": return "식물 이름"
+        case "zh": return "植物名称"; case "ar": return "اسم النبات"; case "hi": return "पौधे का नाम"
+        case "uk": return "Назва рослини"; case "ru": return "Название"; default: return "Plant Name"
+        }
+    }
+    var scientificName: String {
+        switch currentLanguage {
+        case "pl": return "Nazwa naukowa"; case "es": return "Nombre científico"; case "de": return "Wissenschaftlicher Name"
+        case "fr": return "Nom scientifique"; case "it": return "Nome scientifico"; case "pt": return "Nome científico"
+        case "nl": return "Wetenschappelijke naam"; case "ja": return "学名"; case "ko": return "학명"
+        case "zh": return "学名"; case "ar": return "الاسم العلمي"; case "hi": return "वैज्ञानिक नाम"
+        case "uk": return "Наукова назва"; case "ru": return "Научное название"; default: return "Scientific Name"
+        }
+    }
+    var notes: String {
+        switch currentLanguage {
+        case "pl": return "Notatki"; case "es": return "Notas"; case "de": return "Notizen"
+        case "fr": return "Notes"; case "it": return "Note"; case "pt": return "Notas"
+        case "nl": return "Notities"; case "ja": return "メモ"; case "ko": return "메모"
+        case "zh": return "备注"; case "ar": return "ملاحظات"; case "hi": return "टिप्पणियाँ"
+        case "uk": return "Нотатки"; case "ru": return "Заметки"; default: return "Notes"
+        }
+    }
+    var photo: String {
+        switch currentLanguage {
+        case "pl": return "Zdjęcie"; case "es": return "Foto"; case "de": return "Foto"
+        case "fr": return "Photo"; case "it": return "Foto"; case "pt": return "Foto"
+        case "nl": return "Foto"; case "ja": return "写真"; case "ko": return "사진"
+        case "zh": return "照片"; case "ar": return "صورة"; case "hi": return "फोटो"
+        case "uk": return "Фото"; case "ru": return "Фото"; default: return "Photo"
+        }
+    }
+    var choosePhoto: String {
+        switch currentLanguage {
+        case "pl": return "Wybierz zdjęcie"; case "es": return "Elegir foto"; case "de": return "Foto wählen"
+        case "fr": return "Choisir une photo"; case "it": return "Scegli foto"; case "pt": return "Escolher foto"
+        case "nl": return "Foto kiezen"; case "ja": return "写真を選ぶ"; case "ko": return "사진 선택"
+        case "zh": return "选择照片"; case "ar": return "اختر صورة"; case "hi": return "फोटो चुनें"
+        case "uk": return "Вибрати фото"; case "ru": return "Выбрать фото"; default: return "Choose Photo"
+        }
+    }
+    var save: String {
+        switch currentLanguage {
+        case "pl": return "Zapisz"; case "es": return "Guardar"; case "de": return "Speichern"
+        case "fr": return "Enregistrer"; case "it": return "Salva"; case "pt": return "Salvar"
+        case "nl": return "Opslaan"; case "ja": return "保存"; case "ko": return "저장"
+        case "zh": return "保存"; case "ar": return "حفظ"; case "hi": return "सहेजें"
+        case "uk": return "Зберегти"; case "ru": return "Сохранить"; default: return "Save"
+        }
+    }
+    var removeFromGarden: String {
+        switch currentLanguage {
+        case "pl": return "Usuń z ogrodu"; case "es": return "Quitar del jardín"; case "de": return "Aus Garten entfernen"
+        case "fr": return "Retirer du jardin"; case "it": return "Rimuovi dal giardino"; case "pt": return "Remover do jardim"
+        case "nl": return "Verwijderen uit tuin"; case "ja": return "庭から削除"; case "ko": return "정원에서 제거"
+        case "zh": return "从花园移除"; case "ar": return "إزالة من الحديقة"; case "hi": return "बगीचे से हटाएँ"
+        case "uk": return "Видалити з саду"; case "ru": return "Удалить из сада"; default: return "Remove from Garden"
+        }
+    }
+    var category: String {
+        switch currentLanguage {
+        case "pl": return "Kategoria"; case "es": return "Categoría"; case "de": return "Kategorie"
+        case "fr": return "Catégorie"; case "it": return "Categoria"; case "pt": return "Categoria"
+        case "nl": return "Categorie"; case "ja": return "カテゴリ"; case "ko": return "카테고리"
+        case "zh": return "类别"; case "ar": return "الفئة"; case "hi": return "श्रेणी"
+        case "uk": return "Категорія"; case "ru": return "Категория"; default: return "Category"
+        }
+    }
     var dueTime: String {
         switch currentLanguage {
         case "pl": return "Godzina"; case "es": return "Hora"; case "de": return "Uhrzeit"

@@ -22,13 +22,23 @@ struct PlantImageView: View {
                     )
                 )
             
-            // Real plant photo if asset exists, otherwise emoji fallback
-            if UIImage(named: plant.imageAssetName) != nil {
+            // 1) User-uploaded photo (custom plants)
+            if let data = GardenStore.customPhotoData(for: plant.id),
+               let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(RoundedRectangle(cornerRadius: size * 0.2))
+            }
+            // 2) Bundled catalog photo
+            else if UIImage(named: plant.imageAssetName) != nil {
                 Image(plant.imageAssetName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .clipShape(RoundedRectangle(cornerRadius: size * 0.2))
-            } else {
+            }
+            // 3) Emoji fallback
+            else {
                 Text(plantEmoji)
                     .font(.system(size: size * 0.45))
             }

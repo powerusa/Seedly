@@ -44,8 +44,25 @@ struct PlantDetailView: View {
     // MARK: - Header
     private var plantHeader: some View {
         ZStack(alignment: .bottomLeading) {
-            // Real plant photo if asset exists, otherwise gradient + category icon fallback
-            if UIImage(named: plant.imageAssetName) != nil {
+            // 1) Custom user-uploaded photo
+            if let data = GardenStore.customPhotoData(for: plant.id),
+               let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 260)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+                    .overlay(
+                        LinearGradient(
+                            colors: [.clear, .black.opacity(0.5)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+            }
+            // 2) Bundled catalog photo
+            else if UIImage(named: plant.imageAssetName) != nil {
                 Image(plant.imageAssetName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)

@@ -35,6 +35,11 @@ struct Plant: Identifiable, Codable, Hashable {
     let descriptionKey: String
     
     func localizedName(for locale: String? = nil) -> String {
+        // User-added custom plants store their name directly on the entry.
+        if id.hasPrefix("custom_"),
+           let name = GardenStore.customName(for: id) {
+            return name
+        }
         let lang = locale ?? UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
         return PlantLocalization.localizedName(for: nameKey, locale: lang)
     }
