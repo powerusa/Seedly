@@ -19,11 +19,13 @@ struct TasksView: View {
                             emptyState
                         } else {
                             ForEach(viewModel.filteredTasks) { task in
-                                TaskRow(task: task) {
-                                    withAnimation(SeedlyTheme.springAnimation) {
-                                        viewModel.toggleTask(task)
+                                taskRowLink(for: task) {
+                                    TaskRow(task: task) {
+                                        withAnimation(SeedlyTheme.springAnimation) {
+                                            viewModel.toggleTask(task)
+                                        }
+                                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                     }
-                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                 }
                             }
                         }
@@ -74,6 +76,22 @@ struct TasksView: View {
         }
         .padding(.horizontal, SeedlyTheme.paddingLarge)
         .padding(.vertical, SeedlyTheme.paddingSmall)
+    }
+    
+    /// Wraps a row in a NavigationLink to the plant's detail page when the
+    /// task has a related plantId that resolves in the catalog.
+    @ViewBuilder
+    private func taskRowLink<Content: View>(for task: GardenTaskItem,
+                                            @ViewBuilder content: () -> Content) -> some View {
+        if let plantId = task.plantId,
+           let plant = PlantDatabase.shared.plant(byId: plantId) {
+            NavigationLink(destination: PlantDetailView(plant: plant)) {
+                content()
+            }
+            .buttonStyle(.plain)
+        } else {
+            content()
+        }
     }
     
     // MARK: - Helpers
