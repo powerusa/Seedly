@@ -1157,6 +1157,411 @@ final class LocalizationManager: ObservableObject {
         }
     }
     
+    // MARK: - Notifications & Buttons
+    
+    var done: String {
+        switch currentLanguage {
+        case "pl": return "Gotowe"; case "es": return "Listo"; case "de": return "Fertig"
+        case "fr": return "Terminé"; case "it": return "Fatto"; case "pt": return "Concluído"
+        case "nl": return "Klaar"; case "ja": return "完了"; case "ko": return "완료"
+        case "zh": return "完成"; case "ar": return "تم"; case "hi": return "हो गया"
+        case "uk": return "Готово"; case "ru": return "Готово"; default: return "Done"
+        }
+    }
+    
+    var weatherAlerts: String {
+        switch currentLanguage {
+        case "pl": return "Alerty pogodowe"; case "es": return "Alertas meteorológicas"; case "de": return "Wetterwarnungen"
+        case "fr": return "Alertes météo"; case "it": return "Avvisi meteo"; case "pt": return "Alertas meteorológicos"
+        case "nl": return "Weerwaarschuwingen"; case "ja": return "天気アラート"; case "ko": return "날씨 알림"
+        case "zh": return "天气警报"; case "ar": return "تنبيهات الطقس"; case "hi": return "मौसम अलर्ट"
+        case "uk": return "Сповіщення про погоду"; case "ru": return "Погодные оповещения"; default: return "Weather Alerts"
+        }
+    }
+    
+    var heatAlerts: String {
+        switch currentLanguage {
+        case "pl": return "Alerty upału"; case "es": return "Alertas de calor"; case "de": return "Hitzewarnungen"
+        case "fr": return "Alertes chaleur"; case "it": return "Avvisi caldo"; case "pt": return "Alertas de calor"
+        case "nl": return "Hittewaarschuwingen"; case "ja": return "暑さアラート"; case "ko": return "더위 알림"
+        case "zh": return "高温警报"; case "ar": return "تنبيهات الحرارة"; case "hi": return "गर्मी अलर्ट"
+        case "uk": return "Сповіщення про спеку"; case "ru": return "Оповещения о жаре"; default: return "Heat Alerts"
+        }
+    }
+    
+    var severeWeather: String {
+        switch currentLanguage {
+        case "pl": return "Niebezpieczna pogoda"; case "es": return "Clima severo"; case "de": return "Unwetter"
+        case "fr": return "Météo dangereuse"; case "it": return "Maltempo"; case "pt": return "Clima severo"
+        case "nl": return "Onweer"; case "ja": return "悪天候"; case "ko": return "악천후"
+        case "zh": return "恶劣天气"; case "ar": return "طقس قاسي"; case "hi": return "गंभीर मौसम"
+        case "uk": return "Небезпечна погода"; case "ru": return "Опасная погода"; default: return "Severe Weather"
+        }
+    }
+    
+    var reminders: String {
+        switch currentLanguage {
+        case "pl": return "Przypomnienia"; case "es": return "Recordatorios"; case "de": return "Erinnerungen"
+        case "fr": return "Rappels"; case "it": return "Promemoria"; case "pt": return "Lembretes"
+        case "nl": return "Herinneringen"; case "ja": return "リマインダー"; case "ko": return "알림"
+        case "zh": return "提醒"; case "ar": return "تذكيرات"; case "hi": return "अनुस्मारक"
+        case "uk": return "Нагадування"; case "ru": return "Напоминания"; default: return "Reminders"
+        }
+    }
+    
+    var wateringReminders: String {
+        switch currentLanguage {
+        case "pl": return "Podlewanie"; case "es": return "Riego"; case "de": return "Bewässerung"
+        case "fr": return "Arrosage"; case "it": return "Irrigazione"; case "pt": return "Rega"
+        case "nl": return "Water geven"; case "ja": return "水やり"; case "ko": return "물주기"
+        case "zh": return "浇水提醒"; case "ar": return "تذكير الري"; case "hi": return "पानी देना"
+        case "uk": return "Полив"; case "ru": return "Полив"; default: return "Watering Reminders"
+        }
+    }
+    
+    var plantingReminders: String {
+        switch currentLanguage {
+        case "pl": return "Sadzenie"; case "es": return "Siembra"; case "de": return "Pflanzen"
+        case "fr": return "Plantation"; case "it": return "Semina"; case "pt": return "Plantio"
+        case "nl": return "Planten"; case "ja": return "植え付け"; case "ko": return "심기"
+        case "zh": return "种植提醒"; case "ar": return "تذكير الزراعة"; case "hi": return "रोपण"
+        case "uk": return "Посадка"; case "ru": return "Посадка"; default: return "Planting Reminders"
+        }
+    }
+    
+    var harvestReminders: String {
+        switch currentLanguage {
+        case "pl": return "Zbiory"; case "es": return "Cosecha"; case "de": return "Ernte"
+        case "fr": return "Récolte"; case "it": return "Raccolta"; case "pt": return "Colheita"
+        case "nl": return "Oogst"; case "ja": return "収穫"; case "ko": return "수확"
+        case "zh": return "收获提醒"; case "ar": return "تذكير الحصاد"; case "hi": return "फसल"
+        case "uk": return "Збір врожаю"; case "ru": return "Сбор урожая"; default: return "Harvest Reminders"
+        }
+    }
+    
+    var reminderTime: String {
+        switch currentLanguage {
+        case "pl": return "Godzina przypomnień"; case "es": return "Hora del recordatorio"; case "de": return "Erinnerungszeit"
+        case "fr": return "Heure de rappel"; case "it": return "Ora promemoria"; case "pt": return "Hora do lembrete"
+        case "nl": return "Herinneringstijd"; case "ja": return "リマインダー時刻"; case "ko": return "알림 시간"
+        case "zh": return "提醒时间"; case "ar": return "وقت التذكير"; case "hi": return "अनुस्मारक समय"
+        case "uk": return "Час нагадування"; case "ru": return "Время напоминания"; default: return "Reminder Time"
+        }
+    }
+    
+    // MARK: - About / Privacy / Acknowledgments
+    
+    var privacyPolicy: String {
+        switch currentLanguage {
+        case "pl": return "Polityka prywatności"
+        case "es": return "Política de privacidad"
+        case "de": return "Datenschutzerklärung"
+        case "fr": return "Politique de confidentialité"
+        case "it": return "Informativa sulla privacy"
+        case "pt": return "Política de privacidade"
+        case "nl": return "Privacybeleid"
+        case "ja": return "プライバシーポリシー"
+        case "ko": return "개인정보 처리방침"
+        case "zh": return "隐私政策"
+        case "ar": return "سياسة الخصوصية"
+        case "hi": return "गोपनीयता नीति"
+        case "uk": return "Політика конфіденційності"
+        case "ru": return "Политика конфиденциальности"
+        default: return "Privacy Policy"
+        }
+    }
+    
+    var acknowledgments: String {
+        switch currentLanguage {
+        case "pl": return "Podziękowania"
+        case "es": return "Agradecimientos"
+        case "de": return "Danksagungen"
+        case "fr": return "Remerciements"
+        case "it": return "Ringraziamenti"
+        case "pt": return "Agradecimentos"
+        case "nl": return "Dankbetuigingen"
+        case "ja": return "謝辞"
+        case "ko": return "감사의 글"
+        case "zh": return "致谢"
+        case "ar": return "شكر وتقدير"
+        case "hi": return "आभार"
+        case "uk": return "Подяки"
+        case "ru": return "Благодарности"
+        default: return "Acknowledgments"
+        }
+    }
+    
+    var appTagline: String {
+        switch currentLanguage {
+        case "pl": return "Kup raz. Uprawiaj wiecznie."
+        case "es": return "Compra una vez. Cultiva para siempre."
+        case "de": return "Einmal kaufen. Ewig gärtnern."
+        case "fr": return "Achetez une fois. Jardinez pour toujours."
+        case "it": return "Acquista una volta. Coltiva per sempre."
+        case "pt": return "Compre uma vez. Cultive para sempre."
+        case "nl": return "Eenmaal kopen. Voor altijd tuinieren."
+        case "ja": return "一度購入すれば、ずっとガーデニング。"
+        case "ko": return "한 번 구매로 평생 정원 가꾸기."
+        case "zh": return "一次购买，永久园艺。"
+        case "ar": return "اشترِ مرة واحدة. ازرع للأبد."
+        case "hi": return "एक बार खरीदें। हमेशा बागवानी करें।"
+        case "uk": return "Купи раз. Сади вічно."
+        case "ru": return "Купи раз. Садоводствуй вечно."
+        default: return "Buy once. Garden forever."
+        }
+    }
+    
+    var appDescription: String {
+        switch currentLanguage {
+        case "pl": return "Simple Seeds to Twój osobisty asystent ogrodniczy. Otrzymuj spersonalizowane kalendarze sadzenia, ostrzeżenia o przymrozkach, prognozy pogody dla ogrodu i przypomnienia o zadaniach — wszystko dopasowane do Twojej strefy klimatycznej i wybranych roślin."
+        case "de": return "Simple Seeds ist Ihr persönlicher Gartenassistent. Erhalten Sie personalisierte Pflanzkalender, Frostwarnungen, Wettervorhersagen für den Garten und Aufgabenerinnerungen — alles abgestimmt auf Ihre Klimazone und Pflanzen."
+        case "fr": return "Simple Seeds est votre assistant de jardin personnel. Recevez des calendriers de plantation personnalisés, des alertes de gel, des prévisions météo pour le jardin et des rappels de tâches — tout adapté à votre zone climatique et à vos plantes."
+        case "es": return "Simple Seeds es tu asistente personal de jardinería. Recibe calendarios de plantación personalizados, alertas de heladas, pronósticos meteorológicos para el jardín y recordatorios de tareas, todo adaptado a tu zona climática y tus plantas."
+        case "it": return "Simple Seeds è il tuo assistente personale per il giardino. Ricevi calendari di semina personalizzati, allerte gelo, previsioni meteo per il giardino e promemoria delle attività, tutto adattato alla tua zona climatica e alle tue piante."
+        case "uk": return "Simple Seeds — це ваш персональний помічник садівника. Отримуйте персоналізовані календарі посадки, оповіщення про заморозки, прогнози погоди для саду та нагадування про завдання — усе адаптоване до вашої кліматичної зони та рослин."
+        case "ru": return "Simple Seeds — ваш персональный садовый помощник. Получайте персонализированные календари посадки, оповещения о заморозках, прогнозы погоды для сада и напоминания о задачах — всё подобрано под вашу климатическую зону и растения."
+        default: return "Simple Seeds is your personal gardening assistant. Get personalized planting calendars, frost alerts, garden weather forecasts, and task reminders — all tailored to your climate zone and chosen plants."
+        }
+    }
+    
+    var privacyPolicyContent: String {
+        switch currentLanguage {
+        case "pl": return """
+Simple Seeds szanuje Twoją prywatność.
+
+Dane lokalizacji
+Używamy Twojej lokalizacji wyłącznie do obliczania prognozy pogody, dat przymrozków i kalendarza sadzenia. Dane lokalizacji są przetwarzane lokalnie na Twoim urządzeniu i nie są przesyłane na nasze serwery.
+
+Brak konta
+Aplikacja nie wymaga rejestracji ani konta użytkownika. Wszystkie ustawienia, ogrody i zadania są przechowywane lokalnie na Twoim urządzeniu.
+
+Brak śledzenia
+Nie używamy narzędzi analitycznych ani reklamowych. Nie udostępniamy Twoich danych żadnym stronom trzecim.
+
+Powiadomienia
+Powiadomienia o przymrozkach, podlewaniu i zbiorach są generowane lokalnie na Twoim urządzeniu na podstawie Twoich ustawień.
+
+Kontakt
+Pytania dotyczące prywatności? Napisz do nas: support@simpleseeds.app
+"""
+        default: return """
+Simple Seeds respects your privacy.
+
+Location Data
+We use your location solely to compute weather forecasts, frost dates, and planting calendars. Location data is processed locally on your device and is not transmitted to our servers.
+
+No Account
+The app does not require registration or a user account. All your settings, gardens, and tasks are stored locally on your device.
+
+No Tracking
+We use no analytics or advertising tools. We do not share your data with any third parties.
+
+Notifications
+Frost, watering, and harvest notifications are generated locally on your device based on your settings.
+
+Contact
+Questions about privacy? Email us: support@simpleseeds.app
+"""
+        }
+    }
+    
+    var acknowledgmentsContent: String {
+        switch currentLanguage {
+        case "pl": return """
+Dziękujemy społeczności open source.
+
+Apple
+• SwiftUI, SwiftData, MapKit, Core Location, WeatherKit
+• SF Symbols — biblioteka ikon
+
+Dane klimatyczne
+• Klasyfikacja klimatu Köppen-Geigera
+• Strefy mrozoodporności USDA
+• Pogoda Open-Meteo (open-meteo.com)
+
+Baza roślin
+Informacje agronomiczne pochodzą z publicznie dostępnych źródeł rolniczych, w tym uniwersyteckich stacji rolniczych i open-source ogrodniczych baz wiedzy.
+
+Tłumaczenia
+Tłumaczenia społecznościowe na 15 języków.
+
+Specjalne podziękowania
+Dla każdego ogrodnika, który dzieli się swoją pasją.
+"""
+        default: return """
+Thanks to the open source community.
+
+Apple
+• SwiftUI, SwiftData, MapKit, Core Location, WeatherKit
+• SF Symbols — icon library
+
+Climate Data
+• Köppen–Geiger climate classification
+• USDA Hardiness Zones
+• Open-Meteo weather (open-meteo.com)
+
+Plant Database
+Agronomic information sourced from publicly available agricultural references, including university extension services and open-source gardening knowledge bases.
+
+Translations
+Community translations into 15 languages.
+
+Special Thanks
+To every gardener who shares their passion.
+"""
+        }
+    }
+    
+    var version: String {
+        switch currentLanguage {
+        case "pl": return "Wersja"
+        case "es": return "Versión"
+        case "de": return "Version"
+        case "fr": return "Version"
+        case "it": return "Versione"
+        case "pt": return "Versão"
+        case "nl": return "Versie"
+        case "ja": return "バージョン"
+        case "ko": return "버전"
+        case "zh": return "版本"
+        case "ar": return "الإصدار"
+        case "hi": return "संस्करण"
+        case "uk": return "Версія"
+        case "ru": return "Версия"
+        default: return "Version"
+        }
+    }
+    
+    var refreshLocation: String {
+        switch currentLanguage {
+        case "pl": return "Odśwież lokalizację"
+        case "de": return "Standort aktualisieren"
+        case "fr": return "Actualiser la position"
+        case "es": return "Actualizar ubicación"
+        case "it": return "Aggiorna posizione"
+        case "uk": return "Оновити місцезнаходження"
+        case "ru": return "Обновить местоположение"
+        default: return "Refresh Location"
+        }
+    }
+    
+    var latitude: String {
+        switch currentLanguage {
+        case "pl": return "Szerokość geograficzna"
+        case "de": return "Breitengrad"
+        case "fr": return "Latitude"
+        case "es": return "Latitud"
+        case "it": return "Latitudine"
+        case "uk": return "Широта"
+        case "ru": return "Широта"
+        default: return "Latitude"
+        }
+    }
+    
+    var longitude: String {
+        switch currentLanguage {
+        case "pl": return "Długość geograficzna"
+        case "de": return "Längengrad"
+        case "fr": return "Longitude"
+        case "es": return "Longitud"
+        case "it": return "Longitudine"
+        case "uk": return "Довгота"
+        case "ru": return "Долгота"
+        default: return "Longitude"
+        }
+    }
+    
+    var locationNotAvailable: String {
+        switch currentLanguage {
+        case "pl": return "Lokalizacja niedostępna"
+        case "de": return "Standort nicht verfügbar"
+        case "fr": return "Position non disponible"
+        case "es": return "Ubicación no disponible"
+        case "it": return "Posizione non disponibile"
+        case "uk": return "Місцезнаходження недоступне"
+        case "ru": return "Местоположение недоступно"
+        default: return "Location not available"
+        }
+    }
+    
+    var locationDescription: String {
+        switch currentLanguage {
+        case "pl": return "Twoja lokalizacja jest używana do obliczenia kalendarza sadzenia, dat przymrozków i prognoz pogody. Dane nigdy nie opuszczają Twojego urządzenia."
+        case "de": return "Ihr Standort wird zur Berechnung von Pflanzkalender, Frostdaten und Wettervorhersagen verwendet. Daten verlassen niemals Ihr Gerät."
+        case "fr": return "Votre position est utilisée pour calculer le calendrier de plantation, les dates de gel et les prévisions météo. Les données ne quittent jamais votre appareil."
+        case "es": return "Tu ubicación se usa para calcular el calendario de siembra, las fechas de heladas y los pronósticos meteorológicos. Los datos nunca salen de tu dispositivo."
+        case "it": return "La tua posizione viene usata per calcolare il calendario di semina, le date di gelo e le previsioni meteo. I dati non lasciano mai il tuo dispositivo."
+        case "uk": return "Ваше місцезнаходження використовується для розрахунку календаря посадки, дат заморозків і прогнозів погоди. Дані ніколи не залишають ваш пристрій."
+        case "ru": return "Ваше местоположение используется для расчёта календаря посадки, дат заморозков и прогнозов погоды. Данные никогда не покидают ваше устройство."
+        default: return "Your location is used to calculate the planting calendar, frost dates, and weather forecasts. Data never leaves your device."
+        }
+    }
+    
+    var growingSeason: String {
+        switch currentLanguage {
+        case "pl": return "Sezon wegetacyjny"
+        case "de": return "Vegetationsperiode"
+        case "fr": return "Saison de croissance"
+        case "es": return "Temporada de cultivo"
+        case "it": return "Stagione di crescita"
+        case "uk": return "Вегетаційний період"
+        case "ru": return "Вегетационный период"
+        default: return "Growing Season"
+        }
+    }
+    
+    var weeks: String {
+        switch currentLanguage {
+        case "pl": return "tygodni"
+        case "de": return "Wochen"
+        case "fr": return "semaines"
+        case "es": return "semanas"
+        case "it": return "settimane"
+        case "uk": return "тижнів"
+        case "ru": return "недель"
+        default: return "weeks"
+        }
+    }
+    
+    var firstFrost: String {
+        switch currentLanguage {
+        case "pl": return "Pierwszy przymrozek"
+        case "de": return "Erster Frost"
+        case "fr": return "Premier gel"
+        case "es": return "Primera helada"
+        case "it": return "Prima gelata"
+        case "uk": return "Перший заморозок"
+        case "ru": return "Первый заморозок"
+        default: return "First Frost"
+        }
+    }
+    
+    var lastFrost: String {
+        switch currentLanguage {
+        case "pl": return "Ostatni przymrozek"
+        case "de": return "Letzter Frost"
+        case "fr": return "Dernier gel"
+        case "es": return "Última helada"
+        case "it": return "Ultima gelata"
+        case "uk": return "Останній заморозок"
+        case "ru": return "Последний заморозок"
+        default: return "Last Frost"
+        }
+    }
+    
+    var climateZoneDescription: String {
+        switch currentLanguage {
+        case "pl": return "Twoja strefa klimatyczna jest automatycznie obliczana na podstawie lokalizacji. Decyduje o tym, jakie rośliny mogą się u Ciebie udać i kiedy najlepiej je sadzić."
+        case "de": return "Ihre Klimazone wird automatisch anhand Ihres Standorts berechnet. Sie bestimmt, welche Pflanzen bei Ihnen gedeihen und wann sie am besten gepflanzt werden."
+        case "fr": return "Votre zone climatique est calculée automatiquement à partir de votre position. Elle détermine quelles plantes peuvent prospérer chez vous et quand les planter."
+        case "es": return "Tu zona climática se calcula automáticamente a partir de tu ubicación. Determina qué plantas pueden prosperar en tu zona y cuándo plantarlas."
+        case "it": return "La tua zona climatica viene calcolata automaticamente in base alla tua posizione. Determina quali piante possono prosperare e quando piantarle."
+        case "uk": return "Ваша кліматична зона обчислюється автоматично на основі місцезнаходження. Вона визначає, які рослини можуть рости у вас та коли їх найкраще садити."
+        case "ru": return "Ваша климатическая зона рассчитывается автоматически на основе местоположения. Она определяет, какие растения могут расти у вас и когда их лучше сажать."
+        default: return "Your climate zone is calculated automatically from your location. It determines which plants can thrive in your area and the best time to plant them."
+        }
+    }
+    
     var aboutSeedly: String {
         switch currentLanguage {
         case "pl": return "O Simple Seeds"

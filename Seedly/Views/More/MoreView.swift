@@ -15,13 +15,13 @@ struct MoreView: View {
             List {
                 // Garden Section
                 Section {
-                    NavigationLink(destination: Text(localization.myGardens)) {
+                    NavigationLink(destination: MyGardenView()) {
                         SettingsRow(icon: "leaf.fill", title: localization.myGardens, color: .green)
                     }
-                    NavigationLink(destination: Text(localization.location)) {
+                    NavigationLink(destination: LocationSettingsView()) {
                         SettingsRow(icon: "location.fill", title: localization.location, color: .blue)
                     }
-                    NavigationLink(destination: Text(localization.climateZone)) {
+                    NavigationLink(destination: ClimateZoneInfoView()) {
                         SettingsRow(icon: "globe", title: localization.climateZone, color: .teal)
                     }
                 } header: {
@@ -65,7 +65,7 @@ struct MoreView: View {
                     NavigationLink(destination: NotificationSettingsView()) {
                         SettingsRow(icon: "bell.fill", title: localization.notifications, color: .red)
                     }
-                    NavigationLink(destination: Text(localization.frostAlerts)) {
+                    NavigationLink(destination: FrostAlertsDetailView()) {
                         SettingsRow(icon: "thermometer.snowflake", title: localization.frostAlerts, color: .cyan)
                     }
                 } header: {
@@ -74,14 +74,14 @@ struct MoreView: View {
                 
                 // About Section
                 Section {
-                    NavigationLink(destination: Text(localization.aboutSeedly)) {
+                    NavigationLink(destination: AboutSeedlyView()) {
                         SettingsRow(icon: "info.circle.fill", title: localization.aboutSeedly, color: SeedlyTheme.primaryGreen)
                     }
-                    NavigationLink(destination: Text("Privacy Policy")) {
-                        SettingsRow(icon: "hand.raised.fill", title: "Privacy Policy", color: .gray)
+                    NavigationLink(destination: PrivacyPolicyView()) {
+                        SettingsRow(icon: "hand.raised.fill", title: localization.privacyPolicy, color: .gray)
                     }
-                    NavigationLink(destination: Text("Acknowledgments")) {
-                        SettingsRow(icon: "heart.fill", title: "Acknowledgments", color: .pink)
+                    NavigationLink(destination: AcknowledgmentsView()) {
+                        SettingsRow(icon: "heart.fill", title: localization.acknowledgments, color: .pink)
                     }
                 } header: {
                     Text(localization.aboutSeedly)
@@ -89,7 +89,7 @@ struct MoreView: View {
                     VStack(spacing: 8) {
                         Text("Simple Seeds v1.0.0")
                             .font(.system(.caption, design: .rounded))
-                        Text("Buy once. Garden forever.")
+                        Text(localization.appTagline)
                             .font(.system(.caption, design: .rounded))
                             .foregroundStyle(SeedlyTheme.accentGreen)
                     }
@@ -169,11 +169,11 @@ struct LanguagePickerView: View {
                     }
                 }
             }
-            .navigationTitle("Language")
+            .navigationTitle(LocalizationManager.shared.language)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button(LocalizationManager.shared.done) { dismiss() }
                         .foregroundStyle(SeedlyTheme.primaryGreen)
                 }
             }
@@ -184,6 +184,7 @@ struct LanguagePickerView: View {
 // MARK: - Notification Settings
 
 struct NotificationSettingsView: View {
+    @EnvironmentObject var localization: LocalizationManager
     @AppStorage("frostAlerts") private var frostAlerts = true
     @AppStorage("heatAlerts") private var heatAlerts = true
     @AppStorage("wateringReminders") private var wateringReminders = true
@@ -193,28 +194,28 @@ struct NotificationSettingsView: View {
     
     var body: some View {
         List {
-            Section("Weather Alerts") {
-                Toggle("Frost Alerts", isOn: $frostAlerts)
-                Toggle("Heat Alerts", isOn: $heatAlerts)
-                Toggle("Severe Weather", isOn: $severeWeather)
+            Section(localization.weatherAlerts) {
+                Toggle(localization.frostAlerts, isOn: $frostAlerts)
+                Toggle(localization.heatAlerts, isOn: $heatAlerts)
+                Toggle(localization.severeWeather, isOn: $severeWeather)
             }
             
-            Section("Reminders") {
-                Toggle("Watering Reminders", isOn: $wateringReminders)
-                Toggle("Planting Reminders", isOn: $plantingReminders)
-                Toggle("Harvest Reminders", isOn: $harvestReminders)
+            Section(localization.reminders) {
+                Toggle(localization.wateringReminders, isOn: $wateringReminders)
+                Toggle(localization.plantingReminders, isOn: $plantingReminders)
+                Toggle(localization.harvestReminders, isOn: $harvestReminders)
             }
             
             Section {
                 HStack {
-                    Text("Reminder Time")
+                    Text(localization.reminderTime)
                     Spacer()
                     Text("8:00 AM")
                         .foregroundStyle(.secondary)
                 }
             }
         }
-        .navigationTitle("Notifications")
+        .navigationTitle(localization.notifications)
     }
 }
 
