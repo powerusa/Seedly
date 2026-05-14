@@ -4,14 +4,14 @@
 import Foundation
 
 enum AppConstants {
-    static let appName = "Seedly"
+    static let appName = "Simple Seeds"
     static let appSubtitle = "Global Planting Calendar"
     static let tagline = "Buy once. Garden forever."
     static let version = "1.0.0"
     static let buildNumber = "1"
     
     // MARK: - App Store
-    static let appStoreTitle = "Seedly – Global Planting Calendar"
+    static let appStoreTitle = "Simple Seeds – Global Planting Calendar"
     static let appStoreSubtitle = "Plan. Plant. Grow."
     static let appPrice = "$14.99"
     
@@ -62,7 +62,7 @@ enum AppConstants {
         static let privacyPolicyURL = "https://seedly.app/privacy"
         static let termsURL = "https://seedly.app/terms"
         static let dataCollectionStatement = """
-        Seedly collects NO personal data. Your location is used only on-device \
+        Simple Seeds collects NO personal data. Your location is used only on-device \
         to provide accurate planting calendars. No data is sent to any server. \
         No account required. No tracking. No analytics.
         """

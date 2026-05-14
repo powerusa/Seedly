@@ -67,7 +67,7 @@ struct TodayGardenWidgetView: View {
             HStack {
                 Image(systemName: "leaf.fill")
                     .foregroundStyle(.green)
-                Text("Seedly")
+                Text("Simple Seeds")
                     .font(.system(.caption2, design: .rounded, weight: .bold))
                     .foregroundStyle(.secondary)
             }
