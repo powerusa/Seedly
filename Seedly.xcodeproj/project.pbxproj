@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		AA000001 /* Seedly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seedly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA000001 /* Planting Calendar Si.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Planting Calendar Si.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -46,7 +46,7 @@
 		AA000031 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA000001 /* Seedly.app */,
+				AA000001 /* Planting Calendar Si.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -71,7 +71,7 @@
 			);
 			name = Seedly;
 			productName = Seedly;
-			productReference = AA000001 /* Seedly.app */;
+			productReference = AA000001 /* Planting Calendar Si.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -259,23 +259,24 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = RG6E263GKB;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = Info.plist;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Seedly/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Simple Seeds";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Simple Seeds uses your location to provide accurate planting calendars and frost alerts for your area.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.seedly.app;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.SimpleSeeds.app;
+				PRODUCT_NAME = "Planting Calendar Si";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -294,23 +295,24 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = RG6E263GKB;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = Info.plist;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Seedly/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Simple Seeds";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Simple Seeds uses your location to provide accurate planting calendars and frost alerts for your area.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.seedly.app;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.SimpleSeeds.app;
+				PRODUCT_NAME = "Planting Calendar Si";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
