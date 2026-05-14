@@ -736,6 +736,15 @@ final class LocalizationManager: ObservableObject {
         case "uk": return "Термін"; case "ru": return "Срок"; default: return "Due Date"
         }
     }
+    var dueTime: String {
+        switch currentLanguage {
+        case "pl": return "Godzina"; case "es": return "Hora"; case "de": return "Uhrzeit"
+        case "fr": return "Heure"; case "it": return "Ora"; case "pt": return "Hora"
+        case "nl": return "Tijd"; case "ja": return "時刻"; case "ko": return "시간"
+        case "zh": return "时间"; case "ar": return "الوقت"; case "hi": return "समय"
+        case "uk": return "Час"; case "ru": return "Время"; default: return "Time"
+        }
+    }
     var recurring: String {
         switch currentLanguage {
         case "pl": return "Powtarzające się"; case "es": return "Recurrente"; case "de": return "Wiederkehrend"

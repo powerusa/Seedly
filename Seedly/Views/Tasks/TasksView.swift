@@ -219,6 +219,7 @@ struct AddTaskSheet: View {
                     }
                     
                     DatePicker(localization.dueDate, selection: $dueDate, displayedComponents: .date)
+                    DatePicker(localization.dueTime, selection: $dueDate, displayedComponents: .hourAndMinute)
                 }
                 
                 Section {
