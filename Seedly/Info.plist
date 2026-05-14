@@ -26,6 +26,8 @@
 	<false/>
 	<key>NSPrivacyTrackingDomains</key>
 	<array/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Simple Seeds uses your location to determine your climate zone, last/first frost dates, and local planting calendar (for example, when it is safe to plant tomatoes outdoors in your region). You can also enter your location manually instead.</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Simple Seeds sends you frost alerts, watering reminders, and planting notifications.</string>
 	<key>UIApplicationSceneManifest</key>
