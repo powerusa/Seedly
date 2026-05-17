@@ -6,6 +6,8 @@ import CoreLocation
 
 @MainActor
 final class LocationService: NSObject, ObservableObject {
+    static let shared = LocationService()
+    
     @Published var currentLocation: GardenLocation?
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published var isLoading = false
@@ -14,7 +16,7 @@ final class LocationService: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     private let geocoder = CLGeocoder()
     
-    override init() {
+    private override init() {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer

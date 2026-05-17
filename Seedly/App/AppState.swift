@@ -14,12 +14,29 @@ final class AppState: ObservableObject {
     @Published var temperatureUnit: TemperatureUnit = .celsius
     @Published var measurementUnit: MeasurementSystem = .metric
     
-    private let locationService = LocationService()
+    private var cancellables = Set<AnyCancellable>()
     private let weatherService = WeatherService()
     private let climateEngine = ClimateEngine()
     
     init() {
         loadUserPreferences()
+        observeLocationService()
+    }
+    
+    private func observeLocationService() {
+        LocationService.shared.$currentLocation
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] location in
+                guard let self = self else { return }
+                if let location = location {
+                    self.currentLocation = location
+                    self.climateZone = self.climateEngine.determineZone(for: location)
+                    Task {
+                        await self.refreshWeather()
+                    }
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func refreshWeather() async {

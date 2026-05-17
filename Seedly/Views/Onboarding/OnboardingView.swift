@@ -164,7 +164,7 @@ struct OnboardingView: View {
             
             VStack(spacing: 12) {
                 Button(action: {
-                    // Request location permission
+                    LocationService.shared.requestPermission()
                 }) {
                     HStack {
                         Image(systemName: "location.fill")
@@ -180,7 +180,9 @@ struct OnboardingView: View {
                     )
                 }
                 
-                Button(action: {}) {
+                Button(action: {
+                    // Show manual location entry sheet
+                }) {
                     Text("Enter Location Manually")
                         .font(.system(.subheadline, design: .rounded))
                         .foregroundStyle(.white.opacity(0.7))
