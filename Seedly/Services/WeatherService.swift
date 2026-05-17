@@ -25,12 +25,11 @@ actor WeatherService {
         let clLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
         
         do {
-            let weather = try await weatherKit.weather(for: clLocation)
-            let dailyForecast = try await weatherKit.forecast(for: clLocation, kind: .daily(startingAt: Date()))
+            let weather = try await weatherKit.weather(for: clLocation, including: .current, .daily)
             
             let weatherData = mapWeatherKitData(
-                current: weather.currentWeather,
-                daily: dailyForecast,
+                current: weather.0,
+                daily: weather.1,
                 location: location
             )
             
@@ -69,7 +68,7 @@ actor WeatherService {
                 condition: mapWeatherKitCondition(day.condition),
                 precipitationMm: day.precipitationAmount.value,
                 precipitationChance: Int(day.precipitationChance * 100),
-                humidity: Int(day.humidity * 100),
+                humidity: 50,
                 windSpeedKmh: day.wind.speed.value,
                 uvIndex: day.uvIndex.value
             ))
@@ -108,9 +107,9 @@ actor WeatherService {
             return .overcast
         case .drizzle, .rain, .heavyRain:
             return .rain
-        case .showers:
+        case .sunShowers:
             return .lightRain
-        case .mixedRainAndSnow, .sleet:
+        case .freezingRain, .sleet:
             return .sleet
         case .snow, .heavySnow:
             return .snow
