@@ -10,6 +10,7 @@ actor WeatherService {
     private var cachedWeather: WeatherData?
     private var lastFetchDate: Date?
     private let cacheValidityMinutes: Int = 30
+    private let weatherKit = WeatherKit.WeatherService.shared
     
     // MARK: - Fetch Weather
     func fetchWeather(for location: GardenLocation) async -> WeatherData? {
@@ -20,12 +21,108 @@ actor WeatherService {
             return cached
         }
         
-        // In production, use WeatherKit API
-        // For now, generate realistic mock data based on location
-        let weather = generateMockWeather(for: location)
-        cachedWeather = weather
-        lastFetchDate = Date()
-        return weather
+        // Fetch real weather from WeatherKit
+        let clLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
+        
+        do {
+            let weather = try await weatherKit.weather(for: clLocation)
+            let dailyForecast = try await weatherKit.forecast(for: clLocation, kind: .daily(startingAt: Date()))
+            
+            let weatherData = mapWeatherKitData(
+                current: weather.currentWeather,
+                daily: dailyForecast,
+                location: location
+            )
+            
+            cachedWeather = weatherData
+            lastFetchDate = Date()
+            return weatherData
+            
+        } catch {
+            print("WeatherKit error: \(error)")
+            // Fallback to mock data on error
+            let weather = generateMockWeather(for: location)
+            cachedWeather = weather
+            lastFetchDate = Date()
+            return weather
+        }
+    }
+    
+    // MARK: - Map WeatherKit Data
+    private nonisolated func mapWeatherKitData(
+        current: WeatherKit.CurrentWeather,
+        daily: WeatherKit.Forecast<WeatherKit.DayWeather>,
+        location: GardenLocation
+    ) -> WeatherData {
+        let calendar = Calendar.current
+        
+        // Map current weather condition
+        let condition = mapWeatherKitCondition(current.condition)
+        
+        // Map 7-day forecast
+        var forecast: [DayForecast] = []
+        for day in daily.forecast.prefix(7) {
+            forecast.append(DayForecast(
+                date: day.date,
+                highTemp: day.highTemperature.value,
+                lowTemp: day.lowTemperature.value,
+                condition: mapWeatherKitCondition(day.condition),
+                precipitationMm: day.precipitationAmount.value,
+                precipitationChance: Int(day.precipitationChance * 100),
+                humidity: Int(day.humidity * 100),
+                windSpeedKmh: day.wind.speed.value,
+                uvIndex: day.uvIndex.value
+            ))
+        }
+        
+        return WeatherData(
+            location: location.city,
+            currentTemp: current.temperature.value,
+            feelsLike: current.apparentTemperature.value,
+            highTemp: daily.forecast.first?.highTemperature.value ?? current.temperature.value + 5,
+            lowTemp: daily.forecast.first?.lowTemperature.value ?? current.temperature.value - 5,
+            humidity: Int(current.humidity * 100),
+            windSpeedKmh: current.wind.speed.value,
+            uvIndex: current.uvIndex.value,
+            condition: condition,
+            precipitationMm: daily.forecast.first?.precipitationAmount.value ?? 0,
+            precipitationChance: Int((daily.forecast.first?.precipitationChance ?? 0) * 100),
+            sunrise: daily.forecast.first?.sun.sunrise ?? calendar.date(bySettingHour: 6, minute: 30, second: 0, of: Date())!,
+            sunset: daily.forecast.first?.sun.sunset ?? calendar.date(bySettingHour: 20, minute: 0, second: 0, of: Date())!,
+            forecast: forecast,
+            lastUpdated: Date()
+        )
+    }
+    
+    private nonisolated func mapWeatherKitCondition(_ condition: WeatherKit.WeatherCondition) -> WeatherCondition {
+        switch condition {
+        case .clear, .mostlyClear:
+            return .sunny
+        case .partlyCloudy:
+            return .partlyCloudy
+        case .mostlyCloudy, .cloudy:
+            return .cloudy
+        case .foggy:
+            return .fog
+        case .haze:
+            return .overcast
+        case .drizzle, .rain, .heavyRain:
+            return .rain
+        case .showers:
+            return .lightRain
+        case .mixedRainAndSnow, .sleet:
+            return .sleet
+        case .snow, .heavySnow:
+            return .snow
+        case .thunderstorms, .strongStorms:
+            return .thunderstorm
+        case .windy, .breezy:
+            return .windy
+        case .hail:
+            return .hail
+        default:
+            return .partlyCloudy
+        }
     }
     
     // MARK: - Generate Insights
