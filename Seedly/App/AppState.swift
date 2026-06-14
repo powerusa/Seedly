@@ -49,6 +49,10 @@ final class AppState: ObservableObject {
         }
     }
     
+    func refreshLocation() {
+        LocationService.shared.refreshCurrentLocation()
+    }
+    
     func updateLocation(_ location: GardenLocation) {
         currentLocation = location
         climateZone = climateEngine.determineZone(for: location)

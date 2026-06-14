@@ -42,6 +42,7 @@ struct MainTabView: View {
         }
         .tint(SeedlyTheme.primaryGreen)
         .task {
+            appState.refreshLocation()
             await appState.refreshWeather()
         }
     }

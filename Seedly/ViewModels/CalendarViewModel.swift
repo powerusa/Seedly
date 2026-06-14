@@ -53,12 +53,13 @@ final class CalendarViewModel: ObservableObject {
         return (weekday + 5) % 7  // Monday start
     }
     
-    func loadEvents() {
-        let location = GardenLocation(
-            latitude: 43.07, longitude: -89.40,
-            city: "Madison", country: "US",
-            timeZone: .current
-        )
+    func loadEvents(location: GardenLocation?) {
+        guard let location else {
+            plantingEvents = []
+            selectedDayPlants = []
+            return
+        }
+        
         let zone = climateEngine.determineZone(for: location)
         
         var events: [PlantingEvent] = []

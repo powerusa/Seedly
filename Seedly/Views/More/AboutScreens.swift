@@ -211,7 +211,7 @@ struct LocationSettingsView: View {
                 
                 // Refresh button
                 Button(action: {
-                    Task { await appState.refreshWeather() }
+                    appState.refreshLocation()
                 }) {
                     HStack {
                         Image(systemName: "arrow.clockwise")

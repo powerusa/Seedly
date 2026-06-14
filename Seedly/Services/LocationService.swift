@@ -20,10 +20,30 @@ final class LocationService: NSObject, ObservableObject {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+        authorizationStatus = locationManager.authorizationStatus
     }
     
     func requestPermission() {
         locationManager.requestWhenInUseAuthorization()
+    }
+    
+    func refreshCurrentLocation() {
+        authorizationStatus = locationManager.authorizationStatus
+        
+        switch authorizationStatus {
+        case .notDetermined:
+            isLoading = true
+            error = nil
+            requestPermission()
+        case .authorizedWhenInUse, .authorizedAlways:
+            requestLocation()
+        case .denied, .restricted:
+            isLoading = false
+            error = .permissionDenied
+        @unknown default:
+            isLoading = false
+            error = .locationUnavailable
+        }
     }
     
     func requestLocation() {

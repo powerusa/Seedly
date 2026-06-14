@@ -8,22 +8,26 @@ import CoreLocation
 actor WeatherService {
     
     private var cachedWeather: WeatherData?
+    private var cachedLocation: CLLocation?
     private var lastFetchDate: Date?
     private let cacheValidityMinutes: Int = 30
+    private let cacheDistanceMeters: CLLocationDistance = 1_000
     private let weatherKit = WeatherKit.WeatherService.shared
     
     // MARK: - Fetch Weather
     func fetchWeather(for location: GardenLocation) async -> WeatherData? {
         // Check cache validity
+        let clLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
+        
         if let cached = cachedWeather,
+           let cachedLocation,
            let lastFetch = lastFetchDate,
-           Date().timeIntervalSince(lastFetch) < Double(cacheValidityMinutes * 60) {
+           Date().timeIntervalSince(lastFetch) < Double(cacheValidityMinutes * 60),
+           cachedLocation.distance(from: clLocation) < cacheDistanceMeters {
             return cached
         }
         
         // Fetch real weather from WeatherKit
-        let clLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
-        
         do {
             let weather = try await weatherKit.weather(for: clLocation, including: .current, .daily)
             
@@ -34,6 +38,7 @@ actor WeatherService {
             )
             
             cachedWeather = weatherData
+            cachedLocation = clLocation
             lastFetchDate = Date()
             return weatherData
             
@@ -42,6 +47,7 @@ actor WeatherService {
             // Fallback to mock data on error
             let weather = generateMockWeather(for: location)
             cachedWeather = weather
+            cachedLocation = clLocation
             lastFetchDate = Date()
             return weather
         }

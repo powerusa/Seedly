@@ -5,6 +5,7 @@ import SwiftUI
 
 struct CalendarScreenView: View {
     @StateObject private var viewModel = CalendarViewModel()
+    @EnvironmentObject var appState: AppState
     @EnvironmentObject var localization: LocalizationManager
     @State private var showMonthPicker = false
     
@@ -30,7 +31,11 @@ struct CalendarScreenView: View {
             .navigationTitle(localization.calendar)
             .navigationBarTitleDisplayMode(.large)
             .task {
-                viewModel.loadEvents()
+                appState.refreshLocation()
+                viewModel.loadEvents(location: appState.currentLocation)
+            }
+            .onChange(of: appState.currentLocation) { _, location in
+                viewModel.loadEvents(location: location)
             }
         }
     }

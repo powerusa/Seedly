@@ -5,6 +5,7 @@ import SwiftUI
 
 struct TodayView: View {
     @StateObject private var viewModel = HomeViewModel()
+    @EnvironmentObject var appState: AppState
     @EnvironmentObject var localization: LocalizationManager
     @State private var animateBackground = false
     
@@ -23,10 +24,25 @@ struct TodayView: View {
             .background(backgroundGradient)
             .ignoresSafeArea(edges: .top)
             .task {
-                await viewModel.loadData()
+                appState.refreshLocation()
+                await appState.refreshWeather()
+                await viewModel.loadData(location: appState.currentLocation, weather: appState.currentWeather)
             }
             .refreshable {
-                await viewModel.loadData()
+                appState.refreshLocation()
+                await appState.refreshWeather()
+                await viewModel.loadData(location: appState.currentLocation, weather: appState.currentWeather)
+            }
+            .onChange(of: appState.currentLocation) { _, location in
+                Task {
+                    await appState.refreshWeather()
+                    await viewModel.loadData(location: location, weather: appState.currentWeather)
+                }
+            }
+            .onReceive(appState.$currentWeather) { weather in
+                Task {
+                    await viewModel.loadData(location: appState.currentLocation, weather: weather)
+                }
             }
         }
     }

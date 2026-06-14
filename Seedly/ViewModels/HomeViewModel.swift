@@ -19,25 +19,29 @@ final class HomeViewModel: ObservableObject {
     private let climateEngine = ClimateEngine()
     private let plantDatabase = PlantDatabase.shared
     
-    func loadData() async {
+    func loadData(location: GardenLocation?, weather appWeather: WeatherData?) async {
         isLoading = true
         defer { isLoading = false }
         
-        // Use mock location if none set
-        let loc = location ?? GardenLocation(
-            latitude: 43.07,
-            longitude: -89.40,
-            city: "Madison",
-            country: "United States",
-            timeZone: TimeZone(identifier: "America/Chicago")!
-        )
+        guard let loc = location else {
+            self.location = nil
+            self.climateZone = nil
+            self.weather = nil
+            self.insights = []
+            self.recommendations = []
+            return
+        }
         
         self.location = loc
         self.climateZone = climateEngine.determineZone(for: loc)
         self.currentSeason = climateEngine.currentSeason(for: loc)
         
-        // Fetch weather
-        weather = await weatherService.fetchWeather(for: loc)
+        // Prefer app-level weather so Today stays in sync with the current phone location.
+        if let appWeather {
+            weather = appWeather
+        } else {
+            weather = await weatherService.fetchWeather(for: loc)
+        }
         
         // Generate insights
         if let weather = weather {

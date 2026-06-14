@@ -130,6 +130,7 @@ struct GardenStat: View {
 // MARK: - Add Garden Sheet
 
 struct AddGardenSheet: View {
+    @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var gardenName = ""
@@ -183,13 +184,16 @@ struct AddGardenSheet: View {
     }
     
     private func createGarden() {
+        let location = appState.currentLocation
+        let climateZone = location.map { ClimateEngine().determineZone(for: $0) }
+        
         let garden = Garden(
             name: gardenName,
-            locationLatitude: 43.07,
-            locationLongitude: -89.40,
-            city: "Madison",
-            country: "United States",
-            climateZoneId: "dfb_43_-89",
+            locationLatitude: location?.latitude ?? 0,
+            locationLongitude: location?.longitude ?? 0,
+            city: location?.city ?? "Unknown",
+            country: location?.country ?? "Unknown",
+            climateZoneId: climateZone?.id ?? "unknown",
             gardenType: gardenType
         )
         modelContext.insert(garden)
