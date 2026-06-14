@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -119,6 +120,7 @@ public class MainActivity extends Activity {
         LinearLayout root = darkRoot();
         addTopHeader(root, "Today in Your Garden", locationLine(location), true);
         root.addView(weatherHero(location));
+        root.addView(plantImageStrip());
 
         root.addView(sectionTitle("Today's Highlights"));
         root.addView(glassInsight("Perfect planting window", "Conditions are lined up for cool-season planning.", ACCENT));
@@ -127,9 +129,9 @@ public class MainActivity extends Activity {
         root.addView(glassInsight("Start indoors", "Warm-season crops can be prepared inside.", HEAT));
 
         root.addView(sectionTitleWithAction("Coming Up", "View All"));
-        root.addView(recommendationRow("Tomato", "Safe plant in 12 days", ACCENT, () -> showPlantDetail("Tomato")));
-        root.addView(recommendationRow("Pepper", "Safe plant in 14 days", HEAT, () -> showPlantDetail("Pepper")));
-        root.addView(recommendationRow("Basil", "Start indoors now", Color.rgb(164, 118, 220), () -> showPlantDetail("Basil")));
+        root.addView(recommendationRow("Tomato", "Safe plant in 12 days", R.drawable.plant_tomato, () -> showPlantDetail("Tomato", R.drawable.plant_tomato)));
+        root.addView(recommendationRow("Pepper", "Safe plant in 14 days", R.drawable.plant_pepper, () -> showPlantDetail("Pepper", R.drawable.plant_pepper)));
+        root.addView(recommendationRow("Basil", "Start indoors now", R.drawable.plant_basil, () -> showPlantDetail("Basil", R.drawable.plant_basil)));
 
         root.addView(sectionTitle("Frost Forecast"));
         root.addView(frostForecastStrip());
@@ -162,6 +164,50 @@ public class MainActivity extends Activity {
         right.addView(rain);
         weather.addView(right);
         return weather;
+    }
+
+    private LinearLayout plantImageStrip() {
+        LinearLayout outer = new LinearLayout(this);
+        outer.setOrientation(LinearLayout.VERTICAL);
+        outer.setPadding(dp(24), 0, dp(24), dp(24));
+
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+
+        row.addView(imageTile("Tomato", R.drawable.plant_tomato, () -> showPlantDetail("Tomato", R.drawable.plant_tomato)), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        row.addView(imageSpacer());
+        row.addView(imageTile("Pepper", R.drawable.plant_pepper, () -> showPlantDetail("Pepper", R.drawable.plant_pepper)), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        row.addView(imageSpacer());
+        row.addView(imageTile("Basil", R.drawable.plant_basil, () -> showPlantDetail("Basil", R.drawable.plant_basil)), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+
+        outer.addView(row);
+        return outer;
+    }
+
+    private View imageSpacer() {
+        View spacer = new View(this);
+        spacer.setLayoutParams(new LinearLayout.LayoutParams(dp(10), 1));
+        return spacer;
+    }
+
+    private LinearLayout imageTile(String label, int imageRes, Runnable action) {
+        LinearLayout tile = new LinearLayout(this);
+        tile.setOrientation(LinearLayout.VERTICAL);
+        tile.setClickable(true);
+        tile.setOnClickListener(view -> action.run());
+        tile.setBackground(rounded(Color.argb(42, 255, 255, 255), dp(14), Color.argb(44, 255, 255, 255)));
+        tile.setPadding(dp(8), dp(8), dp(8), dp(8));
+
+        ImageView image = new ImageView(this);
+        image.setImageResource(imageRes);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        tile.addView(image, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(86)));
+
+        TextView text = text(label, 12, WHITE, Typeface.BOLD);
+        text.setGravity(Gravity.CENTER_HORIZONTAL);
+        text.setPadding(0, dp(8), 0, 0);
+        tile.addView(text);
+        return tile;
     }
 
     private TextView sectionTitle(String title) {
@@ -206,7 +252,7 @@ public class MainActivity extends Activity {
         return wrapWithMargins(row, 24, 0, 24, 10);
     }
 
-    private LinearLayout recommendationRow(String name, String detail, int accentColor, Runnable action) {
+    private LinearLayout recommendationRow(String name, String detail, int imageRes, Runnable action) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setGravity(Gravity.CENTER_VERTICAL);
@@ -215,12 +261,14 @@ public class MainActivity extends Activity {
         row.setClickable(true);
         row.setOnClickListener(view -> action.run());
 
-        TextView marker = text("•", 28, accentColor, Typeface.BOLD);
-        marker.setGravity(Gravity.CENTER);
-        row.addView(marker, new LinearLayout.LayoutParams(dp(40), dp(40)));
+        ImageView image = new ImageView(this);
+        image.setImageResource(imageRes);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        row.addView(image, new LinearLayout.LayoutParams(dp(54), dp(54)));
 
         LinearLayout copy = new LinearLayout(this);
         copy.setOrientation(LinearLayout.VERTICAL);
+        copy.setPadding(dp(14), 0, 0, 0);
         copy.addView(text(name, 15, WHITE, Typeface.BOLD));
         copy.addView(text(detail, 12, WHITE_55, Typeface.NORMAL));
         row.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -263,14 +311,27 @@ public class MainActivity extends Activity {
         setContentView(scroll(root));
     }
 
-    private void showPlantDetail(String plant) {
+    private void showPlantDetail(String plant, int imageRes) {
         LinearLayout root = darkRoot();
         addTopHeader(root, plant, "Plant guidance", false);
+        root.addView(plantHeroImage(imageRes));
         root.addView(glassInsight("Planting window", plant + " timing is matched to your location and frost risk.", ACCENT));
         root.addView(glassInsight("Care note", "Keep soil evenly moist and protect young plants from cold nights.", RAIN));
         root.addView(glassInsight("Garden task", "Add this crop to your upcoming planting plan.", HEAT));
         addBackButton(root);
         setContentView(scroll(root));
+    }
+
+    private LinearLayout plantHeroImage(int imageRes) {
+        LinearLayout wrapper = new LinearLayout(this);
+        wrapper.setPadding(dp(24), 0, dp(24), dp(20));
+
+        ImageView image = new ImageView(this);
+        image.setImageResource(imageRes);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        image.setBackground(rounded(Color.argb(40, 255, 255, 255), dp(16), Color.argb(44, 255, 255, 255)));
+        wrapper.addView(image, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(210)));
+        return wrapper;
     }
 
     private void addBackButton(LinearLayout root) {
