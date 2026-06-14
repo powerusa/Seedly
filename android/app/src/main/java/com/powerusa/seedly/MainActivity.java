@@ -21,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class MainActivity extends Activity {
@@ -133,8 +135,8 @@ public class MainActivity extends Activity {
         root.addView(recommendationRow("Pepper", "Safe plant in 14 days", R.drawable.plant_pepper, () -> showPlantDetail("Pepper", R.drawable.plant_pepper)));
         root.addView(recommendationRow("Basil", "Start indoors now", R.drawable.plant_basil, () -> showPlantDetail("Basil", R.drawable.plant_basil)));
 
-        root.addView(sectionTitle("Frost Forecast"));
-        root.addView(frostForecastStrip());
+        root.addView(sectionTitle("Weather Forecast"));
+        root.addView(weatherForecastGrid(location));
 
         setContentView(scroll(root));
     }
@@ -278,26 +280,163 @@ public class MainActivity extends Activity {
         return wrapWithMargins(row, 24, 0, 24, 8);
     }
 
-    private LinearLayout frostForecastStrip() {
-        LinearLayout strip = new LinearLayout(this);
-        strip.setOrientation(LinearLayout.HORIZONTAL);
-        strip.setPadding(dp(8), dp(14), dp(8), dp(14));
-        strip.setBackground(rounded(Color.argb(38, 255, 255, 255), dp(16), Color.argb(36, 255, 255, 255)));
+    private LinearLayout weatherForecastGrid(Location location) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setPadding(dp(14), dp(12), dp(14), dp(12));
+        card.setBackground(rounded(Color.argb(42, 255, 255, 255), dp(16), Color.argb(42, 255, 255, 255)));
 
-        String[] days = {"Tonight", "Tue", "Wed", "Thu", "Fri"};
-        int[] lows = {42, 44, 39, 41, 46};
-        for (int i = 0; i < days.length; i++) {
-            LinearLayout day = new LinearLayout(this);
-            day.setOrientation(LinearLayout.VERTICAL);
-            day.setGravity(Gravity.CENTER);
-            day.addView(text(days[i], 11, WHITE_55, Typeface.NORMAL));
-            TextView marker = text(lows[i] <= 39 ? "*" : "•", 22, lows[i] <= 39 ? FROST : WHITE_70, Typeface.BOLD);
-            marker.setGravity(Gravity.CENTER);
-            day.addView(marker);
-            day.addView(text(lows[i] + "°", 14, lows[i] <= 39 ? FROST : WHITE, Typeface.BOLD));
-            strip.addView(day, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        ForecastDay[] forecast = buildForecast(location);
+        for (int i = 0; i < forecast.length; i++) {
+            ForecastDay day = forecast[i];
+            card.addView(forecastRow(day.label, day.condition, day.high, day.low, day.frostRisk));
+            if (i < forecast.length - 1) {
+                card.addView(forecastDivider());
+            }
         }
-        return wrapWithMargins(strip, 24, 0, 24, 28);
+
+        return wrapWithMargins(card, 24, 0, 24, 34);
+    }
+
+    private LinearLayout forecastRow(String day, String condition, int high, int low, boolean frostRisk) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(2), dp(8), dp(2), dp(8));
+
+        TextView dayView = text(day, 13, WHITE, Typeface.BOLD);
+        row.addView(dayView, new LinearLayout.LayoutParams(dp(76), ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        TextView icon = text(forecastIcon(condition, frostRisk), 22, frostRisk ? FROST : RAIN, Typeface.BOLD);
+        icon.setGravity(Gravity.CENTER);
+        row.addView(icon, new LinearLayout.LayoutParams(dp(38), ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        LinearLayout copy = new LinearLayout(this);
+        copy.setOrientation(LinearLayout.VERTICAL);
+        copy.addView(text(condition, 13, frostRisk ? FROST : WHITE_70, Typeface.BOLD));
+        copy.addView(text(frostRisk ? "Protect tender starts overnight" : "Garden weather guidance", 11, WHITE_55, Typeface.NORMAL));
+        row.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+
+        TextView temps = text("H " + high + "°  L " + low + "°", 13, frostRisk ? FROST : WHITE, Typeface.BOLD);
+        temps.setGravity(Gravity.RIGHT);
+        row.addView(temps, new LinearLayout.LayoutParams(dp(92), ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        return row;
+    }
+
+    private String forecastIcon(String condition, boolean frostRisk) {
+        String normalized = condition.toLowerCase(Locale.US);
+        if (frostRisk) {
+            return "❄";
+        }
+        if (normalized.contains("rain")) {
+            return "☔";
+        }
+        if (normalized.contains("sunny")) {
+            return "☀";
+        }
+        return "☁";
+    }
+
+    private ForecastDay[] buildForecast(Location location) {
+        ForecastDay[] forecast = new ForecastDay[5];
+        for (int offset = 0; offset < forecast.length; offset++) {
+            int current = estimatedTemp(location, offset);
+            int high = current + 5 + Math.floorMod(weatherSeed(location, offset), 4);
+            int low = current - 7 - Math.floorMod(weatherSeed(location, offset + 2), 4);
+            boolean frostRisk = low <= 36;
+            String condition = frostRisk ? "Frost watch" : forecastCondition(location, offset);
+            forecast[offset] = new ForecastDay(dayLabel(offset), condition, high, low, frostRisk);
+        }
+        return forecast;
+    }
+
+    private String forecastCondition(Location location, int offset) {
+        int pattern = Math.floorMod(weatherSeed(location, offset), 10);
+        if (pattern <= 1) {
+            return "Light rain";
+        }
+        if (pattern <= 3) {
+            return "Cloudy";
+        }
+        if (pattern <= 6) {
+            return "Partly cloudy";
+        }
+        return "Sunny";
+    }
+
+    private String dayLabel(int offset) {
+        if (offset == 0) {
+            return "Today";
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, offset);
+        String[] weekdays = new DateFormatSymbols(Locale.US).getShortWeekdays();
+        return weekdays[calendar.get(Calendar.DAY_OF_WEEK)];
+    }
+
+    private int estimatedTemp(Location location, int offset) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, offset);
+        int month = calendar.get(Calendar.MONTH) + 1;
+
+        double latitude = location == null ? 43.1 : location.getLatitude();
+        double absLatitude = Math.abs(latitude);
+        boolean northern = latitude >= 0;
+        boolean winter = northern ? month == 12 || month <= 2 : month >= 6 && month <= 8;
+        boolean spring = northern ? month >= 3 && month <= 5 : month >= 9 && month <= 11;
+        boolean summer = northern ? month >= 6 && month <= 8 : month == 12 || month <= 2;
+
+        int base;
+        if (absLatitude < 23.5) {
+            base = 82;
+        } else if (winter) {
+            base = 44;
+        } else if (spring) {
+            base = 62;
+        } else if (summer) {
+            base = 77;
+        } else {
+            base = 59;
+        }
+
+        if (absLatitude > 45) {
+            base -= 8;
+        } else if (absLatitude < 32) {
+            base += 7;
+        }
+
+        return base + Math.floorMod(weatherSeed(location, offset), 9) - 4;
+    }
+
+    private int weatherSeed(Location location, int offset) {
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        int lat = location == null ? 431 : (int) Math.round(location.getLatitude() * 10);
+        int lon = location == null ? -894 : (int) Math.round(location.getLongitude() * 10);
+        return lat * 31 + lon * 17 + day + offset * 23;
+    }
+
+    private static class ForecastDay {
+        final String label;
+        final String condition;
+        final int high;
+        final int low;
+        final boolean frostRisk;
+
+        ForecastDay(String label, String condition, int high, int low, boolean frostRisk) {
+            this.label = label;
+            this.condition = condition;
+            this.high = high;
+            this.low = low;
+            this.frostRisk = frostRisk;
+        }
+    }
+
+    private View forecastDivider() {
+        View divider = new View(this);
+        divider.setBackgroundColor(Color.argb(28, 255, 255, 255));
+        divider.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+        return divider;
     }
 
     private void showWeather(Location location) {
@@ -454,17 +593,17 @@ public class MainActivity extends Activity {
     }
 
     private String weatherTemp(Location location) {
-        int temp = location == null ? 64 : 58 + (int) Math.round((Math.abs(location.getLatitude()) % 12));
+        int temp = estimatedTemp(location, 0);
         return temp + "°";
     }
 
     private int highTemp(Location location) {
-        int current = location == null ? 64 : 58 + (int) Math.round((Math.abs(location.getLatitude()) % 12));
+        int current = estimatedTemp(location, 0);
         return current + 6;
     }
 
     private int lowTemp(Location location) {
-        int current = location == null ? 64 : 58 + (int) Math.round((Math.abs(location.getLatitude()) % 12));
+        int current = estimatedTemp(location, 0);
         return current - 8;
     }
 
