@@ -123,7 +123,7 @@ struct PlantDetailView: View {
             VStack {
                 HStack {
                     Spacer()
-                    Text(plant.difficulty.rawValue.capitalized)
+                    Text(LocalizedStringKey(plant.difficulty.rawValue.capitalized))
                         .font(.system(.caption, design: .rounded, weight: .semibold))
                         .foregroundStyle(.white)
                         .padding(.horizontal, 12)

@@ -241,3 +241,9 @@
 "%lld–%lld days" = "%lld–%lld dni";
 "Repeat every %lld days" = "Powtarzaj co %lld dni";
 "%lld weeks before last frost" = "%lld tyg. przed ostatnim przymrozkiem";
+
+// Plant difficulty
+"Beginner" = "Początkujący";
+"Intermediate" = "Średniozaawansowany";
+"Advanced" = "Zaawansowany";
+"Expert" = "Ekspert";

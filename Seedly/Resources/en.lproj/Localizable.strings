@@ -241,3 +241,9 @@
 "%lld–%lld days" = "%lld–%lld days";
 "Repeat every %lld days" = "Repeat every %lld days";
 "%lld weeks before last frost" = "%lld weeks before last frost";
+
+// Plant difficulty
+"Beginner" = "Beginner";
+"Intermediate" = "Intermediate";
+"Advanced" = "Advanced";
+"Expert" = "Expert";

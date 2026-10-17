@@ -185,9 +185,11 @@ final class PlantingEngine {
         zone: ClimateZone,
         weather: WeatherData?
     ) -> [PlantRecommendation] {
+        let polish = UserDefaults.standard.string(forKey: "selectedLanguage") == "pl"
         var recommendations: [PlantRecommendation] = []
         
         for plant in plants where !plant.usesSeasonalGuide {
+            if plant.frostSensitivity == .tropical && !zone.koppenClass.isTropical { continue }
             let schedule = calculatePlantingWindow(for: plant, in: zone, weather: weather)
             
             switch schedule.currentStatus {
@@ -203,10 +205,10 @@ final class PlantingEngine {
                     reason = warning
                 case .unknown:
                     action = .waitToPlant
-                    reason = "Estimated planting window; check local weather first"
+                    reason = polish ? "Szacowany termin sadzenia; sprawdź lokalną pogodę" : "Estimated planting window; check local weather first"
                 case .safe, .excellent:
                     action = .plantNow
-                    reason = "Within the estimated planting window"
+                    reason = polish ? "W szacowanym terminie sadzenia" : "Within the estimated planting window"
                 }
                 recommendations.append(PlantRecommendation(
                     plant: plant, action: action, reason: reason, safety: safety
@@ -215,7 +217,7 @@ final class PlantingEngine {
                 recommendations.append(PlantRecommendation(
                     plant: plant,
                     action: .startIndoors,
-                    reason: "Start seeds indoors this week",
+                    reason: polish ? "Siej w domu w tym tygodniu" : "Start seeds indoors this week",
                     safety: .safe
                 ))
             case .approaching:
@@ -223,7 +225,7 @@ final class PlantingEngine {
                     recommendations.append(PlantRecommendation(
                         plant: plant,
                         action: .waitToPlant,
-                        reason: "Safe to plant in \(days) days",
+                        reason: polish ? "Szacowane sadzenie za \(days) dni" : "Estimated planting in \(days) days",
                         safety: .safe
                     ))
                 }
@@ -231,7 +233,7 @@ final class PlantingEngine {
                 recommendations.append(PlantRecommendation(
                     plant: plant,
                     action: .harvest,
-                    reason: "Ready to harvest",
+                    reason: polish ? "Szacowany okres zbioru" : "Estimated harvest period",
                     safety: .excellent
                 ))
             default:
