@@ -4,7 +4,7 @@ Wersja aplikacji: **3.0**, numer kompilacji: **3**.
 
 - `pl/` — 5 rzeczywistych screenshotów polskiej aplikacji.
 - `en/` — 5 rzeczywistych screenshotów angielskiej aplikacji.
-- `header-pl.png`, `header-en.png` — dodatkowe grafiki nagłówkowe 1600 × 900. To materiały promocyjne; nie są screenshotami do slotu iPhone w App Store Connect.
+- `header-pl.png`, `header-en.png` — nagłówki do slotu Header Apple: **5244 × 2950 px**. Warianty `header-en-3840x1646.png` i `header-pl-3840x1646.png` mają drugi obsługiwany rozmiar **3840 × 1646 px**. Nie należy ich dodawać do slotu screenshotów iPhone.
 - `whats-new-pl.txt`, `whats-new-en.txt` — tekst „Co nowego” / „What's New” do wersji 3.0.
 
 Screenshoty zapisano bez ramek i modyfikacji zawartości, bezpośrednio z iPhone 18 Pro Simulator. Rozdzielczość **1206 × 2622 px**, PNG RGB bez przezroczystości. W App Store Connect należy wybrać kategorię **iPhone with Dynamic Island (medium display)**. Rozdzielczość jest wymieniona w [specyfikacji Apple](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications). Jeśli konkretny slot wymaga dużego ekranu, potrzebny będzie osobny zestaw z symulatora Pro Max; obecne pliki są opisane zgodnie z faktycznym urządzeniem.
