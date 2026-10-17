@@ -15,7 +15,7 @@ final class AppState: ObservableObject {
     @Published var measurementUnit: MeasurementSystem = .metric
     
     private var cancellables = Set<AnyCancellable>()
-    private let weatherService = WeatherService()
+    private let weatherService = WeatherService.shared
     private let climateEngine = ClimateEngine()
     
     init() {

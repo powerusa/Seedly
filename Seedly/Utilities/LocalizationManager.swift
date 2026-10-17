@@ -1479,13 +1479,13 @@ final class LocalizationManager: ObservableObject {
 Simple Seeds szanuje Twoją prywatność.
 
 Dane lokalizacji
-Używamy Twojej lokalizacji wyłącznie do obliczania prognozy pogody, dat przymrozków i kalendarza sadzenia. Dane lokalizacji są przetwarzane lokalnie na Twoim urządzeniu i nie są przesyłane na nasze serwery.
+Używamy Twojej lokalizacji wyłącznie do obliczania prognozy pogody, dat przymrozków i kalendarza sadzenia. Kalendarz obliczamy lokalnie. Pobieranie pogody wysyła współrzędne zaokrąglone do 4 miejsc dziesiętnych do MET Norway; dostawca otrzymuje także adres IP. Wyszukiwanie nazw miejsc korzysta z usług Apple.
 
 Brak konta
 Aplikacja nie wymaga rejestracji ani konta użytkownika. Wszystkie ustawienia, ogrody i zadania są przechowywane lokalnie na Twoim urządzeniu.
 
 Brak śledzenia
-Nie używamy narzędzi analitycznych ani reklamowych. Nie udostępniamy Twoich danych żadnym stronom trzecim.
+Nie używamy narzędzi analitycznych ani reklamowych. Dane potrzebne do pobrania pogody i wyszukania miejsca są przesyłane dostawcom opisanym powyżej.
 
 Powiadomienia
 Powiadomienia o przymrozkach, podlewaniu i zbiorach są generowane lokalnie na Twoim urządzeniu na podstawie Twoich ustawień.
@@ -1497,13 +1497,13 @@ Pytania dotyczące prywatności? Napisz do nas: powersatellite@yahoo.com
 Simple Seeds respects your privacy.
 
 Location Data
-We use your location solely to compute weather forecasts, frost dates, and planting calendars. Location data is processed locally on your device and is not transmitted to our servers.
+We use your location solely to compute weather forecasts, frost dates, and planting calendars. Planting calculations run locally. Weather requests send coordinates rounded to 4 decimal places to MET Norway, which also receives your IP address. Place-name lookup uses Apple services.
 
 No Account
 The app does not require registration or a user account. All your settings, gardens, and tasks are stored locally on your device.
 
 No Tracking
-We use no analytics or advertising tools. We do not share your data with any third parties.
+We use no analytics or advertising tools. Data needed for weather and place-name lookup is sent to the providers described above.
 
 Notifications
 Frost, watering, and harvest notifications are generated locally on your device based on your settings.
@@ -1520,13 +1520,15 @@ Questions about privacy? Email us: powersatellite@yahoo.com
 Dziękujemy społeczności open source.
 
 Apple
-• SwiftUI, SwiftData, MapKit, Core Location, WeatherKit
+• SwiftUI, SwiftData, MapKit, Core Location
 • SF Symbols — biblioteka ikon
 
 Dane klimatyczne
 • Klasyfikacja klimatu Köppen-Geigera
 • Strefy mrozoodporności USDA
-• Pogoda Open-Meteo (open-meteo.com)
+• Dane pogodowe MET Norway — CC BY 4.0
+• api.met.no/doc/License
+• Dane godzinowe łączymy w prognozy dobowe.
 
 Baza roślin
 Informacje agronomiczne pochodzą z publicznie dostępnych źródeł rolniczych, w tym uniwersyteckich stacji rolniczych i open-source ogrodniczych baz wiedzy.
@@ -1541,13 +1543,15 @@ Dla każdego ogrodnika, który dzieli się swoją pasją.
 Thanks to the open source community.
 
 Apple
-• SwiftUI, SwiftData, MapKit, Core Location, WeatherKit
+• SwiftUI, SwiftData, MapKit, Core Location
 • SF Symbols — icon library
 
 Climate Data
 • Köppen–Geiger climate classification
 • USDA Hardiness Zones
-• Open-Meteo weather (open-meteo.com)
+• Weather data from MET Norway — CC BY 4.0
+• api.met.no/doc/License
+• Hourly model data is aggregated into daily forecasts.
 
 Plant Database
 Agronomic information sourced from publicly available agricultural references, including university extension services and open-source gardening knowledge bases.
@@ -1635,16 +1639,11 @@ To every gardener who shares their passion.
     
     var locationDescription: String {
         switch currentLanguage {
-        case "pl": return "Lokalizacja służy do wyliczania terminów uprawy. Nazwy miast i prognozy są pobierane z usług Apple; wyszukiwanie miasta wymaga internetu. Możesz też wpisać współrzędne ręcznie."
-        case "de": return "Der Standort wird für Pflanztermine verwendet. Ortsnamen und Wetterdaten werden von Apple-Diensten abgerufen. Die Ortssuche benötigt Internet; Koordinaten können manuell eingegeben werden."
-        case "fr": return "La position sert au calendrier de plantation. Les noms de lieux et la météo proviennent des services Apple. La recherche de ville nécessite Internet; les coordonnées peuvent être saisies manuellement."
-        case "es": return "La ubicación se usa para las fechas de cultivo. Los nombres de lugares y el tiempo se consultan en servicios de Apple. Buscar ciudades requiere internet; también puedes introducir coordenadas."
-        case "it": return "La posizione serve per le date di coltivazione. Nomi dei luoghi e meteo vengono richiesti ai servizi Apple. La ricerca delle città richiede internet; puoi inserire le coordinate manualmente."
-        case "uk": return "Місцезнаходження використовується для календаря посадки. Назви міст і погода надходять із сервісів Apple. Пошук міста потребує інтернету; координати можна ввести вручну."
-        case "ru": return "Местоположение используется для календаря посадки. Названия городов и погода запрашиваются у сервисов Apple. Поиск города требует интернета; координаты можно ввести вручную."
-        default: return "Location is used for planting dates. Place names and weather are requested from Apple services. City search needs internet; you can also enter coordinates manually."
+        case "pl": return "Lokalizacja służy do wyliczania terminów uprawy. Nazwy miast pobieramy z Apple, a pogodę z MET Norway. Przy pobieraniu pogody MET Norway otrzymuje współrzędne zaokrąglone do 4 miejsc i adres IP. Wymagany jest internet. Możesz też wpisać współrzędne ręcznie."
+        default: return "Location is used for planting dates. Place names come from Apple and weather from MET Norway. Weather requests send coordinates rounded to 4 decimals and your IP address to MET Norway. Internet is required; you can also enter coordinates manually."
         }
     }
+
 
     var growingSeason: String {
         switch currentLanguage {

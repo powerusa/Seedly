@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0 (build 4) — MET Norway weather
+
+- Replace the WeatherKit dependency with live MET Norway Locationforecast data for device or manual locations; no API key or Apple weather entitlement required.
+- Coalesce simultaneous requests, round coordinates to four decimals, respect cache expiry and Retry-After, and avoid fabricated values when data is unavailable.
+- Display MET Norway attribution, CC BY 4.0, model update time and location-data disclosure.
+- Fix forecast weekday labels when the garden and phone use different time zones.
+- Validate a real provider fixture, missing fields, stale forecasts, unit conversion, cache behaviour, concurrent requests and throttling.
+
 ## 3.0 — 2026-10-17
 
 - Unify main screens, navigation destinations and forms with the green home gradient and a dark color scheme.

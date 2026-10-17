@@ -9,6 +9,7 @@ struct GardenStore {
 
 @main struct RegressionChecks {
     @MainActor static func main() async {
+        try! await WeatherChecks.run()
         let suite = "SeedlyRegression.\(UUID())"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }

@@ -24,7 +24,7 @@ Green screens throughout the app, persistent location and tasks, native in-app l
 | Persistence | SwiftData |
 | Concurrency | async/await |
 | Purchases | StoreKit 2 |
-| Weather | WeatherKit |
+| Weather | MET Norway Locationforecast 2.0 (CC BY 4.0) |
 | Location | CoreLocation |
 | Notifications | UserNotifications |
 | Widgets | WidgetKit |
@@ -135,14 +135,14 @@ Optional future expansion packs:
 2. Select iOS 18+ simulator or device
 3. Build and run
 
-> **Note:** For production WeatherKit integration, configure your Apple Developer account with WeatherKit capability. The app uses mock weather data for development.
+> **Weather:** Live model forecasts come from MET Norway without a WeatherKit entitlement or API key. Coordinates are rounded to four decimal places. The app identifies itself in its User-Agent, uses HTTP caching and request coalescing, observes retry limits, and credits MET Norway. No random weather is substituted on failures. For high-volume distribution, deploy a caching proxy in accordance with [MET Norway terms](https://api.met.no/doc/TermsOfService).
 
 ## 📋 Requirements
 
 - Xcode 16.0+
 - iOS 18.0+
 - Swift 6.0
-- Apple Developer Account (for WeatherKit + StoreKit)
+- Apple Developer Account (for distribution and StoreKit)
 
 ## 🧪 Testing
 

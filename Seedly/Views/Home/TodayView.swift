@@ -15,6 +15,7 @@ struct TodayView: View {
                 VStack(spacing: 0) {
                     headerSection
                     weatherSection
+                    weatherSourceSection
                     insightsSection
                     plantingRecommendationsSection
                     frostForecastSection
@@ -152,6 +153,23 @@ struct TodayView: View {
         .padding(.bottom, SeedlyTheme.paddingLarge)
     }
     
+    private var weatherSourceSection: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Link(localization.currentLanguage == "pl" ? "Dane pogodowe: MET Norway" : "Weather data: MET Norway",
+                 destination: URL(string: "https://api.met.no/")!)
+            if let weather = viewModel.weather {
+                Text(localization.currentLanguage == "pl" ? "Prognoza modelowa dla lokalizacji" : "Model forecast for your location")
+                Text(weather.lastUpdated, format: .dateTime.day().month().hour().minute())
+            }
+            Link("CC BY 4.0", destination: URL(string: "https://creativecommons.org/licenses/by/4.0/")!)
+        }
+        .font(.caption2)
+        .foregroundStyle(.white.opacity(0.75))
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, SeedlyTheme.paddingLarge)
+        .padding(.bottom, SeedlyTheme.paddingMedium)
+    }
+
     // MARK: - Insights
     private var insightsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -260,7 +278,7 @@ struct TodayView: View {
                 HStack {
                     Image(systemName: "checkmark.shield.fill")
                         .foregroundStyle(SeedlyTheme.accentGreen)
-                    Text(localization.safePlantingMessage)
+                    Text(localization.currentLanguage == "pl" ? "Brak przymrozku w prognozie" : "No frost in the forecast")
                         .font(.system(.caption, design: .rounded))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -285,9 +303,14 @@ struct TodayView: View {
     }
     
     private func dayName(for date: Date) -> String {
-        let calendar = Calendar.current
-        if calendar.isDateInToday(date) { return localization.tonight }
-        return localization.shortWeekday(for: date)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = appState.currentLocation?.timeZone ?? .current
+        if calendar.isDate(date, inSameDayAs: Date()) { return localization.tonight }
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: localization.currentLanguage)
+        formatter.timeZone = calendar.timeZone
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: date)
     }
 }
 

@@ -15,7 +15,7 @@ final class HomeViewModel: ObservableObject {
     @Published var climateZone: ClimateZone?
     
     private let plantingEngine = PlantingEngine()
-    private let weatherService = WeatherService()
+    private let weatherService = WeatherService.shared
     private let climateEngine = ClimateEngine()
     private let plantDatabase = PlantDatabase.shared
     

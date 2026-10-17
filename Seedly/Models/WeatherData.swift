@@ -7,17 +7,17 @@ import SwiftUI
 struct WeatherData: Codable {
     let location: String
     let currentTemp: Double
-    let feelsLike: Double
+    let feelsLike: Double?
     let highTemp: Double
     let lowTemp: Double
     let humidity: Int
     let windSpeedKmh: Double
-    let uvIndex: Int
+    let uvIndex: Int?
     let condition: WeatherCondition
     let precipitationMm: Double
-    let precipitationChance: Int
-    let sunrise: Date
-    let sunset: Date
+    let precipitationChance: Int?
+    let sunrise: Date?
+    let sunset: Date?
     let forecast: [DayForecast]
     let lastUpdated: Date
     
@@ -30,7 +30,7 @@ struct WeatherData: Codable {
     }
     
     var hasRainExpected: Bool {
-        precipitationChance > 60 || forecast.prefix(2).contains(where: { $0.precipitationChance > 60 })
+        (precipitationChance ?? 0) > 60 || precipitationMm > 0.5 || forecast.prefix(2).contains(where: { ($0.precipitationChance ?? 0) > 60 || $0.precipitationMm > 0.5 })
     }
 }
 
@@ -41,10 +41,10 @@ struct DayForecast: Codable, Identifiable {
     let lowTemp: Double
     let condition: WeatherCondition
     let precipitationMm: Double
-    let precipitationChance: Int
+    let precipitationChance: Int?
     let humidity: Int
     let windSpeedKmh: Double
-    let uvIndex: Int
+    let uvIndex: Int?
     
     var hasFrostRisk: Bool { lowTemp <= 0 }
     var hasHeatRisk: Bool { highTemp >= 35 }
@@ -55,10 +55,10 @@ struct DayForecast: Codable, Identifiable {
         lowTemp: Double,
         condition: WeatherCondition,
         precipitationMm: Double = 0,
-        precipitationChance: Int = 0,
+        precipitationChance: Int? = nil,
         humidity: Int = 50,
         windSpeedKmh: Double = 10,
-        uvIndex: Int = 5
+        uvIndex: Int? = nil
     ) {
         self.id = UUID()
         self.date = date

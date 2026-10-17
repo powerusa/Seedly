@@ -46,12 +46,13 @@ struct WeatherCardView: View {
             Divider()
                 .background(.white.opacity(0.2))
             
+            Link("MET Norway · CC BY 4.0", destination: URL(string: "https://api.met.no/doc/License")!).font(.caption2)
             // Quick stats
             HStack(spacing: 16) {
                 WeatherStat(icon: "humidity.fill", value: "\(weather.humidity)%", label: localization.humidity)
                 WeatherStat(icon: "wind", value: "\(Int(weather.windSpeedKmh)) km/h", label: localization.wind)
-                WeatherStat(icon: "sun.max.fill", value: "\(weather.uvIndex)", label: localization.uvIndex)
-                WeatherStat(icon: "drop.fill", value: "\(weather.precipitationChance)%", label: localization.rain)
+                WeatherStat(icon: "sun.max.fill", value: weather.uvIndex.map(String.init) ?? "—", label: localization.uvIndex)
+                WeatherStat(icon: "drop.fill", value: weather.precipitationChance.map { "\($0)%" } ?? String(format: "%.1f mm", weather.precipitationMm), label: localization.rain)
             }
         }
         .padding(SeedlyTheme.paddingMedium)
