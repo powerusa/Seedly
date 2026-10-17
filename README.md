@@ -125,8 +125,8 @@ Optional future expansion packs:
 - No tracking
 - No analytics
 - No accounts
-- No data collection
-- Location used on-device only
+- No analytics or advertising data collection
+- Planting calculations run on-device; weather requests send rounded coordinates to MET Norway and place-name lookup uses Apple services
 - Full offline functionality
 
 ## 🚀 Getting Started
@@ -147,7 +147,7 @@ Optional future expansion packs:
 ## 🧪 Testing
 
 - All ViewModels support preview data
-- Mock weather generation for development
+- Deterministic MET Norway forecast fixture and cache/network regression checks
 - SwiftData in-memory containers for previews
 - Widget previews included
 

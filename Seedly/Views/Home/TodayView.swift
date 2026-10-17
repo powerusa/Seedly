@@ -40,6 +40,9 @@ struct TodayView: View {
                     await viewModel.loadData(location: location, weather: appState.currentWeather)
                 }
             }
+            .onChange(of: localization.currentLanguage) { _, _ in
+                Task { await viewModel.loadData(location: appState.currentLocation, weather: appState.currentWeather) }
+            }
             .onReceive(appState.$currentWeather) { weather in
                 Task {
                     await viewModel.loadData(location: appState.currentLocation, weather: weather)

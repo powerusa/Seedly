@@ -7,3 +7,5 @@ Seedly 3.0 wprowadza spójny zielony wygląd całej aplikacji.
 • Zapisuj zadania ogrodnicze, ich wykonanie, powtarzanie oraz notatki o roślinach.
 • Korzystaj z poprawionego kalendarza, przeliczania jednostek i polskich tłumaczeń.
 • Zobacz jasny komunikat, gdy aktualna prognoza pogody jest niedostępna.
+
+Prognozy pogody pobieramy teraz z MET Norway dla lokalizacji telefonu lub ręcznie wybranego miejsca, bez autoryzacji WeatherKit.

@@ -7,3 +7,5 @@ Seedly 3.0 brings a fresh green look throughout the app.
 • Save gardening tasks, completion status, recurring tasks and plant notes.
 • Enjoy improved calendar dates, unit conversions and Polish translations.
 • See a clear unavailable state when live weather cannot be retrieved.
+
+Weather forecasts now come from MET Norway for your device or manually selected location, without WeatherKit authorization.
