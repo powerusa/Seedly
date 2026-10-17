@@ -12,6 +12,8 @@ struct WeatherChecks {
         assert(weather.forecast.allSatisfy { $0.highTemp >= $0.lowTemp })
         assert(weather.precipitationChance == nil && weather.sunrise == nil, "Missing fields must not become invented values")
         assert(weather.condition == .sunny)
+        let insights = WeatherService.shared.generateInsights(weather: weather, plants: [])
+        assert(!insights.contains { $0.type == .planting }, "A sunny but cold forecast must not claim ideal planting conditions")
         let request = try METWeatherProvider.request(for: location)
         assert(request.url!.query!.contains("lat=50.0595") && request.url!.query!.contains("lon=19.9362"))
         assert(request.value(forHTTPHeaderField: "User-Agent")!.contains("powerusa/Seedly"))

@@ -98,7 +98,7 @@ actor WeatherService {
         }
         
         // Planting conditions
-        if !weather.hasFrostRisk && !weather.hasHeatRisk && weather.condition.gardeningImpact == .excellent {
+        if !weather.hasFrostRisk && !weather.hasHeatRisk && weather.currentTemp >= 15 && weather.lowTemp >= 10 && weather.condition.gardeningImpact == .excellent {
             insights.append(GardenInsight(
                 type: .planting,
                 title: localized("insight_perfect_title"),
