@@ -1,0 +1,9 @@
+Seedly 3.0 wprowadza spójny zielony wygląd całej aplikacji.
+
+• Odkrywaj 77 roślin ze zdjęciami dostępnymi offline.
+• Poznaj nowe warzywa, zioła, kwiaty i drzewa owocowe.
+• Ustal lokalizację automatycznie, wyszukaj miasto lub wpisz współrzędne.
+• Zachowaj wybraną lokalizację i język po ponownym uruchomieniu.
+• Zapisuj zadania ogrodnicze, ich wykonanie, powtarzanie oraz notatki o roślinach.
+• Korzystaj z poprawionego kalendarza, przeliczania jednostek i polskich tłumaczeń.
+• Zobacz jasny komunikat, gdy aktualna prognoza pogody jest niedostępna.
