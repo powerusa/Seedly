@@ -118,18 +118,14 @@ final class StoreKitManager: ObservableObject {
             for await result in Transaction.updates {
                 do {
                     guard let transaction = try self?.checkVerifiedDetached(result) else { continue }
-                    let productID = transaction.productID
-                    await self?.markPurchased(productID)
+                    // Re-read active entitlements: updates also include refunds and revocations.
+                    await self?.updatePurchasedProducts()
                     await transaction.finish()
                 } catch {
                     // Transaction verification failed
                 }
             }
         }
-    }
-    
-    private func markPurchased(_ productID: String) {
-        purchasedProductIDs.insert(productID)
     }
     
     private nonisolated func checkVerifiedDetached(_ result: VerificationResult<Transaction>) throws -> Transaction {

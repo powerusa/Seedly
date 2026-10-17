@@ -44,12 +44,8 @@ actor WeatherService {
             
         } catch {
             print("WeatherKit error: \(error)")
-            // Fallback to mock data on error
-            let weather = generateMockWeather(for: location)
-            cachedWeather = weather
-            cachedLocation = clLocation
-            lastFetchDate = Date()
-            return weather
+            // A failed weather request must not become a fabricated forecast or frost alert.
+            return nil
         }
     }
     
@@ -69,25 +65,25 @@ actor WeatherService {
         for day in daily.forecast.prefix(7) {
             forecast.append(DayForecast(
                 date: day.date,
-                highTemp: day.highTemperature.value,
-                lowTemp: day.lowTemperature.value,
+                highTemp: day.highTemperature.converted(to: .celsius).value,
+                lowTemp: day.lowTemperature.converted(to: .celsius).value,
                 condition: mapWeatherKitCondition(day.condition),
                 precipitationMm: day.precipitationAmountByType.precipitation.value,
                 precipitationChance: Int(day.precipitationChance * 100),
                 humidity: 50,
-                windSpeedKmh: day.wind.speed.value,
+                windSpeedKmh: day.wind.speed.converted(to: .kilometersPerHour).value,
                 uvIndex: day.uvIndex.value
             ))
         }
         
         return WeatherData(
             location: location.city,
-            currentTemp: current.temperature.value,
-            feelsLike: current.apparentTemperature.value,
-            highTemp: daily.forecast.first?.highTemperature.value ?? current.temperature.value + 5,
-            lowTemp: daily.forecast.first?.lowTemperature.value ?? current.temperature.value - 5,
+            currentTemp: current.temperature.converted(to: .celsius).value,
+            feelsLike: current.apparentTemperature.converted(to: .celsius).value,
+            highTemp: daily.forecast.first?.highTemperature.value ?? current.temperature.converted(to: .celsius).value + 5,
+            lowTemp: daily.forecast.first?.lowTemperature.value ?? current.temperature.converted(to: .celsius).value - 5,
             humidity: Int(current.humidity * 100),
-            windSpeedKmh: current.wind.speed.value,
+            windSpeedKmh: current.wind.speed.converted(to: .kilometersPerHour).value,
             uvIndex: current.uvIndex.value,
             condition: condition,
             precipitationMm: daily.forecast.first?.precipitationAmountByType.precipitation.value ?? 0,
@@ -209,83 +205,4 @@ actor WeatherService {
         return insights.sorted { $0.priority < $1.priority }
     }
     
-    // MARK: - Mock Weather Generation
-    private func generateMockWeather(for location: GardenLocation) -> WeatherData {
-        let calendar = Calendar.current
-        let month = calendar.component(.month, from: Date())
-        let isNorthern = location.hemisphere == .northern
-        
-        // Seasonal temperature adjustment
-        let baseTemp: Double
-        
-        let isWinter: Bool
-        let isSpring: Bool
-        let isSummer: Bool
-        
-        if isNorthern {
-            isWinter = month == 12 || month == 1 || month == 2
-            isSpring = month >= 3 && month <= 5
-            isSummer = month >= 6 && month <= 8
-        } else {
-            isWinter = month >= 6 && month <= 8
-            isSpring = month >= 9 && month <= 11
-            isSummer = month == 12 || month == 1 || month == 2
-        }
-        
-        if isWinter {
-            baseTemp = 2
-        } else if isSpring {
-            baseTemp = 14
-        } else if isSummer {
-            baseTemp = 25
-        } else {
-            baseTemp = 16
-        }
-        
-        let currentTemp = baseTemp + Double.random(in: -3...3)
-        let highTemp = currentTemp + Double.random(in: 3...8)
-        let lowTemp = currentTemp - Double.random(in: 3...8)
-        
-        let conditions: [WeatherCondition] = [.sunny, .partlyCloudy, .cloudy, .lightRain]
-        let condition = conditions.randomElement() ?? .partlyCloudy
-        
-        // Generate 7-day forecast
-        var forecast: [DayForecast] = []
-        for i in 1...7 {
-            let date = calendar.date(byAdding: .day, value: i, to: Date())!
-            let dayHigh = highTemp + Double.random(in: -4...4)
-            let dayLow = lowTemp + Double.random(in: -3...3)
-            let dayCondition = conditions.randomElement() ?? .partlyCloudy
-            
-            forecast.append(DayForecast(
-                date: date,
-                highTemp: dayHigh,
-                lowTemp: dayLow,
-                condition: dayCondition,
-                precipitationMm: dayCondition == .lightRain ? Double.random(in: 2...15) : 0,
-                precipitationChance: dayCondition == .lightRain ? Int.random(in: 40...80) : Int.random(in: 0...20),
-                humidity: Int.random(in: 40...75),
-                windSpeedKmh: Double.random(in: 5...25),
-                uvIndex: Int.random(in: 2...8)
-            ))
-        }
-        
-        return WeatherData(
-            location: location.city,
-            currentTemp: currentTemp,
-            feelsLike: currentTemp - 2,
-            highTemp: highTemp,
-            lowTemp: lowTemp,
-            humidity: Int.random(in: 40...75),
-            windSpeedKmh: Double.random(in: 5...20),
-            uvIndex: Int.random(in: 2...8),
-            condition: condition,
-            precipitationMm: condition == .lightRain ? Double.random(in: 1...10) : 0,
-            precipitationChance: condition == .lightRain ? Int.random(in: 40...70) : Int.random(in: 0...15),
-            sunrise: calendar.date(bySettingHour: 6, minute: 30, second: 0, of: Date())!,
-            sunset: calendar.date(bySettingHour: 20, minute: 0, second: 0, of: Date())!,
-            forecast: forecast,
-            lastUpdated: Date()
-        )
-    }
 }

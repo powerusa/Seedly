@@ -1,0 +1,112 @@
+[
+  {
+    "plantId": "kohlrabi",
+    "file": "Brassica_oleracea_var._gongylodes_(kohlrabi).jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Brassica_oleracea_var._gongylodes_%28kohlrabi%29.jpg",
+    "author": "Unknown",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.rawpixel.com/image/6037170/photo-image-public-domain-plant-green\">https://www.rawpixel.com/image/6037170/photo-image-public-domain-plant-green</a>",
+    "license": "CC0",
+    "licenseURL": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Brassica_oleracea_var._gongylodes_%28kohlrabi%29.jpg/330px-Brassica_oleracea_var._gongylodes_%28kohlrabi%29.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "fennel",
+    "file": "Foeniculum_July_2011-1a.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Foeniculum_July_2011-1a.jpg",
+    "author": "<a href=\"//commons.wikimedia.org/wiki/User:Alvesgaspar\" title=\"User:Alvesgaspar\">Alvesgaspar</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "license": "CC BY-SA 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Foeniculum_July_2011-1a.jpg/330px-Foeniculum_July_2011-1a.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "tarragon",
+    "file": "Estragon_1511.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Estragon_1511.jpg",
+    "author": "No machine-readable author provided. <a href=\"//commons.wikimedia.org/wiki/User:Ies\" title=\"User:Ies\">Ies</a> assumed (based on copyright claims).",
+    "credit": "No machine-readable source provided. Own work assumed (based on copyright claims).",
+    "license": "Public domain",
+    "licenseURL": "",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Estragon_1511.jpg/330px-Estragon_1511.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "daffodil",
+    "file": "Narcissus_pseudonarcissus_flower_300303.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Narcissus_pseudonarcissus_flower_300303.jpg",
+    "author": "BerndH",
+    "credit": "",
+    "license": "CC BY-SA 3.0",
+    "licenseURL": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/Narcissus_pseudonarcissus_flower_300303.jpg/330px-Narcissus_pseudonarcissus_flower_300303.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "pansy",
+    "file": "PansyScan_(cropped).jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:PansyScan_%28cropped%29.jpg",
+    "author": "<a rel=\"nofollow\" class=\"external text\" href=\"http://www.osnatamir.com\">Osnat Ravid Amir</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "license": "CC BY-SA 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/PansyScan_%28cropped%29.jpg/330px-PansyScan_%28cropped%29.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "peony",
+    "file": "Lactiflora1b.UME.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Lactiflora1b.UME.jpg",
+    "author": "Ulf Eliasson",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "license": "CC BY-SA 3.0",
+    "licenseURL": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Lactiflora1b.UME.jpg/330px-Lactiflora1b.UME.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "pearTree",
+    "file": "Pears.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Pears.jpg",
+    "author": "Keith Weller",
+    "credit": "<a href=\"https://en.wikipedia.org/wiki/United_States_Department_of_Agriculture\" class=\"extiw\" title=\"en:United States Department of Agriculture\">USDA</a>, <a rel=\"nofollow\" class=\"external text\" data-mw-original-href=\"http://www.ars.usda.gov/is/graphics/photos/k5299-1.htm\" href=\"https://www.ars.usda.gov/is/graphics/photos/k5299-1.htm\">Image Number K5299-1</a>.",
+    "license": "Public domain",
+    "licenseURL": "",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Pears.jpg/330px-Pears.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "cherryTree",
+    "file": "Prunus_avium_fruit.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Prunus_avium_fruit.jpg",
+    "author": "<a href=\"//commons.wikimedia.org/wiki/User:MPF\" title=\"User:MPF\">MPF</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "license": "CC BY 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by/2.5",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Prunus_avium_fruit.jpg/330px-Prunus_avium_fruit.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "appleTree",
+    "file": "Malus_domestica_a1.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File%3AMalus_domestica_a1.jpg",
+    "author": "Opioła Jerzy (Poland)",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "license": "CC BY 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by/2.5",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Malus_domestica_a1.jpg/500px-Malus_domestica_a1.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  },
+  {
+    "plantId": "asparagus",
+    "file": "Asparagus-Bundle.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File%3AAsparagus-Bundle.jpg",
+    "author": "<a href=\"//commons.wikimedia.org/wiki/User:Evan-Amos\" title=\"User:Evan-Amos\">Evan-Amos</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "license": "CC BY-SA 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0",
+    "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Asparagus-Bundle.jpg/500px-Asparagus-Bundle.jpg",
+    "changes": "Bundled thumbnail; no edits."
+  }
+]

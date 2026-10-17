@@ -6,7 +6,10 @@ import SwiftUI
 struct PlantDetailView: View {
     let plant: Plant
     @State private var selectedTab: PlantDetailTab = .overview
-    @State private var isAddedToGarden = false
+    @State private var plantNotes = ""
+    @EnvironmentObject var garden: GardenStore
+    @EnvironmentObject var appState: AppState
+    private var isAddedToGarden: Bool { !garden.isRemoved(plant.id) }
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var favorites: FavoritesStore
     
@@ -20,7 +23,7 @@ struct PlantDetailView: View {
             }
             .padding(.bottom, 100)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -35,6 +38,13 @@ struct PlantDetailView: View {
                 }
                 .accessibilityLabel(favorites.isFavorite(plant.id) ? "Remove from favorites" : "Add to favorites")
             }
+        }
+        .onAppear {
+            plantNotes = UserDefaults.standard.string(forKey: "plant.notes.\(plant.id)")
+                ?? garden.customPlant(withId: plant.id)?.notes ?? ""
+        }
+        .onChange(of: plantNotes) { _, value in
+            UserDefaults.standard.set(value, forKey: "plant.notes.\(plant.id)")
         }
         .safeAreaInset(edge: .bottom) {
             addToGardenButton
@@ -135,12 +145,14 @@ struct PlantDetailView: View {
     private var quickInfoBar: some View {
         HStack(spacing: 0) {
             QuickInfoItem(icon: "sun.max.fill", title: "Full Sun", subtitle: plant.sunlight.hours)
-            QuickInfoItem(icon: "ruler", title: "Spacing", subtitle: "\(Int(plant.spacing.betweenPlantsCm))–\(Int(plant.spacing.betweenRowsCm)) cm")
+            QuickInfoItem(icon: "ruler", title: "Spacing", subtitle: "\(length(plant.spacing.betweenPlantsCm)) / \(length(plant.spacing.betweenRowsCm))")
             QuickInfoItem(icon: "drop.fill", title: "Water", subtitle: plant.waterNeeds.rawValue.capitalized)
-            QuickInfoItem(icon: "calendar", title: "Harvest", subtitle: "\(plant.daysToHarvest.lowerBound)–\(plant.daysToHarvest.upperBound)")
+            if plant.category != .flower {
+                QuickInfoItem(icon: "calendar", title: "Harvest", subtitle: plant.category == .tree ? "Varies by cultivar" : "\(plant.daysToHarvest.lowerBound)–\(plant.daysToHarvest.upperBound) days")
+            }
         }
         .padding(.vertical, SeedlyTheme.paddingMedium)
-        .background(Color(.systemBackground))
+        .background(SeedlyTheme.cardBackground)
     }
     
     // MARK: - Tab Selector
@@ -153,9 +165,9 @@ struct PlantDetailView: View {
                     }
                 }) {
                     VStack(spacing: 6) {
-                        Text(tab.rawValue)
+                        Text(LocalizedStringKey(tab.rawValue))
                             .font(.system(.subheadline, design: .rounded, weight: selectedTab == tab ? .semibold : .regular))
-                            .foregroundStyle(selectedTab == tab ? SeedlyTheme.primaryGreen : .secondary)
+                            .foregroundStyle(selectedTab == tab ? SeedlyTheme.accentGreen : .secondary)
                         
                         Rectangle()
                             .fill(selectedTab == tab ? SeedlyTheme.primaryGreen : Color.clear)
@@ -166,7 +178,7 @@ struct PlantDetailView: View {
             }
         }
         .padding(.top, SeedlyTheme.paddingSmall)
-        .background(Color(.systemBackground))
+        .background(SeedlyTheme.cardBackground)
     }
     
     // MARK: - Tab Content
@@ -187,14 +199,21 @@ struct PlantDetailView: View {
     // MARK: - Overview
     private var overviewContent: some View {
         VStack(spacing: SeedlyTheme.paddingMedium) {
+            if let guide = plant.growingGuide {
+                DetailSection(title: "Growing guide") { Text(guide).font(.subheadline) }
+            }
             // Growing conditions
             DetailSection(title: "Growing Conditions") {
                 VStack(spacing: 12) {
                     DetailRow(icon: "sun.max.fill", title: "Sunlight", value: plant.sunlight.rawValue.camelCaseToWords())
                     DetailRow(icon: "drop.fill", title: "Water Needs", value: plant.waterNeeds.rawValue.capitalized)
-                    DetailRow(icon: "thermometer", title: "Optimal Temp", value: "\(Int(plant.optimalTempCelsius.lowerBound))–\(Int(plant.optimalTempCelsius.upperBound))°C")
+                    if !plant.usesSeasonalGuide {
+                        DetailRow(icon: "thermometer", title: "Optimal Temp", value: "\(temperature(plant.optimalTempCelsius.lowerBound)) – \(temperature(plant.optimalTempCelsius.upperBound))")
+                    }
                     DetailRow(icon: "humidity.fill", title: "Humidity", value: plant.humidityPreference.rawValue.capitalized)
-                    DetailRow(icon: "arrow.down.to.line", title: "Planting Depth", value: "\(plant.plantingDepthCm) cm")
+                    if !plant.usesSeasonalGuide {
+                        DetailRow(icon: "arrow.down.to.line", title: "Planting Depth", value: length(plant.plantingDepthCm))
+                    }
                 }
             }
             
@@ -202,7 +221,7 @@ struct PlantDetailView: View {
             DetailSection(title: "Soil Preferences") {
                 FlowLayout(spacing: 8) {
                     ForEach(plant.soilPreferences, id: \.self) { soil in
-                        Text(soil.rawValue.camelCaseToWords())
+                        Text(LocalizedStringKey(soil.rawValue.camelCaseToWords()))
                             .font(.system(.caption, design: .rounded))
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
@@ -219,14 +238,18 @@ struct PlantDetailView: View {
                 VStack(spacing: 12) {
                     DetailRow(icon: "snowflake", title: "Frost Sensitivity", value: plant.frostSensitivity.rawValue.camelCaseToWords())
                     DetailRow(icon: "thermometer.sun.fill", title: "Heat Tolerance", value: plant.heatTolerance.rawValue.capitalized)
-                    DetailRow(icon: "thermometer.low", title: "Min Soil Temp", value: "\(Int(plant.minSoilTempCelsius))°C")
+                    if !plant.usesSeasonalGuide {
+                        DetailRow(icon: "thermometer.low", title: "Min Soil Temp", value: temperature(plant.minSoilTempCelsius))
+                    }
                 }
             }
             
             // Characteristics
             DetailSection(title: "Characteristics") {
                 VStack(spacing: 12) {
-                    DetailRow(icon: "clock", title: "Germination", value: "\(plant.germinationDays.lowerBound)–\(plant.germinationDays.upperBound) days")
+                    if plant.germinationDays.upperBound > 0 {
+                        DetailRow(icon: "clock", title: "Germination", value: "\(plant.germinationDays.lowerBound)–\(plant.germinationDays.upperBound) days")
+                    }
                     DetailRow(icon: "arrow.triangle.2.circlepath", title: "Perennial", value: plant.perennial ? "Yes" : "No")
                     DetailRow(icon: "square.grid.2x2", title: "Container Friendly", value: plant.containerFriendly ? "Yes" : "No")
                     DetailRow(icon: "house.fill", title: "Greenhouse", value: plant.greenhouseSuitable ? "Yes" : "No")
@@ -240,46 +263,45 @@ struct PlantDetailView: View {
     }
     
     // MARK: - Timeline
+    private func dateText(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en")
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+
+    private func temperature(_ celsius: Double) -> String {
+        "\(Int(appState.temperatureUnit.convert(celsius)))\(appState.temperatureUnit.symbol)"
+    }
+
+    private func length(_ cm: Double) -> String {
+        String(format: "%.1f %@", appState.measurementUnit.convertLength(cm), appState.measurementUnit.lengthUnit)
+    }
+
     private var timelineContent: some View {
-        VStack(spacing: 0) {
-            if plant.indoorSeedWeeks != nil {
-                TimelineItem(
-                    icon: "house.fill",
-                    title: "Start Seeds Indoors",
-                    subtitle: "Mar 15 – Apr 5",
-                    color: .purple,
-                    isFirst: true
-                )
+        VStack(alignment: .leading, spacing: 16) {
+            if plant.usesSeasonalGuide {
+                Text(plant.growingGuide ?? "Choose planting dates for your cultivar and local climate.")
+            } else if let zone = appState.climateZone {
+                let schedule = PlantingEngine().calculatePlantingWindow(for: plant, in: zone, weather: appState.currentWeather)
+                if let indoor = schedule.indoorSeedStart {
+                    Text("Start indoors: \(dateText(indoor))")
+                }
+                Text("Plant outdoors: \(dateText(schedule.outdoorPlantDate))")
+                if plant.category != .flower {
+                    Text("Estimated harvest: \(dateText(schedule.expectedHarvestDate))")
+                }
+                Text("Dates are estimates based on climate, not a record of actual planting.")
+                    .font(.caption).foregroundStyle(.secondary)
+            } else {
+                Text("Set your location to see estimated planting dates.")
             }
-            
-            TimelineItem(
-                icon: "leaf.fill",
-                title: "Transplant Outdoors",
-                subtitle: "May 20 – Jun 5",
-                color: .green,
-                isFirst: plant.indoorSeedWeeks == nil
-            )
-            
-            TimelineItem(
-                icon: "basket.fill",
-                title: "Harvest",
-                subtitle: "Jul 25 – Sep 15",
-                color: .orange,
-                isFirst: false
-            )
-            
-            TimelineItem(
-                icon: "snowflake",
-                title: "Frost Sensitive",
-                subtitle: "Protect below 0°C",
-                color: SeedlyTheme.frost,
-                isFirst: false,
-                isLast: true
-            )
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(SeedlyTheme.paddingLarge)
     }
-    
+
     // MARK: - Companions
     private var companionsContent: some View {
         VStack(spacing: SeedlyTheme.paddingMedium) {
@@ -321,15 +343,11 @@ struct PlantDetailView: View {
         VStack(spacing: SeedlyTheme.paddingMedium) {
             DetailSection(title: "Your Notes") {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("No notes yet. Add notes about your experience growing \(plant.localizedName()).")
-                        .font(.system(.subheadline, design: .rounded))
-                        .foregroundStyle(.secondary)
-                    
-                    Button(action: {}) {
-                        Label("Add Note", systemImage: "plus")
-                            .font(.system(.subheadline, design: .rounded, weight: .medium))
-                            .foregroundStyle(SeedlyTheme.primaryGreen)
-                    }
+                    TextEditor(text: $plantNotes)
+                        .frame(minHeight: 140)
+                        .accessibilityLabel("Plant notes")
+                    Text("Notes save automatically.")
+                        .font(.caption).foregroundStyle(.secondary)
                 }
             }
         }
@@ -340,7 +358,7 @@ struct PlantDetailView: View {
     private var addToGardenButton: some View {
         Button(action: {
             withAnimation(SeedlyTheme.springAnimation) {
-                isAddedToGarden.toggle()
+                garden.restoreToGarden(plant.id)
             }
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }) {
@@ -392,11 +410,11 @@ struct QuickInfoItem: View {
         VStack(spacing: 4) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundStyle(SeedlyTheme.primaryGreen)
-            Text(title)
+                .foregroundStyle(SeedlyTheme.accentGreen)
+            Text(LocalizedStringKey(title))
                 .font(.system(.caption2, design: .rounded))
                 .foregroundStyle(.secondary)
-            Text(subtitle)
+            Text(LocalizedStringKey(subtitle))
                 .font(.system(.caption, design: .rounded, weight: .medium))
                 .foregroundStyle(.primary)
         }
@@ -410,7 +428,7 @@ struct DetailSection<Content: View>: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.system(.headline, design: .rounded, weight: .semibold))
             
             content
@@ -419,7 +437,7 @@ struct DetailSection<Content: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                .fill(Color(.systemBackground))
+                .fill(SeedlyTheme.cardBackground)
         )
         .padding(.horizontal, SeedlyTheme.paddingLarge)
     }
@@ -434,16 +452,16 @@ struct DetailRow: View {
         HStack {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundStyle(SeedlyTheme.primaryGreen)
+                .foregroundStyle(SeedlyTheme.accentGreen)
                 .frame(width: 24)
             
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.system(.subheadline, design: .rounded))
                 .foregroundStyle(.secondary)
             
             Spacer()
             
-            Text(value)
+            Text(LocalizedStringKey(value))
                 .font(.system(.subheadline, design: .rounded, weight: .medium))
         }
     }
@@ -485,9 +503,9 @@ struct TimelineItem: View {
             
             // Content
             VStack(alignment: .leading, spacing: 4) {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.system(.subheadline, design: .rounded, weight: .semibold))
-                Text(subtitle)
+                Text(LocalizedStringKey(subtitle))
                     .font(.system(.caption, design: .rounded))
                     .foregroundStyle(.secondary)
             }

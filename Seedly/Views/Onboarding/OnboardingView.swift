@@ -7,7 +7,9 @@ struct OnboardingView: View {
     @EnvironmentObject var appState: AppState
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var currentPage = 0
-    @State private var selectedLanguage = "en"
+    @EnvironmentObject var localization: LocalizationManager
+    @State private var showManualLocation = false
+    @AppStorage("selectedLanguage") private var selectedLanguage = "en"
     @State private var gardeningExperience: GardeningExperience = .beginner
     @State private var animateLeaf = false
     
@@ -36,6 +38,7 @@ struct OnboardingView: View {
                 bottomArea
             }
         }
+        .sheet(isPresented: $showManualLocation) { NavigationStack { LocationSettingsView() } }
     }
     
     // MARK: - Welcome Page
@@ -100,7 +103,7 @@ struct OnboardingView: View {
             ScrollView {
                 LazyVStack(spacing: 8) {
                     ForEach(PlantLocalization.supportedLanguages) { language in
-                        Button(action: { selectedLanguage = language.code }) {
+                        Button(action: { selectedLanguage = language.code; localization.currentLanguage = language.code }) {
                             HStack {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(language.nativeName)
@@ -181,7 +184,7 @@ struct OnboardingView: View {
                 }
                 
                 Button(action: {
-                    // Show manual location entry sheet
+                    showManualLocation = true
                 }) {
                     Text("Enter Location Manually")
                         .font(.system(.subheadline, design: .rounded))

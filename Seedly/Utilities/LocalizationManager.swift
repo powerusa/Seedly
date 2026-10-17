@@ -8,14 +8,15 @@ import Combine
 final class LocalizationManager: ObservableObject {
     static let shared = LocalizationManager()
     
-    @AppStorage("selectedLanguage") var currentLanguage: String = "en" {
-        didSet {
-            objectWillChange.send()
-        }
+    @Published var currentLanguage: String {
+        didSet { UserDefaults.standard.set(currentLanguage, forKey: "selectedLanguage") }
     }
-    
-    private init() {}
-    
+
+    private init() {
+        let saved = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
+        currentLanguage = PlantLocalization.supportedLanguages.contains { $0.code == saved } ? saved : "en"
+    }
+
     // MARK: - Main UI Strings
     
     var todayInYourGarden: String {
@@ -1634,17 +1635,17 @@ To every gardener who shares their passion.
     
     var locationDescription: String {
         switch currentLanguage {
-        case "pl": return "Twoja lokalizacja jest używana do obliczenia kalendarza sadzenia, dat przymrozków i prognoz pogody. Dane nigdy nie opuszczają Twojego urządzenia."
-        case "de": return "Ihr Standort wird zur Berechnung von Pflanzkalender, Frostdaten und Wettervorhersagen verwendet. Daten verlassen niemals Ihr Gerät."
-        case "fr": return "Votre position est utilisée pour calculer le calendrier de plantation, les dates de gel et les prévisions météo. Les données ne quittent jamais votre appareil."
-        case "es": return "Tu ubicación se usa para calcular el calendario de siembra, las fechas de heladas y los pronósticos meteorológicos. Los datos nunca salen de tu dispositivo."
-        case "it": return "La tua posizione viene usata per calcolare il calendario di semina, le date di gelo e le previsioni meteo. I dati non lasciano mai il tuo dispositivo."
-        case "uk": return "Ваше місцезнаходження використовується для розрахунку календаря посадки, дат заморозків і прогнозів погоди. Дані ніколи не залишають ваш пристрій."
-        case "ru": return "Ваше местоположение используется для расчёта календаря посадки, дат заморозков и прогнозов погоды. Данные никогда не покидают ваше устройство."
-        default: return "Your location is used to calculate the planting calendar, frost dates, and weather forecasts. Data never leaves your device."
+        case "pl": return "Lokalizacja służy do wyliczania terminów uprawy. Nazwy miast i prognozy są pobierane z usług Apple; wyszukiwanie miasta wymaga internetu. Możesz też wpisać współrzędne ręcznie."
+        case "de": return "Der Standort wird für Pflanztermine verwendet. Ortsnamen und Wetterdaten werden von Apple-Diensten abgerufen. Die Ortssuche benötigt Internet; Koordinaten können manuell eingegeben werden."
+        case "fr": return "La position sert au calendrier de plantation. Les noms de lieux et la météo proviennent des services Apple. La recherche de ville nécessite Internet; les coordonnées peuvent être saisies manuellement."
+        case "es": return "La ubicación se usa para las fechas de cultivo. Los nombres de lugares y el tiempo se consultan en servicios de Apple. Buscar ciudades requiere internet; también puedes introducir coordenadas."
+        case "it": return "La posizione serve per le date di coltivazione. Nomi dei luoghi e meteo vengono richiesti ai servizi Apple. La ricerca delle città richiede internet; puoi inserire le coordinate manualmente."
+        case "uk": return "Місцезнаходження використовується для календаря посадки. Назви міст і погода надходять із сервісів Apple. Пошук міста потребує інтернету; координати можна ввести вручну."
+        case "ru": return "Местоположение используется для календаря посадки. Названия городов и погода запрашиваются у сервисов Apple. Поиск города требует интернета; координаты можно ввести вручную."
+        default: return "Location is used for planting dates. Place names and weather are requested from Apple services. City search needs internet; you can also enter coordinates manually."
         }
     }
-    
+
     var growingSeason: String {
         switch currentLanguage {
         case "pl": return "Sezon wegetacyjny"

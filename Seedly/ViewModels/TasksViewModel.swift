@@ -6,57 +6,59 @@ import SwiftData
 
 @MainActor
 final class TasksViewModel: ObservableObject {
-    @Published var todayTasks: [GardenTaskItem] = []
-    @Published var upcomingTasks: [GardenTaskItem] = []
-    @Published var completedTasks: [GardenTaskItem] = []
+    @Published private var tasks: [GardenTaskItem] = []
     @Published var selectedFilter: TaskFilter = .today
-    
-    init() {
-        loadMockTasks()
+    private let defaults: UserDefaults
+    private let storageKey = "garden.tasks.v1"
+
+    var todayTasks: [GardenTaskItem] {
+        tasks.filter { !$0.isCompleted && $0.dueDate < (Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) ?? Date()) }
+            .sorted { $0.dueDate < $1.dueDate }
     }
-    
-    func loadMockTasks() {
-        let today = Date()
-        let calendar = Calendar.current
-        
-        todayTasks = [
-            GardenTaskItem(taskType: .watering, dueDate: today, plantId: "tomato"),
-            GardenTaskItem(taskType: .pestInspection, dueDate: today, plantId: nil),
-            GardenTaskItem(taskType: .harvesting, dueDate: today, plantId: "lettuce"),
-        ]
-        
-        upcomingTasks = [
-            GardenTaskItem(taskType: .fertilizing, dueDate: calendar.date(byAdding: .day, value: 2, to: today)!, plantId: "pepper"),
-            GardenTaskItem(taskType: .seedStarting, dueDate: calendar.date(byAdding: .day, value: 3, to: today)!, plantId: "basil"),
-            GardenTaskItem(taskType: .transplanting, dueDate: calendar.date(byAdding: .day, value: 5, to: today)!, plantId: "cucumber"),
-            GardenTaskItem(taskType: .pruning, dueDate: calendar.date(byAdding: .day, value: 7, to: today)!, plantId: "mint"),
-        ]
-        
-        completedTasks = [
-            GardenTaskItem(taskType: .seedStarting, dueDate: calendar.date(byAdding: .day, value: -1, to: today)!, plantId: "carrot", isCompleted: true),
-        ]
+    var upcomingTasks: [GardenTaskItem] {
+        tasks.filter { task in
+            !task.isCompleted && !todayTasks.contains(where: { $0.id == task.id })
+        }.sorted { $0.dueDate < $1.dueDate }
     }
-    
-    func toggleTask(_ task: GardenTaskItem) {
-        if let index = todayTasks.firstIndex(where: { $0.id == task.id }) {
-            todayTasks[index].isCompleted.toggle()
-            if todayTasks[index].isCompleted {
-                let completed = todayTasks.remove(at: index)
-                completedTasks.insert(completed, at: 0)
-            }
-        } else if let index = upcomingTasks.firstIndex(where: { $0.id == task.id }) {
-            upcomingTasks[index].isCompleted.toggle()
-            if upcomingTasks[index].isCompleted {
-                let completed = upcomingTasks.remove(at: index)
-                completedTasks.insert(completed, at: 0)
-            }
-        } else if let index = completedTasks.firstIndex(where: { $0.id == task.id }) {
-            completedTasks[index].isCompleted.toggle()
-            let uncompleted = completedTasks.remove(at: index)
-            todayTasks.append(uncompleted)
+    var completedTasks: [GardenTaskItem] {
+        tasks.filter(\.isCompleted).sorted { $0.dueDate > $1.dueDate }
+    }
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        if let data = defaults.data(forKey: storageKey),
+           let saved = try? JSONDecoder().decode([GardenTaskItem].self, from: data) {
+            tasks = saved
         }
     }
-    
+
+    func addTask(title: String, type: TaskType, dueDate: Date, recurringInterval: Int? = nil) {
+        let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !title.isEmpty else { return }
+        tasks.append(GardenTaskItem(customTitle: title, taskType: type, dueDate: dueDate,
+                                    recurringInterval: recurringInterval))
+        save()
+    }
+
+    func toggleTask(_ task: GardenTaskItem) {
+        guard let index = tasks.firstIndex(where: { $0.id == task.id }) else { return }
+        tasks[index].isCompleted.toggle()
+        // A recurrence has a stable link to its source so undo/re-complete cannot duplicate it.
+        if tasks[index].isCompleted, let interval = tasks[index].recurringInterval,
+           interval > 0, !tasks.contains(where: { $0.sourceTaskId == task.id }),
+           let nextDate = Calendar.current.date(byAdding: .day, value: interval, to: task.dueDate) {
+            tasks.append(GardenTaskItem(customTitle: task.customTitle, taskType: task.taskType,
+                                        dueDate: nextDate, plantId: task.plantId,
+                                        recurringInterval: interval, sourceTaskId: task.id))
+        }
+        save()
+    }
+
+    private func save() {
+        guard let data = try? JSONEncoder().encode(tasks) else { return }
+        defaults.set(data, forKey: storageKey)
+    }
+
     var filteredTasks: [GardenTaskItem] {
         switch selectedFilter {
         case .today: return todayTasks
@@ -66,8 +68,10 @@ final class TasksViewModel: ObservableObject {
     }
 }
 
-struct GardenTaskItem: Identifiable {
-    let id = UUID()
+struct GardenTaskItem: Identifiable, Codable {
+    let id: UUID
+    let recurringInterval: Int?
+    let sourceTaskId: UUID?
     /// Custom user-entered title. When empty, a localized title is built from `taskType` + plant name.
     let customTitle: String
     let taskType: TaskType
@@ -81,8 +85,13 @@ struct GardenTaskItem: Identifiable {
         taskType: TaskType,
         dueDate: Date,
         plantId: String? = nil,
-        isCompleted: Bool = false
+        isCompleted: Bool = false,
+        recurringInterval: Int? = nil,
+        sourceTaskId: UUID? = nil
     ) {
+        self.id = UUID()
+        self.recurringInterval = recurringInterval
+        self.sourceTaskId = sourceTaskId
         self.customTitle = customTitle
         self.taskType = taskType
         self.dueDate = dueDate

@@ -8,6 +8,16 @@ import Foundation
 extension PlantLocalization {
     
     static let additionalLocalizedNames: [String: [String: String]] = [
+        "plant_kohlrabi": ["en": "Kohlrabi", "pl": "Kalarepa"],
+        "plant_fennel": ["en": "Herb fennel", "pl": "Koper włoski"],
+        "plant_tarragon": ["en": "Tarragon", "pl": "Estragon"],
+        "plant_daffodil": ["en": "Daffodil", "pl": "Narcyz"],
+        "plant_pansy": ["en": "Pansy", "pl": "Bratek"],
+        "plant_peony": ["en": "Peony", "pl": "Piwonia"],
+        "plant_appleTree": ["en": "Apple tree", "pl": "Jabłoń"],
+        "plant_pearTree": ["en": "Pear tree", "pl": "Grusza"],
+        "plant_cherryTree": ["en": "Sweet cherry tree", "pl": "Czereśnia"],
+
         // ═══════════════════════════════════════
         // VEGETABLES
         // ═══════════════════════════════════════

@@ -27,7 +27,10 @@ struct CalendarScreenView: View {
                 }
                 .padding(.bottom, 100)
             }
-            .background(Color(.systemGroupedBackground))
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle(localization.calendar)
             .navigationBarTitleDisplayMode(.large)
             .task {
@@ -46,7 +49,7 @@ struct CalendarScreenView: View {
             Button(action: { viewModel.previousMonth() }) {
                 Image(systemName: "chevron.left")
                     .font(.title3)
-                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                    .foregroundStyle(SeedlyTheme.accentGreen)
             }
             
             Spacer()
@@ -59,7 +62,7 @@ struct CalendarScreenView: View {
             Button(action: { viewModel.nextMonth() }) {
                 Image(systemName: "chevron.right")
                     .font(.title3)
-                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                    .foregroundStyle(SeedlyTheme.accentGreen)
             }
         }
         .padding(.horizontal, SeedlyTheme.paddingLarge)
@@ -69,7 +72,7 @@ struct CalendarScreenView: View {
     // MARK: - Weekday Header
     private var weekdayHeader: some View {
         LazyVGrid(columns: columns, spacing: 4) {
-            ForEach(viewModel.weekdaySymbols, id: \.self) { day in
+            ForEach(Array(viewModel.weekdaySymbols.enumerated()), id: \.offset) { _, day in
                 Text(day)
                     .font(.system(.caption, design: .rounded, weight: .medium))
                     .foregroundStyle(.secondary)
@@ -133,7 +136,7 @@ struct CalendarScreenView: View {
                 Spacer()
                 Button(localization.viewAll) {}
                     .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                    .foregroundStyle(SeedlyTheme.accentGreen)
             }
             .padding(.horizontal, SeedlyTheme.paddingLarge)
             

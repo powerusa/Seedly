@@ -20,13 +20,13 @@ struct PlantsView: View {
     private var visiblePlants: [Plant] {
         let filtered = viewModel.filteredPlants.filter { !garden.isRemoved($0.id) }
         let customAsPlants = garden.customPlants.map { garden.asPlant($0) }
-        // When viewing favorites, custom plants are not shown unless favorited.
-        let customs = viewModel.showFavoritesOnly
-            ? customAsPlants.filter { viewModel.isFavorite($0.id) }
-            : customAsPlants.filter { plant in
-                if let cat = viewModel.selectedCategory { return plant.category == cat }
-                return true
-            }
+        let query = viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let customs = customAsPlants.filter { plant in
+            (!viewModel.showFavoritesOnly || viewModel.isFavorite(plant.id)) &&
+            (viewModel.selectedCategory == nil || plant.category == viewModel.selectedCategory) &&
+            (query.isEmpty || plant.localizedName().localizedCaseInsensitiveContains(query) ||
+             plant.scientificName.localizedCaseInsensitiveContains(query))
+        }
         return filtered + customs
     }
     
@@ -40,7 +40,10 @@ struct PlantsView: View {
                         .padding(.bottom, 100)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle(localization.myGarden)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -49,7 +52,7 @@ struct PlantsView: View {
                         showAddSheet = true
                     } label: {
                         Image(systemName: "plus.circle.fill")
-                            .foregroundStyle(SeedlyTheme.primaryGreen)
+                            .foregroundStyle(SeedlyTheme.accentGreen)
                     }
                     .accessibilityLabel(localization.addPlant)
                 }
@@ -57,7 +60,7 @@ struct PlantsView: View {
                     Button(isEditing ? localization.done : localization.edit) {
                         withAnimation { isEditing.toggle() }
                     }
-                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                    .foregroundStyle(SeedlyTheme.accentGreen)
                 }
             }
             .searchable(text: $viewModel.searchText, prompt: localization.searchPlants)
@@ -184,7 +187,7 @@ struct SegmentButton: View {
         Button(action: action) {
             Text(title)
                 .font(.system(.subheadline, design: .rounded, weight: isSelected ? .semibold : .regular))
-                .foregroundStyle(isSelected ? SeedlyTheme.primaryGreen : .secondary)
+                .foregroundStyle(isSelected ? SeedlyTheme.accentGreen : .secondary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 8)
                 .background(
@@ -254,7 +257,7 @@ struct PlantGridCard: View {
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 
-                Text(plantingDateRange())
+                Text(plant.scientificName)
                     .font(.system(.caption2, design: .rounded))
                     .foregroundStyle(.secondary)
             }
@@ -263,19 +266,13 @@ struct PlantGridCard: View {
         }
         .background(
             RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                .fill(Color(.systemBackground))
+                .fill(SeedlyTheme.cardBackground)
         )
         .clipShape(RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius))
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
     }
     
-    private func plantingDateRange() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
-        let start = formatter.string(from: Date())
-        let end = formatter.string(from: Calendar.current.date(byAdding: .month, value: 2, to: Date())!)
-        return "\(start) – \(end)"
-    }
+
 }
 
 // MARK: - Add Plant Card
@@ -292,10 +289,10 @@ struct AddPlantCard: View {
                     VStack(spacing: 6) {
                         Image(systemName: "plus.circle.fill")
                             .font(.title)
-                            .foregroundStyle(SeedlyTheme.primaryGreen)
+                            .foregroundStyle(SeedlyTheme.accentGreen)
                         Text(title)
                             .font(.system(.caption, design: .rounded, weight: .medium))
-                            .foregroundStyle(SeedlyTheme.primaryGreen)
+                            .foregroundStyle(SeedlyTheme.accentGreen)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 4)
                     }
@@ -306,7 +303,7 @@ struct AddPlantCard: View {
         }
         .background(
             RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                .fill(Color(.systemBackground))
+                .fill(SeedlyTheme.cardBackground)
         )
         .clipShape(RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius))
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)

@@ -25,13 +25,16 @@ struct MyGardenView: View {
                     gardenList
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle("My Gardens")
             .toolbar {
                 if !gardens.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button(action: { showAddGarden = true }) {
                             Image(systemName: "plus")
-                                .foregroundStyle(SeedlyTheme.primaryGreen)
+                                .foregroundStyle(SeedlyTheme.accentGreen)
                         }
                     }
                 }
@@ -100,7 +103,7 @@ struct GardenCard: View {
         .padding(SeedlyTheme.paddingMedium)
         .background(
             RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                .fill(Color(.systemBackground))
+                .fill(SeedlyTheme.cardBackground)
         )
         .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 2)
     }
@@ -164,6 +167,9 @@ struct AddGardenSheet: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle("New Garden")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -176,7 +182,7 @@ struct AddGardenSheet: View {
                         dismiss()
                     }
                     .font(.system(.body, weight: .semibold))
-                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                    .foregroundStyle(SeedlyTheme.accentGreen)
                     .disabled(gardenName.isEmpty)
                 }
             }

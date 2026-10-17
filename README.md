@@ -4,6 +4,10 @@
 
 A premium native iOS gardening app that helps users worldwide know what to plant, when to plant, and how to care for their garden — all personalized to their exact location and climate.
 
+## Version 3.0
+
+Green screens throughout the app, persistent location and tasks, native in-app locale handling, and 77 plants with offline photos. See [CHANGELOG.md](CHANGELOG.md) for changes and current limitations. Run `zsh Checks/run-regressions.sh` and `python3 Checks/check-catalog.py` on macOS to repeat the regression checks.
+
 ## 📱 App Store
 
 - **Title:** Seedly – Global Planting Calendar

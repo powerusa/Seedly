@@ -125,11 +125,11 @@ struct TodayView: View {
     private var weatherSection: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(viewModel.temperatureString)
+                Text(viewModel.weather.map { "\(Int(appState.temperatureUnit.convert($0.currentTemp)))°" } ?? "--")
                     .font(.system(size: 52, weight: .thin, design: .rounded))
                     .foregroundStyle(.white)
                 
-                Text(viewModel.weather?.condition.localizedDisplayName ?? localization.loading)
+                Text(viewModel.weather?.condition.localizedDisplayName ?? (viewModel.isLoading ? localization.loading : (localization.currentLanguage == "pl" ? "Pogoda niedostępna" : "Weather unavailable")))
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundStyle(.white.opacity(0.8))
             }
@@ -137,7 +137,7 @@ struct TodayView: View {
             Spacer()
             
             VStack(alignment: .trailing, spacing: 4) {
-                Text(viewModel.highLowString)
+                Text(viewModel.weather.map { "H \(Int(appState.temperatureUnit.convert($0.highTemp)))° L \(Int(appState.temperatureUnit.convert($0.lowTemp)))°" } ?? "")
                     .font(.system(.subheadline, design: .rounded, weight: .medium))
                     .foregroundStyle(.white.opacity(0.8))
                 
@@ -162,31 +162,13 @@ struct TodayView: View {
             
             VStack(spacing: 10) {
                 if viewModel.insights.isEmpty {
-                    // Default insight cards
                     InsightCardView(
-                        icon: "leaf.fill",
-                        title: localization.insightPlantingPerfect,
-                        color: .green
-                    )
-                    
-                    InsightCardView(
-                        icon: "thermometer.snowflake",
-                        title: localization.insightFrostRisk,
-                        subtitle: localization.insightFrostSubtitle,
-                        color: SeedlyTheme.frost
-                    )
-                    
-                    InsightCardView(
-                        icon: "cloud.rain.fill",
-                        title: localization.insightRainExpected,
-                        subtitle: localization.insightRainSubtitle,
-                        color: SeedlyTheme.rain
-                    )
-                    
-                    InsightCardView(
-                        icon: "house.fill",
-                        title: localization.insightStartIndoors,
-                        color: .purple
+                        icon: viewModel.weather == nil ? "cloud.slash" : "checkmark.circle",
+                        title: viewModel.weather == nil
+                            ? (localization.currentLanguage == "pl" ? "Pogoda niedostępna" : "Weather unavailable")
+                            : (localization.currentLanguage == "pl" ? "Brak alertów pogodowych" : "No weather alerts"),
+                        subtitle: viewModel.location == nil ? localization.locationNotAvailable : nil,
+                        color: .gray
                     )
                 } else {
                     ForEach(viewModel.insights) { insight in
@@ -212,45 +194,28 @@ struct TodayView: View {
                     .font(.system(.headline, design: .rounded, weight: .semibold))
                     .foregroundStyle(.white)
                 Spacer()
-                Text(localization.viewAll)
+                Button(localization.viewAll) { appState.selectedTab = .calendar }
                     .font(.system(.caption, design: .rounded))
                     .foregroundStyle(.white.opacity(0.6))
             }
             .padding(.horizontal, SeedlyTheme.paddingLarge)
             
             VStack(spacing: 8) {
-                if let tomato = PlantDatabase.shared.plant(byId: "tomato") {
-                    NavigationLink(destination: PlantDetailView(plant: tomato)) {
+                if viewModel.recommendations.isEmpty {
+                    Text(localization.currentLanguage == "pl" ? "Brak zaleceń sadzenia dla bieżącej lokalizacji i daty." : "No planting recommendations for the current location and date.")
+                        .font(.subheadline).foregroundStyle(.white.opacity(0.7))
+                }
+                ForEach(viewModel.recommendations.prefix(5)) { recommendation in
+                    NavigationLink(destination: PlantDetailView(plant: recommendation.plant)) {
                         PlantRecommendationRow(
-                            plantName: PlantLocalization.localizedName(for: "plant_tomato", locale: localization.currentLanguage),
-                            detail: localization.safePlantIn(days: 12),
-                            icon: "leaf.fill",
+                            plantName: recommendation.plant.localizedName(for: localization.currentLanguage),
+                            detail: recommendation.reason,
+                            icon: recommendation.action.icon,
                             color: .green
                         )
                     }
                 }
-                
-                if let pepper = PlantDatabase.shared.plant(byId: "pepper") {
-                    NavigationLink(destination: PlantDetailView(plant: pepper)) {
-                        PlantRecommendationRow(
-                            plantName: PlantLocalization.localizedName(for: "plant_pepper", locale: localization.currentLanguage),
-                            detail: localization.safePlantIn(days: 14),
-                            icon: "leaf.fill",
-                            color: .orange
-                        )
-                    }
-                }
-                
-                if let basil = PlantDatabase.shared.plant(byId: "basil") {
-                    NavigationLink(destination: PlantDetailView(plant: basil)) {
-                        PlantRecommendationRow(
-                            plantName: PlantLocalization.localizedName(for: "plant_basil", locale: localization.currentLanguage),
-                            detail: localization.startIndoorsNow,
-                            icon: "house.fill",
-                            color: .purple
-                        )
-                    }
-                }
+
             }
             .padding(.horizontal, SeedlyTheme.paddingLarge)
         }
@@ -276,7 +241,7 @@ struct TodayView: View {
                             .font(.title3)
                             .foregroundStyle(day.hasFrostRisk ? SeedlyTheme.frost : .white.opacity(0.8))
                         
-                        Text("\(Int(day.lowTemp))°")
+                        Text("\(Int(appState.temperatureUnit.convert(day.lowTemp)))°")
                             .font(.system(.subheadline, design: .rounded, weight: .medium))
                             .foregroundStyle(day.hasFrostRisk ? SeedlyTheme.frost : .white)
                     }
@@ -291,7 +256,7 @@ struct TodayView: View {
             )
             .padding(.horizontal, SeedlyTheme.paddingLarge)
             
-            if viewModel.weather?.hasFrostRisk == true {
+            if viewModel.weather?.hasFrostRisk == false {
                 HStack {
                     Image(systemName: "checkmark.shield.fill")
                         .foregroundStyle(SeedlyTheme.accentGreen)

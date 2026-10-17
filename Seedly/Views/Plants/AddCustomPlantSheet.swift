@@ -51,6 +51,9 @@ struct AddCustomPlantSheet: View {
                         .lineLimit(3...6)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle(localization.newPlant)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -60,7 +63,7 @@ struct AddCustomPlantSheet: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(localization.save) { save() }
                         .font(.system(.body, weight: .semibold))
-                        .foregroundStyle(SeedlyTheme.primaryGreen)
+                        .foregroundStyle(SeedlyTheme.accentGreen)
                         .disabled(!canSave)
                 }
             }
@@ -105,7 +108,7 @@ struct AddCustomPlantSheet: View {
             ) {
                 Label(choosePhotoTitle, systemImage: "photo")
                     .font(.system(.subheadline, design: .rounded, weight: .medium))
-                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                    .foregroundStyle(SeedlyTheme.accentGreen)
             }
         }
         .padding(.vertical, 4)

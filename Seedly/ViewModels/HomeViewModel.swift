@@ -44,6 +44,7 @@ final class HomeViewModel: ObservableObject {
         }
         
         // Generate insights
+        insights = []
         if let weather = weather {
             insights = weatherService.generateInsights(weather: weather, plants: plantDatabase.allPlants)
         }

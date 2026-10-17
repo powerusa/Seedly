@@ -10,7 +10,7 @@ final class PlantDatabase: Sendable {
     let allPlants: [Plant]
     
     private init() {
-        self.allPlants = Self.mockPlants + Self.expansionPlants + Self.fullPlantList
+        self.allPlants = Self.mockPlants + Self.expansionPlants + Self.fullPlantList + Self.catalogAdditions
     }
     
     // MARK: - Query

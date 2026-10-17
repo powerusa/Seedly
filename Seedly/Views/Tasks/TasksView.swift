@@ -35,19 +35,24 @@ struct TasksView: View {
                     .padding(.bottom, 100)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle(localization.tasks)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: { showAddTask = true }) {
                         Image(systemName: "plus.circle.fill")
-                            .foregroundStyle(SeedlyTheme.primaryGreen)
+                            .foregroundStyle(SeedlyTheme.accentGreen)
                     }
                 }
             }
             .sheet(isPresented: $showAddTask) {
-                AddTaskSheet()
+                AddTaskSheet { title, type, date, interval in
+                    viewModel.addTask(title: title, type: type, dueDate: date, recurringInterval: interval)
+                }
             }
         }
     }
@@ -171,7 +176,7 @@ struct TaskRow: View {
                     if let plantName = task.plantDisplayName(language: localization.currentLanguage) {
                         Text(plantName)
                             .font(.system(.caption, design: .rounded))
-                            .foregroundStyle(SeedlyTheme.primaryGreen)
+                            .foregroundStyle(SeedlyTheme.accentGreen)
                         
                         Text("•")
                             .foregroundStyle(.tertiary)
@@ -192,7 +197,7 @@ struct TaskRow: View {
         .padding(14)
         .background(
             RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadiusSmall)
-                .fill(Color(.systemBackground))
+                .fill(SeedlyTheme.cardBackground)
         )
         .shadow(color: .black.opacity(0.03), radius: 3, x: 0, y: 1)
     }
@@ -216,12 +221,14 @@ struct TaskRow: View {
 // MARK: - Add Task Sheet
 
 struct AddTaskSheet: View {
+    let onAdd: (String, TaskType, Date, Int?) -> Void
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var localization: LocalizationManager
     @State private var title = ""
     @State private var selectedType: TaskType = .watering
     @State private var dueDate = Date()
     @State private var isRecurring = false
+    @State private var recurringInterval = 7
     
     var body: some View {
         NavigationStack {
@@ -242,8 +249,14 @@ struct AddTaskSheet: View {
                 
                 Section {
                     Toggle(localization.recurring, isOn: $isRecurring)
+                    if isRecurring {
+                        Stepper("Repeat every \(recurringInterval) days", value: $recurringInterval, in: 1...365)
+                    }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle(localization.newTask)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -251,10 +264,13 @@ struct AddTaskSheet: View {
                     Button(localization.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(localization.add) { dismiss() }
+                    Button(localization.add) {
+                        onAdd(title, selectedType, dueDate, isRecurring ? recurringInterval : nil)
+                        dismiss()
+                    }
                         .font(.system(.body, weight: .semibold))
-                        .foregroundStyle(SeedlyTheme.primaryGreen)
-                        .disabled(title.isEmpty)
+                        .foregroundStyle(SeedlyTheme.accentGreen)
+                        .disabled(title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
         }

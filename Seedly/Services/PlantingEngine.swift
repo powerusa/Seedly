@@ -12,15 +12,16 @@ final class PlantingEngine {
     func calculatePlantingWindow(
         for plant: Plant,
         in zone: ClimateZone,
-        weather: WeatherData?
+        weather: WeatherData?,
+        referenceDate: Date = Date()
     ) -> PlantingSchedule {
-        let today = Date()
+        let today = referenceDate
         
         // Calculate indoor seed start date
-        let indoorStartDate = calculateIndoorSeedDate(plant: plant, zone: zone)
+        let indoorStartDate = calculateIndoorSeedDate(plant: plant, zone: zone, referenceDate: referenceDate)
         
         // Calculate outdoor transplant/sow date
-        let outdoorDate = calculateOutdoorDate(plant: plant, zone: zone)
+        let outdoorDate = calculateOutdoorDate(plant: plant, zone: zone, referenceDate: referenceDate)
         
         // Calculate harvest date
         let harvestDate = calculateHarvestDate(plant: plant, plantingDate: outdoorDate)
@@ -38,7 +39,8 @@ final class PlantingEngine {
         let daysUntilSafe = calculateDaysUntilSafe(
             plant: plant,
             zone: zone,
-            weather: weather
+            weather: weather,
+            referenceDate: referenceDate
         )
         
         return PlantingSchedule(
@@ -48,23 +50,23 @@ final class PlantingEngine {
             expectedHarvestDate: harvestDate,
             currentStatus: status,
             daysUntilSafePlanting: daysUntilSafe,
-            isInPlantingWindow: status == .readyToPlant || status == .inProgress
+            isInPlantingWindow: status == .readyToPlant
         )
     }
     
     // MARK: - Indoor Seed Calculation
-    private func calculateIndoorSeedDate(plant: Plant, zone: ClimateZone) -> Date? {
+    private func calculateIndoorSeedDate(plant: Plant, zone: ClimateZone, referenceDate: Date) -> Date? {
         guard let indoorWeeks = plant.indoorSeedWeeks else { return nil }
         guard let lastFrost = zone.averageLastFrost else { return nil }
         
         let calendar = Calendar.current
-        let year = calendar.component(.year, from: Date())
+        let year = calendar.component(.year, from: referenceDate)
         
         // Last frost date
         var components = DateComponents()
         components.year = year
         components.month = lastFrost.month
-        components.weekOfMonth = lastFrost.week
+        components.day = (lastFrost.week - 1) * 7 + 1
         
         guard let frostDate = calendar.date(from: components) else { return nil }
         
@@ -73,25 +75,25 @@ final class PlantingEngine {
     }
     
     // MARK: - Outdoor Date Calculation
-    private func calculateOutdoorDate(plant: Plant, zone: ClimateZone) -> Date {
+    private func calculateOutdoorDate(plant: Plant, zone: ClimateZone, referenceDate: Date) -> Date {
         let calendar = Calendar.current
-        let year = calendar.component(.year, from: Date())
+        let year = calendar.component(.year, from: referenceDate)
         
         if zone.koppenClass.isTropical {
             // Tropical: can plant year-round, return current date or next suitable date
-            return Date()
+            return referenceDate
         }
         
         guard let lastFrost = zone.averageLastFrost else {
-            return Date()
+            return referenceDate
         }
         
         var components = DateComponents()
         components.year = year
         components.month = lastFrost.month
-        components.weekOfMonth = lastFrost.week
+        components.day = (lastFrost.week - 1) * 7 + 1
         
-        guard let frostDate = calendar.date(from: components) else { return Date() }
+        guard let frostDate = calendar.date(from: components) else { return referenceDate }
         
         // Add buffer based on frost sensitivity
         let bufferWeeks: Int
@@ -165,10 +167,11 @@ final class PlantingEngine {
     private func calculateDaysUntilSafe(
         plant: Plant,
         zone: ClimateZone,
-        weather: WeatherData?
+        weather: WeatherData?,
+        referenceDate: Date
     ) -> Int? {
-        let outdoorDate = calculateOutdoorDate(plant: plant, zone: zone)
-        let today = Date()
+        let outdoorDate = calculateOutdoorDate(plant: plant, zone: zone, referenceDate: referenceDate)
+        let today = referenceDate
         
         if outdoorDate <= today { return 0 }
         
@@ -184,7 +187,7 @@ final class PlantingEngine {
     ) -> [PlantRecommendation] {
         var recommendations: [PlantRecommendation] = []
         
-        for plant in plants {
+        for plant in plants where !plant.usesSeasonalGuide {
             let schedule = calculatePlantingWindow(for: plant, in: zone, weather: weather)
             
             switch schedule.currentStatus {
@@ -192,11 +195,21 @@ final class PlantingEngine {
                 let safety = climateEngine.isPlantingSafe(for: plant, at: GardenLocation(
                     latitude: 0, longitude: 0, city: "", country: "", timeZone: .current
                 ), weather: weather)
+                let action: RecommendedAction
+                let reason: String
+                switch safety {
+                case .unsafe(let warning), .risky(let warning):
+                    action = .protect
+                    reason = warning
+                case .unknown:
+                    action = .waitToPlant
+                    reason = "Estimated planting window; check local weather first"
+                case .safe, .excellent:
+                    action = .plantNow
+                    reason = "Within the estimated planting window"
+                }
                 recommendations.append(PlantRecommendation(
-                    plant: plant,
-                    action: .plantNow,
-                    reason: "Perfect time to plant",
-                    safety: safety
+                    plant: plant, action: action, reason: reason, safety: safety
                 ))
             case .startIndoors:
                 recommendations.append(PlantRecommendation(
@@ -214,7 +227,7 @@ final class PlantingEngine {
                         safety: .safe
                     ))
                 }
-            case .harvesting:
+            case .harvesting where plant.category != .flower:
                 recommendations.append(PlantRecommendation(
                     plant: plant,
                     action: .harvest,

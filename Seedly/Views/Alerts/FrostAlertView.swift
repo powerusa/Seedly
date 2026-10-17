@@ -4,6 +4,7 @@
 import SwiftUI
 
 struct FrostAlertView: View {
+    @AppStorage("temperatureUnit") private var temperatureUnit = "celsius"
     let weather: WeatherData?
     @Environment(\.dismiss) private var dismiss
     
@@ -65,7 +66,7 @@ struct FrostAlertView: View {
                     .font(.system(.title2, design: .rounded, weight: .bold))
                     .foregroundStyle(.white)
                 
-                Text("Low of \(Int(weather?.lowTemp ?? -1))°F expected")
+                Text(weather.map { "Low of \(Int((TemperatureUnit(rawValue: temperatureUnit) ?? .celsius).convert($0.lowTemp)))\((TemperatureUnit(rawValue: temperatureUnit) ?? .celsius).symbol) expected" } ?? "Weather unavailable")
                     .font(.system(.body, design: .rounded))
                     .foregroundStyle(.white.opacity(0.7))
                 

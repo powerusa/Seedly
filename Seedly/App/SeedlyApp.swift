@@ -39,6 +39,7 @@ struct SeedlyApp: App {
     
     var body: some Scene {
         WindowGroup {
+            Group {
             if hasCompletedOnboarding {
                 MainTabView()
                     .environmentObject(appState)
@@ -52,6 +53,11 @@ struct SeedlyApp: App {
                     .environmentObject(favorites)
                     .environmentObject(garden)
             }
+            }
+            .environment(\.locale, Locale(identifier: localization.currentLanguage))
+            .environment(\.layoutDirection, localization.currentLanguage == "ar" ? .rightToLeft : .leftToRight)
+            .preferredColorScheme(.dark)
+            .tint(SeedlyTheme.accentGreen)
         }
         .modelContainer(sharedModelContainer)
     }

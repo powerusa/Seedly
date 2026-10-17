@@ -11,6 +11,7 @@ final class CalendarViewModel: ObservableObject {
     @Published var plantingEvents: [PlantingEvent] = []
     @Published var selectedDayPlants: [PlantingEvent] = []
     
+    private var eventLocation: GardenLocation?
     private let plantingEngine = PlantingEngine()
     private let climateEngine = ClimateEngine()
     private let plantDatabase = PlantDatabase.shared
@@ -54,6 +55,7 @@ final class CalendarViewModel: ObservableObject {
     }
     
     func loadEvents(location: GardenLocation?) {
+        eventLocation = location
         guard let location else {
             plantingEvents = []
             selectedDayPlants = []
@@ -64,8 +66,8 @@ final class CalendarViewModel: ObservableObject {
         
         var events: [PlantingEvent] = []
         
-        for plant in plantDatabase.allPlants {
-            let schedule = plantingEngine.calculatePlantingWindow(for: plant, in: zone, weather: nil)
+        for plant in plantDatabase.allPlants where !plant.usesSeasonalGuide {
+            let schedule = plantingEngine.calculatePlantingWindow(for: plant, in: zone, weather: nil, referenceDate: currentMonth)
             
             // Add outdoor planting event
             events.append(PlantingEvent(
@@ -77,6 +79,7 @@ final class CalendarViewModel: ObservableObject {
             ))
             
             // Add harvest event
+            if plant.category != .flower {
             events.append(PlantingEvent(
                 plantId: plant.id,
                 plantName: plant.localizedName(),
@@ -84,6 +87,7 @@ final class CalendarViewModel: ObservableObject {
                 date: schedule.expectedHarvestDate,
                 color: .orange
             ))
+            }
             
             // Add indoor seed start if applicable
             if let indoorDate = schedule.indoorSeedStart {
@@ -109,11 +113,15 @@ final class CalendarViewModel: ObservableObject {
     func nextMonth() {
         let calendar = Calendar.current
         currentMonth = calendar.date(byAdding: .month, value: 1, to: currentMonth) ?? currentMonth
+        selectDate(currentMonth)
+        loadEvents(location: eventLocation)
     }
     
     func previousMonth() {
         let calendar = Calendar.current
         currentMonth = calendar.date(byAdding: .month, value: -1, to: currentMonth) ?? currentMonth
+        selectDate(currentMonth)
+        loadEvents(location: eventLocation)
     }
     
     func eventsForDate(_ date: Date) -> [PlantingEvent] {

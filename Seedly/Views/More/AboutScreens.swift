@@ -64,14 +64,17 @@ struct AboutSeedlyView: View {
                 }
                 .background(
                     RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                        .fill(Color(.systemBackground))
+                        .fill(SeedlyTheme.cardBackground)
                 )
                 .padding(.horizontal, SeedlyTheme.paddingLarge)
                 
                 Spacer(minLength: SeedlyTheme.paddingLarge)
             }
         }
-        .background(Color(.systemGroupedBackground))
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .scrollContentBackground(.hidden)
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .toolbarBackground(.hidden, for: .navigationBar)
         .navigationTitle(localization.aboutSeedly)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -106,7 +109,10 @@ struct PrivacyPolicyView: View {
             }
             .padding(SeedlyTheme.paddingLarge)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .scrollContentBackground(.hidden)
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .toolbarBackground(.hidden, for: .navigationBar)
         .navigationTitle(localization.privacyPolicy)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -141,7 +147,10 @@ struct AcknowledgmentsView: View {
             }
             .padding(SeedlyTheme.paddingLarge)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .scrollContentBackground(.hidden)
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .toolbarBackground(.hidden, for: .navigationBar)
         .navigationTitle(localization.acknowledgments)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -152,96 +161,76 @@ struct AcknowledgmentsView: View {
 struct LocationSettingsView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var localization: LocalizationManager
-    
+    @ObservedObject private var locationService = LocationService.shared
+    @State private var cityQuery = ""
+    @State private var latitude = ""
+    @State private var longitude = ""
+    private var pl: Bool { localization.currentLanguage == "pl" }
+
     var body: some View {
         ScrollView {
-            VStack(spacing: SeedlyTheme.paddingMedium) {
-                // Map-style hero
-                ZStack {
-                    RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                        .fill(
-                            LinearGradient(
-                                colors: [.blue.opacity(0.6), .cyan.opacity(0.4)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(height: 140)
-                    Image(systemName: "location.fill")
-                        .font(.system(size: 48))
-                        .foregroundStyle(.white)
-                        .shadow(radius: 4)
-                }
-                .padding(.horizontal, SeedlyTheme.paddingLarge)
-                .padding(.top, SeedlyTheme.paddingMedium)
-                
-                // Current location card
-                if let loc = appState.currentLocation {
-                    VStack(spacing: 0) {
-                        InfoRow(label: "📍", value: "\(loc.city), \(loc.country)")
-                        Divider().padding(.leading)
-                        InfoRow(label: localization.latitude, value: String(format: "%.4f°", loc.latitude))
-                        Divider().padding(.leading)
-                        InfoRow(label: localization.longitude, value: String(format: "%.4f°", loc.longitude))
-                        Divider().padding(.leading)
-                        InfoRow(label: "🌐", value: loc.timeZone.identifier)
+            VStack(alignment: .leading, spacing: 20) {
+                Image(systemName: "location.circle.fill")
+                    .font(.system(size: 64)).foregroundStyle(SeedlyTheme.accentGreen)
+                    .frame(maxWidth: .infinity).padding(.top)
+                if let location = locationService.currentLocation {
+                    VStack(spacing: 12) {
+                        Text([location.city, location.country].filter { !$0.isEmpty }.joined(separator: ", "))
+                            .font(.title3.bold())
+                        Text(String(format: "%.4f, %.4f", location.latitude, location.longitude))
+                        Text(location.timeZone.identifier).font(.caption).foregroundStyle(.secondary)
+                        Text(locationService.usesManualLocation ? (pl ? "Lokalizacja ręczna" : "Manual location") : (pl ? "Lokalizacja urządzenia" : "Device location"))
+                            .font(.caption).foregroundStyle(SeedlyTheme.accentGreen)
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                            .fill(Color(.systemBackground))
-                    )
-                    .padding(.horizontal, SeedlyTheme.paddingLarge)
-                } else {
-                    VStack(spacing: 8) {
-                        Image(systemName: "location.slash")
-                            .font(.title)
-                            .foregroundStyle(.secondary)
-                        Text(localization.locationNotAvailable)
-                            .font(.system(.body, design: .rounded))
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, SeedlyTheme.paddingLarge)
-                    .background(
-                        RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                            .fill(Color(.systemBackground))
-                    )
-                    .padding(.horizontal, SeedlyTheme.paddingLarge)
+                    .frame(maxWidth: .infinity).padding().background(SeedlyTheme.cardBackground, in: RoundedRectangle(cornerRadius: 16))
                 }
-                
-                // Refresh button
-                Button(action: {
-                    appState.refreshLocation()
-                }) {
-                    HStack {
-                        Image(systemName: "arrow.clockwise")
-                        Text(localization.refreshLocation)
-                    }
-                    .font(.system(.body, design: .rounded, weight: .medium))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(
-                        RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                            .fill(SeedlyTheme.primaryGreen)
-                    )
+                Button { locationService.useDeviceLocation() } label: {
+                    Label(pl ? "Użyj lokalizacji urządzenia" : "Use device location", systemImage: "location.fill")
+                        .frame(maxWidth: .infinity).padding()
                 }
-                .padding(.horizontal, SeedlyTheme.paddingLarge)
-                
-                // Privacy note
-                Text(localization.locationDescription)
-                    .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, SeedlyTheme.paddingLarge)
-                    .padding(.top, SeedlyTheme.paddingSmall)
-                
-                Spacer(minLength: SeedlyTheme.paddingLarge)
-            }
+                .buttonStyle(.borderedProminent).disabled(locationService.isLoading)
+                if locationService.isLoading { ProgressView(localization.loading).frame(maxWidth: .infinity) }
+                if let error = locationService.error {
+                    Text(error.localizedDescription).foregroundStyle(.orange).font(.subheadline)
+                    if locationService.authorizationStatus == .denied {
+                        Link(pl ? "Otwórz ustawienia" : "Open Settings", destination: URL(string: UIApplication.openSettingsURLString)!)
+                    }
+                }
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(pl ? "Wpisz miasto i kraj" : "Enter a city and country").font(.headline)
+                    TextField(pl ? "np. Warszawa, Polska" : "e.g. Warsaw, Poland", text: $cityQuery)
+                        .textFieldStyle(.roundedBorder).textContentType(.addressCity)
+                    Button(pl ? "Ustaw miasto" : "Set city") {
+                        Task { await locationService.setManualCity(cityQuery) }
+                    }
+                    .disabled(cityQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || locationService.isLoading)
+                }
+                .padding().background(SeedlyTheme.cardBackground, in: RoundedRectangle(cornerRadius: 16))
+                DisclosureGroup(pl ? "Wpisz współrzędne (także offline)" : "Enter coordinates (also works offline)") {
+                    VStack(spacing: 12) {
+                        TextField(pl ? "Szerokość geograficzna" : "Latitude", text: $latitude).keyboardType(.numbersAndPunctuation)
+                        TextField(pl ? "Długość geograficzna" : "Longitude", text: $longitude).keyboardType(.numbersAndPunctuation)
+                        Button(localization.save) {
+                            guard let lat = Double(latitude.replacingOccurrences(of: ",", with: ".")),
+                                  let lon = Double(longitude.replacingOccurrences(of: ",", with: ".")) else { return }
+                            Task { await locationService.setManualLocation(latitude: lat, longitude: lon) }
+                        }
+                        .disabled(!validCoordinates || locationService.isLoading)
+                    }.padding(.top)
+                }
+                .padding().background(SeedlyTheme.cardBackground, in: RoundedRectangle(cornerRadius: 16))
+                Text(localization.locationDescription).font(.caption).foregroundStyle(.secondary)
+            }.padding(24)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
         .navigationTitle(localization.location)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var validCoordinates: Bool {
+        guard let lat = Double(latitude.replacingOccurrences(of: ",", with: ".")),
+              let lon = Double(longitude.replacingOccurrences(of: ",", with: ".")) else { return false }
+        return lat.isFinite && lon.isFinite && (-90...90).contains(lat) && (-180...180).contains(lon)
     }
 }
 
@@ -299,7 +288,7 @@ struct ClimateZoneInfoView: View {
                     }
                     .background(
                         RoundedRectangle(cornerRadius: SeedlyTheme.cornerRadius)
-                            .fill(Color(.systemBackground))
+                            .fill(SeedlyTheme.cardBackground)
                     )
                     .padding(.horizontal, SeedlyTheme.paddingLarge)
                 } else {
@@ -319,7 +308,10 @@ struct ClimateZoneInfoView: View {
                 Spacer(minLength: SeedlyTheme.paddingLarge)
             }
         }
-        .background(Color(.systemGroupedBackground))
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .scrollContentBackground(.hidden)
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .toolbarBackground(.hidden, for: .navigationBar)
         .navigationTitle(localization.climateZone)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -361,6 +353,9 @@ struct FrostAlertsDetailView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .toolbarBackground(.hidden, for: .navigationBar)
         .navigationTitle(localization.frostAlerts)
         .navigationBarTitleDisplayMode(.inline)
     }

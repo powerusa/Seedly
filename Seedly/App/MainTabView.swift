@@ -6,10 +6,9 @@ import SwiftUI
 struct MainTabView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var localization: LocalizationManager
-    @State private var selectedTab: TabItem = .today
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $appState.selectedTab) {
             TodayView()
                 .tabItem {
                     Label(localization.tabToday, systemImage: TabItem.today.icon)
@@ -40,7 +39,7 @@ struct MainTabView: View {
                 }
                 .tag(TabItem.more)
         }
-        .tint(SeedlyTheme.primaryGreen)
+        .tint(SeedlyTheme.accentGreen)
         .task {
             appState.refreshLocation()
             await appState.refreshWeather()

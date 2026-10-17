@@ -8,7 +8,7 @@ struct SeedlyTheme {
     // MARK: - Colors
     static let primaryGreen = Color(red: 0.16, green: 0.35, blue: 0.14)
     static let secondaryGreen = Color(red: 0.22, green: 0.45, blue: 0.18)
-    static let accentGreen = Color(red: 0.35, green: 0.60, blue: 0.28)
+    static let accentGreen = Color(red: 0.55, green: 0.78, blue: 0.38)
     static let lightGreen = Color(red: 0.85, green: 0.93, blue: 0.82)
     static let darkBackground = Color(red: 0.08, green: 0.14, blue: 0.07)
     static let cardBackground = Color(red: 0.12, green: 0.22, blue: 0.10)

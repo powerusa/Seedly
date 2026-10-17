@@ -7,6 +7,7 @@ struct MoreView: View {
     @AppStorage("temperatureUnit") private var temperatureUnit = "celsius"
     @AppStorage("measurementSystem") private var measurementSystem = "metric"
     @AppStorage("selectedLanguage") private var selectedLanguage = "en"
+    @EnvironmentObject var appState: AppState
     @EnvironmentObject var localization: LocalizationManager
     @State private var showLanguagePicker = false
     
@@ -80,6 +81,9 @@ struct MoreView: View {
                     NavigationLink(destination: PrivacyPolicyView()) {
                         SettingsRow(icon: "hand.raised.fill", title: localization.privacyPolicy, color: .gray)
                     }
+                    NavigationLink(destination: PlantPhotoCreditsView()) {
+                        SettingsRow(icon: "photo", title: localization.currentLanguage == "pl" ? "Autorzy zdjęć" : "Photo credits", color: .green)
+                    }
                     NavigationLink(destination: AcknowledgmentsView()) {
                         SettingsRow(icon: "heart.fill", title: localization.acknowledgments, color: .pink)
                     }
@@ -87,7 +91,7 @@ struct MoreView: View {
                     Text(localization.aboutSeedly)
                 } footer: {
                     VStack(spacing: 8) {
-                        Text("Simple Seeds v1.0.0")
+                        Text("Simple Seeds v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
                             .font(.system(.caption, design: .rounded))
                         Text(localization.appTagline)
                             .font(.system(.caption, design: .rounded))
@@ -97,6 +101,15 @@ struct MoreView: View {
                     .padding(.top, SeedlyTheme.paddingLarge)
                 }
             }
+            .onChange(of: temperatureUnit) { _, value in
+                appState.temperatureUnit = TemperatureUnit(rawValue: value) ?? .celsius
+            }
+            .onChange(of: measurementSystem) { _, value in
+                appState.measurementUnit = MeasurementSystem(rawValue: value) ?? .metric
+            }
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle(localization.more)
             .sheet(isPresented: $showLanguagePicker) {
                 LanguagePickerView(selectedLanguage: $selectedLanguage)
@@ -162,19 +175,22 @@ struct LanguagePickerView: View {
                             
                             if selectedLanguage == language.code {
                                 Image(systemName: "checkmark")
-                                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                                    .foregroundStyle(SeedlyTheme.accentGreen)
                                     .font(.body.bold())
                             }
                         }
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle(LocalizationManager.shared.language)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(LocalizationManager.shared.done) { dismiss() }
-                        .foregroundStyle(SeedlyTheme.primaryGreen)
+                        .foregroundStyle(SeedlyTheme.accentGreen)
                 }
             }
         }
@@ -215,6 +231,9 @@ struct NotificationSettingsView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+        .toolbarBackground(.hidden, for: .navigationBar)
         .navigationTitle(localization.notifications)
     }
 }

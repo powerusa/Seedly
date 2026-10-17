@@ -44,7 +44,9 @@ final class AppState: ObservableObject {
         defer { isLoadingWeather = false }
         
         if let location = currentLocation {
-            currentWeather = await weatherService.fetchWeather(for: location)
+            let weather = await weatherService.fetchWeather(for: location)
+            guard currentLocation == location else { return }
+            currentWeather = weather
             climateZone = climateEngine.determineZone(for: location)
         }
     }
@@ -65,7 +67,7 @@ final class AppState: ObservableObject {
         if let savedUnit = UserDefaults.standard.string(forKey: "temperatureUnit") {
             temperatureUnit = TemperatureUnit(rawValue: savedUnit) ?? .celsius
         }
-        if let savedMeasurement = UserDefaults.standard.string(forKey: "measurementUnit") {
+        if let savedMeasurement = UserDefaults.standard.string(forKey: "measurementSystem") {
             measurementUnit = MeasurementSystem(rawValue: savedMeasurement) ?? .metric
         }
     }

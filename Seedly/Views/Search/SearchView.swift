@@ -24,7 +24,10 @@ struct SearchView: View {
                     resultsList
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .scrollContentBackground(.hidden)
+            .background(SeedlyTheme.homeGradient.ignoresSafeArea())
+            .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle("Search Plants")
             .searchable(text: $searchText, prompt: "Search by name, type, or conditions...")
             .onChange(of: searchText) { _, newValue in
@@ -192,7 +195,7 @@ struct SearchResultRow: View {
                     .frame(width: 48, height: 48)
                 Image(systemName: plant.category.icon)
                     .font(.title3)
-                    .foregroundStyle(SeedlyTheme.primaryGreen)
+                    .foregroundStyle(SeedlyTheme.accentGreen)
             }
             
             VStack(alignment: .leading, spacing: 3) {
@@ -247,7 +250,7 @@ struct CategoryBrowseCard: View {
         VStack(spacing: 8) {
             Image(systemName: category.icon)
                 .font(.title2)
-                .foregroundStyle(SeedlyTheme.primaryGreen)
+                .foregroundStyle(SeedlyTheme.accentGreen)
             
             Text(localization.categoryName(category))
                 .font(.system(.caption, design: .rounded, weight: .medium))
@@ -256,7 +259,7 @@ struct CategoryBrowseCard: View {
         .padding(.vertical, 16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
+                .fill(SeedlyTheme.cardBackground)
         )
         .shadow(color: .black.opacity(0.03), radius: 3, x: 0, y: 1)
     }
