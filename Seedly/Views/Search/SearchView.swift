@@ -4,6 +4,7 @@
 import SwiftUI
 
 struct SearchView: View {
+    @EnvironmentObject var localization: LocalizationManager
     @State private var searchText = ""
     @State private var searchResults: [Plant] = []
     @State private var selectedFilter: SearchFilter = .all
@@ -30,6 +31,7 @@ struct SearchView: View {
             .toolbarBackground(.hidden, for: .navigationBar)
             .navigationTitle("Search Plants")
             .searchable(text: $searchText, prompt: "Search by name, type, or conditions...")
+            .onChange(of: localization.currentLanguage) { _, _ in performSearch(query: searchText) }
             .onChange(of: searchText) { _, newValue in
                 performSearch(query: newValue)
             }
@@ -184,6 +186,7 @@ enum SearchFilter: String, CaseIterable {
 // MARK: - Search Result Row
 
 struct SearchResultRow: View {
+    @EnvironmentObject var localization: LocalizationManager
     let plant: Plant
     
     var body: some View {
@@ -199,7 +202,7 @@ struct SearchResultRow: View {
             }
             
             VStack(alignment: .leading, spacing: 3) {
-                Text(plant.localizedName())
+                Text(plant.localizedName(for: localization.currentLanguage))
                     .font(.system(.subheadline, design: .rounded, weight: .semibold))
                 
                 HStack(spacing: 6) {

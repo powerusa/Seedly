@@ -67,6 +67,7 @@ struct PlantsView: View {
             .onChange(of: viewModel.searchText) { _, _ in
                 viewModel.applyFilters()
             }
+            .onChange(of: localization.currentLanguage) { _, _ in viewModel.applyFilters() }
             .sheet(isPresented: $showAddSheet) {
                 AddCustomPlantSheet()
                     .environmentObject(localization)
@@ -225,6 +226,7 @@ struct CategoryChip: View {
 // MARK: - Plant Grid Card
 
 struct PlantGridCard: View {
+    @EnvironmentObject var localization: LocalizationManager
     let plant: Plant
     let isFavorite: Bool
     
@@ -252,7 +254,7 @@ struct PlantGridCard: View {
             }
             
             VStack(alignment: .leading, spacing: 2) {
-                Text(plant.localizedName())
+                Text(plant.localizedName(for: localization.currentLanguage))
                     .font(.system(.subheadline, design: .rounded, weight: .semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)

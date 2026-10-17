@@ -4,6 +4,7 @@
 import SwiftUI
 
 struct PlantDetailView: View {
+    @EnvironmentObject var localization: LocalizationManager
     let plant: Plant
     @State private var selectedTab: PlantDetailTab = .overview
     @State private var plantNotes = ""
@@ -102,7 +103,7 @@ struct PlantDetailView: View {
             
             // Plant name overlay
             VStack(alignment: .leading, spacing: 4) {
-                Text(plant.localizedName())
+                Text(plant.localizedName(for: localization.currentLanguage))
                     .font(.system(.title, design: .rounded, weight: .bold))
                     .foregroundStyle(.white)
                     .lineLimit(2)
